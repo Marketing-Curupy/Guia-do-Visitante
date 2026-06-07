@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central do Visitante Curupy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="hero">
+    <div class="logo">CURUPY</div>
+    <h1>Bem-vindo ao Curupy! 🌊</h1>
+    <h2>Como podemos ajudar com sua visita?</h2>
+    <p>Encontre informações sobre ingressos, funcionamento, hospedagem, associação e muito mais.</p>
+  </header>
+
+  <section id="barraStatus" class="barra-fixa"></section>
+
+  <main class="container">
+    <section class="card destaque">
+      <div>
+        <h2>🎟️ Ingressos e valores</h2>
+        <p>Garanta sua visita antecipadamente com desconto e parcelamento exclusivo pelo site oficial.</p>
+        <p class="aviso">Compras online devem ser realizadas com pelo menos 1 dia de antecedência.</p>
+      </div>
+      <button class="btn rosa" onclick="abrirModal('modalIngressos')">Ver valores e datas disponíveis</button>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>📅 Calendário de funcionamento</h2>
+        <p>Consulte os dias e horários de funcionamento do parque.</p>
+        <button class="btn azul" onclick="abrirModal('modalCalendario')">Ver calendário</button>
+      </article>
+
+      <article class="card">
+        <h2>🏨 Hospedagem</h2>
+        <p>Conheça nossas opções de hospedagem.</p>
+        <a class="btn azul" href="hospedagem.html">Conhecer hospedagem</a>
+      </article>
+
+      <article class="card">
+        <h2>💎 Clube de Associados</h2>
+        <p>Aproveite vantagens exclusivas durante todo o ano.</p>
+        <a class="btn azul" href="associados.html">Conhecer associação</a>
+      </article>
+
+      <article class="card">
+        <h2>📍 Como chegar</h2>
+        <p>Veja a localização do Curupy no mapa.</p>
+        <button class="btn azul" id="btnMapa">Abrir mapa</button>
+      </article>
+    </section>
+
+    <section class="info">
+      <div>🚗 <strong>Estacionamento</strong><span>Gratuito</span></div>
+      <div>🎒 <strong>Guarda-volumes</strong><span>Pago à parte</span></div>
+      <div>ℹ️ <strong>Meia-entrada</strong><button onclick="abrirModal('modalMeia')">Ver regras</button></div>
+    </section>
+  </main>
+
+  <button class="ajuda" onclick="abrirModal('modalAjuda')">❓ Tire sua dúvida</button>
+
+  <div class="modal" id="modalIngressos">
+    <div class="modal-box grande">
+      <button class="fechar" onclick="fecharModal('modalIngressos')">×</button>
+      <h2>🎟️ Ingressos e valores</h2>
+      <iframe src="http://172.19.0.6:3003/ingressos"></iframe>
+    </div>
+  </div>
+
+  <div class="modal" id="modalCalendario">
+    <div class="modal-box grande">
+      <button class="fechar" onclick="fecharModal('modalCalendario')">×</button>
+      <h2>📅 Calendário de funcionamento</h2>
+      <div id="calendariosContainer"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="modalMeia">
+    <div class="modal-box">
+      <button class="fechar" onclick="fecharModal('modalMeia')">×</button>
+      <h2>ℹ️ Regras de meia-entrada e gratuidade</h2>
+
+      <details open>
+        <summary>Meia-entrada</summary>
+        <ul>
+          <li>Estudantes com carteira estudantil válida.</li>
+          <li>Pessoas com 60 anos ou mais.</li>
+          <li>Jovens de baixa renda com ID Jovem.</li>
+          <li>Doadores de sangue, conforme legislação vigente.</li>
+          <li>Doadores de medula óssea cadastrados no REDOME.</li>
+          <li>Professores da rede pública estadual e municipal.</li>
+          <li>Pessoas com câncer ou doenças degenerativas mediante comprovação.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>Como comprovar?</summary>
+        <p>Apresente documento oficial e comprovante válido da categoria correspondente no momento da compra e da entrada no parque.</p>
+      </details>
+
+      <details>
+        <summary>Informações importantes</summary>
+        <ul>
+          <li>A meia-entrada é vendida exclusivamente na bilheteria do parque.</li>
+          <li>Compras online não possuem meia-entrada.</li>
+          <li>O benefício não é cumulativo com promoções, descontos ou convênios.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>Gratuidade PCD e TEA</summary>
+        <p>Pessoas com Deficiência e pessoas com TEA possuem direito à entrada gratuita mediante apresentação da documentação comprobatória.</p>
+      </details>
+
+      <details>
+        <summary>Acompanhante</summary>
+        <p>Quando houver necessidade comprovada de acompanhamento, o acompanhante também possui direito à gratuidade.</p>
+      </details>
+
+      <button class="btn rosa full" onclick="fecharModal('modalMeia')">Entendi</button>
+    </div>
+  </div>
+
+  <div class="modal" id="modalAjuda">
+    <div class="modal-box">
+      <button class="fechar" onclick="fecharModal('modalAjuda')">×</button>
+      <h2>❓ Tire sua dúvida</h2>
+      <div id="ajudaContainer"></div>
+    </div>
+  </div>
+
+  <script src="dados-barra.js"></script>
+  <script src="calendarios.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
