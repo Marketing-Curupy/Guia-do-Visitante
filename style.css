@@ -633,11 +633,8 @@ body {
 }
 
 .dia-bloco {
-  background: #f8fcff;
-  border: 1px solid #d9ecf5;
-  border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 14px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
 }
 
 .dia-bloco strong {
