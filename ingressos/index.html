@@ -1,108 +1,66 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ingressos Curupy</title>
-
-<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-
-  <div class="container">
-
+  <main class="container">
     <header class="hero">
       <h1>Ingressos Curupy Acqua Park</h1>
-      <p>
-        Escolha uma data para consultar os valores promocionais
-        e comprar seus ingressos online.
-      </p>
+      <p>Escolha a data da visita para consultar os valores online.</p>
     </header>
 
-    <section class="calendar-section">
-
-      <div class="date-selector">
-
-        <label for="visitDate">
-          Data da visita
-        </label>
-
-        <input
-          type="date"
-          id="visitDate"
-        >
-
-        <button id="searchBtn">
-          Consultar valores
-        </button>
-
+    <section class="calendar-card">
+      <div class="calendar-header">
+        <button onclick="changeMonth(-1)">‹</button>
+        <h2 id="monthTitle"></h2>
+        <button onclick="changeMonth(1)">›</button>
       </div>
 
+      <div class="weekdays">
+        <span>Dom</span>
+        <span>Seg</span>
+        <span>Ter</span>
+        <span>Qua</span>
+        <span>Qui</span>
+        <span>Sex</span>
+        <span>Sáb</span>
+      </div>
+
+      <div id="calendarGrid" class="calendar-grid"></div>
     </section>
-
-    <section id="ticketsContainer"></section>
-
-  </div>
-
-  <!-- MODAL -->
+  </main>
 
   <div id="dateModal" class="modal">
-
     <div class="modal-content">
-
-      <button class="close" onclick="closeModal()">
-        ×
-      </button>
+      <button class="close" onclick="closeModal()">×</button>
 
       <h2 id="modalDate"></h2>
 
       <div id="closedMessage" class="closed-message">
-
-        <strong>
-          Ingressos disponíveis somente na bilheteria
-        </strong>
-
-        <p>
-          Os ingressos para o dia de hoje são vendidos somente na bilheteria.
-        </p>
-
-        <p>
-          Os valores da bilheteria são diferentes dos valores promocionais online.
-        </p>
-
+        <strong>Ingressos disponíveis somente na bilheteria</strong>
+        <p>Os ingressos para o dia de hoje são vendidos somente na bilheteria do parque.</p>
+        <p>Para comprar online, escolha uma data com pelo menos 1 dia de antecedência.</p>
       </div>
 
       <div id="openContent">
-
         <div id="ticketsList"></div>
 
         <div class="notice-box">
-
           <h3>⚠️ Antes de continuar</h3>
-
-          <p>
-            Compras online devem ser realizadas com pelo menos 1 dia de antecedência.
-          </p>
-
-          <p>
-            Não é possível comprar ingressos para uso no mesmo dia.
-          </p>
-
-          <p>
-            A meia-entrada é vendida exclusivamente na bilheteria.
-          </p>
+          <p>Compras online devem ser realizadas com pelo menos 1 dia de antecedência.</p>
+          <p>Não é possível comprar ingressos online para uso no mesmo dia.</p>
+          <p>A meia-entrada é vendida exclusivamente na bilheteria mediante comprovação.</p>
+          <p>Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial.</p>
 
           <label class="check-line">
-
-            <input type="checkbox" id="termsCheck">
-
-            <span>
-              Li e estou ciente das condições acima.
-            </span>
-
+            <input type="checkbox" id="termsCheck" />
+            <span>Li e estou ciente das condições acima.</span>
           </label>
-
         </div>
 
         <button id="chooseBtn" disabled>
@@ -112,14 +70,10 @@
         <p class="redirect-text">
           Você será direcionado para o Só Falta para concluir sua compra.
         </p>
-
       </div>
-
     </div>
-
   </div>
 
   <script src="script.js"></script>
-
 </body>
 </html>
