@@ -28,18 +28,16 @@ body{
   padding:34px 18px 26px;
 }
 
-.logo{
-  display:inline-flex;
-  align-items:center;
+.hero-logo{
+  display:flex;
   justify-content:center;
-  min-width:160px;
-  height:56px;
-  border-radius:999px;
-  background:var(--azul);
-  color:#ffd447;
-  font-weight:900;
   margin-bottom:18px;
-  letter-spacing:1px;
+}
+
+.hero-logo img{
+  width:190px;
+  max-width:80%;
+  height:auto;
 }
 
 .hero h1{
@@ -282,6 +280,7 @@ body{
   color:var(--azul);
   font-size:24px;
   cursor:pointer;
+  z-index:2;
 }
 
 .modal-box h2{
@@ -299,41 +298,95 @@ iframe{
 }
 
 /* MODAL MEIA ENTRADA */
-details{
-  border:1px solid #d9ecf5;
-  border-radius:16px;
-  margin-bottom:10px;
+.meia-modal{
+  padding:0;
   overflow:hidden;
-  background:#f8fcff;
 }
 
-summary{
-  cursor:pointer;
-  font-weight:900;
+.meia-header{
+  background:#0f5cb8;
   color:white;
-  background:var(--azul);
-  padding:14px 16px;
-  list-style:none;
+  padding:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-summary::-webkit-details-marker{
+.meia-header h2{
+  color:white;
+  margin:0;
+  padding-right:42px;
+}
+
+.meia-fechar{
+  background:white;
+  color:#0f5cb8;
+}
+
+.accordion{
+  padding:20px;
+}
+
+.accordion-item{
+  border-bottom:1px solid #e2e8f0;
+}
+
+.accordion-header{
+  width:100%;
+  background:#eef4fa;
+  border:none;
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#0f5cb8;
+  font-weight:700;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.accordion-content{
   display:none;
+  padding:10px 15px 25px;
+  color:#61798c;
+  line-height:1.8;
 }
 
-details p,
-details ul{
-  padding:14px 18px;
+.accordion-item.active .accordion-content{
+  display:block;
 }
 
-details ul{
-  padding-left:34px;
+.accordion-content h4{
+  color:#0f5cb8;
+  margin-top:20px;
+  margin-bottom:15px;
 }
 
-details li{
-  margin-bottom:8px;
+.accordion-content ul{
+  padding-left:25px;
 }
 
-/* CALENDÁRIOS EM IMAGEM */
+.accordion-content li{
+  margin-bottom:12px;
+}
+
+.alerta-importante{
+  margin-top:20px;
+  background:#fff2e8;
+  border-left:4px solid #ff6b35;
+  color:#b15c1e;
+  padding:15px;
+  border-radius:10px;
+  font-weight:700;
+}
+
+.meia-footer{
+  padding:0 20px 20px;
+}
+
+/* CALENDÁRIOS EM CÓDIGO */
 .calendarios-tabs{
   display:flex;
   gap:10px;
@@ -351,11 +404,160 @@ details li{
   cursor:pointer;
 }
 
-.calendario-img{
-  width:100%;
-  border-radius:18px;
-  box-shadow:var(--sombra);
+.calendario-funcionamento h3{
+  color:var(--azul);
+  margin-bottom:6px;
+  font-size:1.6rem;
+}
+
+.legenda-funcionamento{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:16px 0;
+  font-size:.9rem;
+}
+
+.legenda-funcionamento span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-weight:800;
+}
+
+.legenda-cor{
+  width:18px;
+  height:18px;
+  border-radius:5px;
+  display:inline-block;
+}
+
+.legenda-cor.semana{
+  background:#ffd447;
+}
+
+.legenda-cor.fim{
+  background:#13d5d0;
+}
+
+.legenda-cor.feriado{
+  background:#ff4f8b;
+}
+
+.legenda-cor.fechado{
+  background:#555;
+}
+
+.cal-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+}
+
+.cal-grid > div{
+  text-align:center;
+  font-weight:900;
+  color:var(--azul);
+  padding:8px 0;
+}
+
+.cal-dia{
+  border:0;
+  border-radius:14px;
+  min-height:72px;
+  padding:8px;
+  cursor:pointer;
+  font-weight:900;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.cal-dia strong{
   display:block;
+  font-size:1.25rem;
+}
+
+.cal-dia span{
+  display:block;
+  font-size:.72rem;
+  margin-top:4px;
+}
+
+.dia-semana{
+  background:#ffd447;
+  color:#111;
+}
+
+.dia-fim-semana{
+  background:#13d5d0;
+  color:#073b66;
+}
+
+.dia-feriado{
+  background:#ff4f8b;
+  color:white;
+}
+
+.dia-fechado{
+  background:#555;
+  color:white;
+  opacity:.45;
+}
+
+/* MODAL DO DIA */
+.dia-modal{
+  width:min(560px,100%);
+}
+
+.dia-info h2{
+  color:var(--azul);
+  margin-bottom:14px;
+  padding-right:36px;
+}
+
+.dia-status{
+  font-size:1.15rem;
+  font-weight:900;
+  padding:12px 14px;
+  border-radius:14px;
+  margin-bottom:14px;
+}
+
+.dia-status.verde{
+  background:#e6fcf5;
+  color:#0f8f62;
+}
+
+.dia-status.vermelho{
+  background:#fff0f0;
+  color:#c92a2a;
+}
+
+.dia-bloco{
+  background:#f8fcff;
+  border:1px solid #d9ecf5;
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+.dia-bloco strong{
+  display:block;
+  color:var(--azul);
+  margin-bottom:6px;
+}
+
+.destaque-online{
+  background:#fff7d6;
+  border-color:#ffe08a;
+}
+
+.destaque-online ul{
+  margin-top:10px;
+  padding-left:20px;
+}
+
+.destaque-online li{
+  margin-bottom:8px;
 }
 
 /* AJUDA */
@@ -401,10 +603,8 @@ details li{
     padding:26px 16px 20px;
   }
 
-  .logo{
-    min-width:135px;
-    height:48px;
-    margin-bottom:14px;
+  .hero-logo img{
+    width:155px;
   }
 
   .hero h1{
@@ -483,192 +683,11 @@ details li{
     height:70vh;
   }
 
-  .ajuda{
-    left:16px;
-    right:16px;
-    bottom:14px;
-  }
-}
-.meia-modal{
-    padding:0;
-    overflow:hidden;
-}
-
-.meia-header{
-    background:#0f5cb8;
-    color:white;
-    padding:22px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.meia-header h2{
-    color:white;
-    margin:0;
-}
-
-.accordion{
-    padding:20px;
-}
-
-.accordion-item{
-    border-bottom:1px solid #e2e8f0;
-}
-
-.accordion-header{
-    width:100%;
-    background:#eef4fa;
-    border:none;
-    border-radius:12px;
-    padding:18px;
-    margin-bottom:12px;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    color:#0f5cb8;
-    font-weight:700;
-    font-size:20px;
-
-    cursor:pointer;
-}
-
-.accordion-content{
-    display:none;
-    padding:10px 15px 25px;
-    color:#61798c;
-    line-height:1.8;
-}
-
-.accordion-item.active .accordion-content{
-    display:block;
-}
-
-.accordion-item.active .accordion-header{
-    background:#eef4fa;
-}
-
-.accordion-content h4{
-    color:#0f5cb8;
-    margin-top:20px;
-    margin-bottom:15px;
-}
-
-.accordion-content ul{
-    padding-left:25px;
-}
-
-.accordion-content li{
-    margin-bottom:12px;
-}
-
-.alerta-importante{
-    margin-top:20px;
-    background:#fff2e8;
-    border-left:4px solid #ff6b35;
-    color:#b15c1e;
+  .accordion-header{
+    font-size:16px;
     padding:15px;
-    border-radius:10px;
-    font-weight:700;
-}
-.calendario-funcionamento h3{
-  color:var(--azul);
-  margin-bottom:6px;
-  font-size:1.6rem;
-}
+  }
 
-.legenda-funcionamento{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin:16px 0;
-  font-size:.9rem;
-}
-
-.legenda-funcionamento span{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-weight:800;
-}
-
-.legenda-cor{
-  width:18px;
-  height:18px;
-  border-radius:5px;
-  display:inline-block;
-}
-
-.legenda-cor.semana{
-  background:#ffd447;
-}
-
-.legenda-cor.fim{
-  background:#13d5d0;
-}
-
-.legenda-cor.fechado{
-  background:#555;
-}
-
-.cal-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:8px;
-}
-
-.cal-grid > div{
-  text-align:center;
-  font-weight:900;
-  color:var(--azul);
-  padding:8px 0;
-}
-
-.cal-dia{
-  border:0;
-  border-radius:14px;
-  min-height:72px;
-  padding:8px;
-  cursor:pointer;
-  font-weight:900;
-  box-shadow:0 6px 16px rgba(0,0,0,.08);
-}
-
-.cal-dia strong{
-  display:block;
-  font-size:1.25rem;
-}
-
-.cal-dia span{
-  display:block;
-  font-size:.72rem;
-  margin-top:4px;
-}
-
-.dia-semana{
-  background:#ffd447;
-  color:#111;
-}
-
-.dia-fim-semana{
-  background:#13d5d0;
-  color:#073b66;
-}
-
-.dia-feriado{
-  background:#ff4f8b;
-  color:white;
-}
-
-.dia-fechado{
-  background:#555;
-  color:white;
-  opacity:.45;
-}
-
-@media(max-width:760px){
   .cal-grid{
     gap:5px;
   }
@@ -684,5 +703,11 @@ details li{
 
   .cal-dia span{
     display:none;
+  }
+
+  .ajuda{
+    left:16px;
+    right:16px;
+    bottom:14px;
   }
 }
