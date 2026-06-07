@@ -590,3 +590,21 @@ document.addEventListener("click", function (e) {
     seta.innerHTML = item.classList.contains("active") ? "⌃" : "⌄";
   }
 });
+
+function openIngressosModal() {
+  const modal = document.getElementById("ingressosModal");
+
+  if (modal) {
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeIngressosModal() {
+  const modal = document.getElementById("ingressosModal");
+
+  if (modal) {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+}
