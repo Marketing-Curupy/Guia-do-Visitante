@@ -318,7 +318,32 @@ function filtrarCalendario(classe) {
     }
   });
 }
+function gerarValoresBilheteria(status) {
 
+  const fimOuFeriado =
+    status === "fim-semana" ||
+    status === "feriado";
+
+  if (fimOuFeriado) {
+    return `
+      <div class="dia-bloco">
+        <strong>🎟 Valor da bilheteria</strong>
+        <p>Adulto: R$ 124,00</p>
+        <p>Kids: R$ 55,00</p>
+        <p>Convidado de sócio: R$ 78,00</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="dia-bloco">
+      <strong>🎟 Valor da bilheteria</strong>
+      <p>Adulto: R$ 86,00</p>
+      <p>Kids: R$ 45,00</p>
+      <p>Convidado de sócio: R$ 55,00</p>
+    </div>
+  `;
+}
 function abrirInfoDia(indexCalendario, numeroDia) {
   const calendario = CALENDARIOS_FUNCIONAMENTO[indexCalendario];
   if (!calendario) return;
@@ -366,12 +391,7 @@ function abrirInfoDia(indexCalendario, numeroDia) {
         <p>${info.horario}</p>
       </div>
 
-      <div class="dia-bloco">
-        <strong>🎟 Valor da bilheteria</strong>
-        <p>Visitante: R$ 86,00</p>
-        <p>Kids: R$ 45,00</p>
-        <p>Convidado: R$ 50,00</p>
-      </div>
+     ${gerarValoresBilheteria(dia.status)}
 
       <div class="dia-bloco">
         <strong>📍 Como chegar</strong>
@@ -423,8 +443,8 @@ const AJUDA = [
   {
     pergunta: "🎟 Ingressos",
     resposta:
-      "Compra online pelo site oficial com até um dia de antecedencia da data de utilização."
-    "Para utilização no mesmo dia é necessario a compra na bilheteria do Park, sujeito ao valor da tárifa do dia"
+      resposta:
+  "Compra online pelo site oficial com até um dia de antecedência da data de utilização. Para utilização no mesmo dia é necessária a compra na bilheteria do parque, sujeita ao valor da tarifa do dia."
   },
   {
     pergunta: "📅 Calendário",
