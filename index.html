@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -16,7 +17,6 @@
     </div>
 
     <h1>Bem-vindo</h1>
-
     <h2>Como podemos ajudar com a sua visita ao Curupy?</h2>
 
     <p>
@@ -43,7 +43,7 @@
     </div>
   </header>
 
-<section id="barraStatus" class="barra-fixa"></section>
+  <section id="barraStatus" class="barra-fixa"></section>
 
   <main class="container">
     <section class="card destaque">
@@ -61,8 +61,9 @@
       </div>
 
       <button class="btn rosa" onclick="abrirModal('modalIngressos')">
-  Ver valores e datas disponíveis
-</button>
+        Ver valores e datas disponíveis
+      </button>
+    </section>
 
     <section class="grid">
       <article class="card">
@@ -125,26 +126,24 @@
     ❓ Tire sua dúvida
   </button>
 
- <div class="modal" id="modalIngressos">
-  <div class="modal-box grande">
-    <button class="fechar" onclick="fecharModal('modalIngressos')">×</button>
+  <div class="modal" id="modalIngressos">
+    <div class="modal-box grande">
+      <button class="fechar" onclick="fecharModal('modalIngressos')">×</button>
 
-    <h2>🎟️ Ingressos e valores</h2>
+      <h2>🎟️ Ingressos e valores</h2>
 
-    <iframe
-      class="iframe-ingressos"
-      src="http://172.19.0.6:3000/ingressos"
-      title="Ingressos e valores">
-    </iframe>
+      <iframe
+        class="iframe-ingressos"
+        src="http://172.19.0.6:3000/ingressos"
+        title="Ingressos e valores">
+      </iframe>
+    </div>
   </div>
-</div>
 
   <div class="modal" id="modalCalendario">
     <div class="modal-box grande">
       <button class="fechar" onclick="fecharModal('modalCalendario')">×</button>
-
       <h2>📅 Calendário de funcionamento</h2>
-
       <div id="calendariosContainer"></div>
     </div>
   </div>
@@ -152,12 +151,8 @@
   <div class="modal" id="modalDiaCalendario">
     <div class="modal-box dia-modal">
       <button class="fechar" onclick="fecharModal('modalDiaCalendario')">×</button>
-
       <div id="conteudoDiaCalendario"></div>
-
-      <button class="btn rosa full" onclick="fecharModal('modalDiaCalendario')">
-        Fechar
-      </button>
+      <button class="btn rosa full" onclick="fecharModal('modalDiaCalendario')">Fechar</button>
     </div>
   </div>
 
@@ -170,9 +165,7 @@
 
       <div class="accordion">
         <div class="accordion-item active">
-          <button class="accordion-header">
-            Meia-Entrada <span>⌃</span>
-          </button>
+          <button class="accordion-header">Meia-Entrada <span>⌃</span></button>
 
           <div class="accordion-content">
             <p>A meia-entrada é válida exclusivamente sobre o valor da tabela padrão da portaria.</p>
@@ -194,10 +187,7 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-header">
-            Gratuidade para PCD <span>⌄</span>
-          </button>
-
+          <button class="accordion-header">Gratuidade para PCD <span>⌄</span></button>
           <div class="accordion-content">
             <p>Pessoas com Deficiência possuem direito à gratuidade mediante apresentação de documento oficial que comprove a condição.</p>
             <p>O direito ao acompanhante será analisado conforme a documentação apresentada.</p>
@@ -205,10 +195,7 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-header">
-            Gratuidade para TEA <span>⌄</span>
-          </button>
-
+          <button class="accordion-header">Gratuidade para TEA <span>⌄</span></button>
           <div class="accordion-content">
             <p>Pessoas com Transtorno do Espectro Autista possuem direito à gratuidade mediante apresentação da CIPTEA ou documento oficial que comprove a condição.</p>
             <p>Nestes casos também é garantido o direito ao acompanhante.</p>
@@ -216,10 +203,7 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-header">
-            Regras para Acompanhantes <span>⌄</span>
-          </button>
-
+          <button class="accordion-header">Regras para Acompanhantes <span>⌄</span></button>
           <div class="accordion-content">
             <ul>
               <li>Ter idade mínima de 18 anos.</li>
@@ -232,9 +216,7 @@
       </div>
 
       <div class="meia-footer">
-        <button class="btn rosa full" onclick="fecharModal('modalMeia')">
-          Entendi
-        </button>
+        <button class="btn rosa full" onclick="fecharModal('modalMeia')">Entendi</button>
       </div>
     </div>
   </div>
@@ -242,9 +224,7 @@
   <div class="modal" id="modalAjuda">
     <div class="modal-box">
       <button class="fechar" onclick="fecharModal('modalAjuda')">×</button>
-
       <h2>❓ Assistente Curupy</h2>
-
       <div id="ajudaContainer"></div>
     </div>
   </div>
@@ -256,6 +236,9 @@
     </div>
   </div>
 
-<script src="dados-barra.js"></script>
-<script src="calendarios.js"></script>
-<script src="script.js"></script>
+  <script src="dados-barra.js"></script>
+  <script src="calendarios.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+```
