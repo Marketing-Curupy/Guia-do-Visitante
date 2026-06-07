@@ -517,7 +517,9 @@ function renderizarAjuda() {
     </div>
 
     <div class="chat-opcoes">
-      <button onclick="abrirModal('modalIngressos')">🎟 Ingressos e valores</button>
+    <button onclick="openIngressosModal()">
+  🎟 Ingressos e valores
+</button>
       <button onclick="abrirModal('modalCalendario')">📅 Calendário de funcionamento</button>
       <button onclick="window.location.href='hospedagem.html'">🏨 Hospedagem</button>
       <button onclick="window.location.href='associados.html'">💎 Associação</button>
