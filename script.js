@@ -319,9 +319,8 @@ function filtrarCalendario(classe) {
   });
 }
 function gerarValoresBilheteria(status) {
-
   const fimOuFeriado =
-    status === "fim-semana" ||
+    status === "fimDeSemana" ||
     status === "feriado";
 
   if (fimOuFeriado) {
