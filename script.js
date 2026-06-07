@@ -153,9 +153,13 @@ function mostrarCalendario(index) {
   const calendario = CALENDARIOS_FUNCIONAMENTO[index];
   const destino = $("#calendarioRenderizado");
 
+  if (!calendario || !destino) return;
+
+  const mesNumero = obterNumeroMes(calendario.mes);
+
   const primeiroDiaSemana = new Date(
     Number(calendario.ano),
-    index === 0 ? 5 : 6,
+    mesNumero,
     1
   ).getDay();
 
@@ -167,19 +171,12 @@ function mostrarCalendario(index) {
     .map((dia) => {
       const info = HORARIOS_FUNCIONAMENTO[dia.status];
 
-      let mensagem = "";
-
-      if (dia.status === "fechado") {
-        mensagem = "Parque fechado nesta data.";
-      } else {
-        mensagem = `${info.label}: ${info.horario}. Compras pelo site possuem desconto e devem ser realizadas com pelo menos 1 dia de antecedência. Para uso no mesmo dia, a compra é exclusiva na bilheteria do parque.`;
-      }
+      if (!info) return "";
 
       return `
         <button
           class="cal-dia ${info.classe}"
-          onclick="alert('${mensagem}')"
-          title="${mensagem}"
+          onclick="abrirInfoDia(${index}, ${dia.dia})"
         >
           <strong>${dia.dia}</strong>
           <span>${dia.status === "fechado" ? "Fechado" : info.horario}</span>
@@ -196,6 +193,7 @@ function mostrarCalendario(index) {
       <div class="legenda-funcionamento">
         <span><b class="legenda-cor semana"></b> Dias de semana: 09h às 17h30</span>
         <span><b class="legenda-cor fim"></b> Fins de semana e feriados: 08h30 às 17h30</span>
+        <span><b class="legenda-cor feriado"></b> Feriados e datas especiais: 08h30 às 17h30</span>
         <span><b class="legenda-cor fechado"></b> Parque fechado</span>
       </div>
 
