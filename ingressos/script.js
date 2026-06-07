@@ -4,10 +4,11 @@ const API_BASE =
 const CHECKOUT_BASE =
   "https://sofalta.eu/meuingresso/no/curupyacquapark/#/ingressos/";
 
+let currentDate = new Date();
 let selectedDate = null;
 
-const visitDate = document.getElementById("visitDate");
-const searchBtn = document.getElementById("searchBtn");
+const monthTitle = document.getElementById("monthTitle");
+const calendarGrid = document.getElementById("calendarGrid");
 const dateModal = document.getElementById("dateModal");
 const modalDate = document.getElementById("modalDate");
 const closedMessage = document.getElementById("closedMessage");
@@ -16,61 +17,84 @@ const ticketsList = document.getElementById("ticketsList");
 const termsCheck = document.getElementById("termsCheck");
 const chooseBtn = document.getElementById("chooseBtn");
 
-searchBtn.addEventListener("click", async () => {
-  const date = visitDate.value;
+document.addEventListener("DOMContentLoaded", () => {
+  renderCalendar();
 
-  if (!date) {
-    alert("Selecione uma data para consultar os valores.");
-    return;
+  termsCheck.addEventListener("change", () => {
+    chooseBtn.disabled = !termsCheck.checked;
+  });
+
+  chooseBtn.addEventListener("click", goToCheckout);
+});
+
+function renderCalendar() {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  const title = new Date(year, month, 1).toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
+
+  monthTitle.textContent = title;
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const lastDate = new Date(year, month + 1, 0).getDate();
+
+  let html = "";
+
+  for (let i = 0; i < firstDay; i++) {
+    html += `<button class="day empty" disabled></button>`;
   }
 
-  selectedDate = date;
+  for (let day = 1; day <= lastDate; day++) {
+    const dateISO = toISODate(year, month, day);
+    const today = getTodayISO();
+
+    const classes = ["day"];
+
+    if (dateISO === today) classes.push("today");
+    if (dateISO <= today) classes.push("past");
+    if (dateISO > today) classes.push("available");
+
+    html += `
+      <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
+        ${day}
+        ${dateISO > today ? "<small>online</small>" : ""}
+      </button>
+    `;
+  }
+
+  calendarGrid.innerHTML = html;
+}
+
+function changeMonth(direction) {
+  currentDate.setMonth(currentDate.getMonth() + direction);
+  renderCalendar();
+}
+
+async function selectDate(dateISO) {
+  selectedDate = dateISO;
 
   openModal();
-  await loadTickets(date);
-});
+  modalDate.textContent = formatDateBR(dateISO);
 
-termsCheck.addEventListener("change", () => {
-  chooseBtn.disabled = !termsCheck.checked;
-});
-
-chooseBtn.addEventListener("click", () => {
-  if (!selectedDate) return;
-
-  const brDate = formatDateForCheckout(selectedDate);
-  const encodedDate = btoa(brDate);
-
-  window.open(CHECKOUT_BASE + encodedDate, "_blank");
-});
-
-function openModal() {
-  dateModal.classList.add("active");
   termsCheck.checked = false;
   chooseBtn.disabled = true;
-}
 
-function closeModal() {
-  dateModal.classList.remove("active");
-}
-
-async function loadTickets(date) {
-  modalDate.textContent = formatDateBR(date);
-
-  ticketsList.innerHTML = `
-    <div class="loading">
-      Carregando ingressos disponíveis...
-    </div>
-  `;
-
-  const today = getTodayISO();
-
-  if (date <= today) {
+  if (dateISO <= getTodayISO()) {
     showClosedMessage();
     return;
   }
 
+  showOpenContent();
+
+  ticketsList.innerHTML = `
+    <div class="loading">Carregando ingressos disponíveis...</div>
+  `;
+
   try {
-    const response = await fetch(API_BASE + date);
+    const response = await fetch(API_BASE + dateISO);
 
     if (!response.ok) {
       throw new Error("Erro ao consultar ingressos.");
@@ -81,19 +105,18 @@ async function loadTickets(date) {
 
     if (!tickets.length) {
       ticketsList.innerHTML = `
-        <div class="closed-message active-message">
+        <div class="closed-message" style="display:block">
           <strong>Nenhum ingresso online disponível para esta data.</strong>
-          <p>Tente selecionar outra data disponível no calendário.</p>
+          <p>Tente selecionar outra data no calendário.</p>
         </div>
       `;
       return;
     }
 
-    showOpenContent();
     renderTickets(tickets);
   } catch (error) {
     ticketsList.innerHTML = `
-      <div class="closed-message active-message">
+      <div class="closed-message" style="display:block">
         <strong>Não foi possível carregar os ingressos.</strong>
         <p>Tente novamente em alguns instantes.</p>
       </div>
@@ -107,17 +130,17 @@ function normalizeTickets(data) {
     : data.itens || data.produtos || data.ingressos || [];
 
   return list.map((ticket) => {
-    const onlinePrice =
-      ticket?.tarifarios?.[0]?.valor ||
-      ticket?.valor ||
-      ticket?.valorOriginal ||
+    const price =
+      ticket?.tarifarios?.[0]?.valor ??
+      ticket?.valor ??
+      ticket?.valorOriginal ??
       0;
 
     return {
       name: ticket.nome || "Ingresso",
-      description: ticket.descricao || "",
+      description: cleanText(ticket.descricao || ""),
       image: ticket.imagem || "",
-      price: onlinePrice,
+      price,
     };
   });
 }
@@ -130,7 +153,7 @@ function renderTickets(tickets) {
           ${
             ticket.image
               ? `<img src="${ticket.image}" alt="${ticket.name}">`
-              : `<div class="ticket-image-placeholder"></div>`
+              : `<div></div>`
           }
 
           <div>
@@ -145,6 +168,14 @@ function renderTickets(tickets) {
     .join("");
 }
 
+function openModal() {
+  dateModal.classList.add("active");
+}
+
+function closeModal() {
+  dateModal.classList.remove("active");
+}
+
 function showClosedMessage() {
   closedMessage.style.display = "block";
   openContent.style.display = "none";
@@ -155,8 +186,17 @@ function showOpenContent() {
   openContent.style.display = "block";
 }
 
+function goToCheckout() {
+  if (!selectedDate || chooseBtn.disabled) return;
+
+  const checkoutDate = formatDateForCheckout(selectedDate);
+  const encodedDate = btoa(checkoutDate);
+
+  window.open(CHECKOUT_BASE + encodedDate, "_blank");
+}
+
 function formatMoney(value) {
-  const number = Number(value || 0);
+  const number = Number(value || 0) / 100;
 
   return number.toLocaleString("pt-BR", {
     style: "currency",
@@ -164,14 +204,21 @@ function formatMoney(value) {
   });
 }
 
-function formatDateBR(date) {
-  const [year, month, day] = date.split("-");
+function cleanText(text) {
+  return String(text)
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function formatDateBR(dateISO) {
+  const [year, month, day] = dateISO.split("-");
 
   return `${day}/${month}/${year}`;
 }
 
-function formatDateForCheckout(date) {
-  const [year, month, day] = date.split("-");
+function formatDateForCheckout(dateISO) {
+  const [year, month, day] = dateISO.split("-");
 
   return `${day}-${month}-${year}`;
 }
@@ -179,9 +226,16 @@ function formatDateForCheckout(date) {
 function getTodayISO() {
   const today = new Date();
 
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
+  return toISODate(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+}
 
-  return `${year}-${month}-${day}`;
+function toISODate(year, monthIndex, day) {
+  const month = String(monthIndex + 1).padStart(2, "0");
+  const date = String(day).padStart(2, "0");
+
+  return `${year}-${month}-${date}`;
 }
