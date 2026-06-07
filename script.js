@@ -4,6 +4,8 @@ function $(selector) {
 
 function abrirModal(id) {
   const modal = document.getElementById(id);
+  if (!modal) return;
+
   modal.classList.add("open");
 
   if (id === "modalCalendario") {
@@ -16,7 +18,10 @@ function abrirModal(id) {
 }
 
 function fecharModal(id) {
-  document.getElementById(id).classList.remove("open");
+  const modal = document.getElementById(id);
+  if (!modal) return;
+
+  modal.classList.remove("open");
 }
 
 function hojeISO() {
@@ -40,9 +45,7 @@ function formatarData(dataISO) {
 }
 
 function formatarMoeda(valor) {
-  if (valor === "" || valor === null || valor === undefined) {
-    return "";
-  }
+  if (valor === "" || valor === null || valor === undefined) return "";
 
   return Number(valor).toLocaleString("pt-BR", {
     style: "currency",
@@ -50,9 +53,10 @@ function formatarMoeda(valor) {
   });
 }
 
+/* BARRA FIXA */
+
 function buscarDiaAtual() {
   const hoje = hojeISO();
-
   return DADOS_BARRA.find((item) => item.data === hoje);
 }
 
@@ -66,6 +70,8 @@ function buscarProximaAbertura() {
 
 function renderizarBarra() {
   const barra = $("#barraStatus");
+  if (!barra) return;
+
   const diaAtual = buscarDiaAtual();
 
   if (diaAtual && diaAtual.status === "aberto") {
@@ -113,6 +119,8 @@ function renderizarBarra() {
   `;
 }
 
+/* POP-UP DE INGRESSOS */
+
 function carregarIngressos() {
   const iframe = $("#iframeIngressos");
 
@@ -121,9 +129,10 @@ function carregarIngressos() {
   }
 }
 
+/* CALENDÁRIO DE FUNCIONAMENTO */
+
 function renderizarCalendarios() {
   const container = $("#calendariosContainer");
-
   if (!container) return;
 
   const botoes = CALENDARIOS_FUNCIONAMENTO
@@ -145,6 +154,9 @@ function renderizarCalendarios() {
 
     <div id="calendarioRenderizado"></div>
   `;
+
+  mostrarCalendario(0);
+}
 
 function obterNumeroMes(nomeMes) {
   const meses = {
@@ -186,7 +198,6 @@ function mostrarCalendario(index) {
   const dias = calendario.dias
     .map((dia) => {
       const info = HORARIOS_FUNCIONAMENTO[dia.status];
-
       if (!info) return "";
 
       return `
@@ -208,7 +219,7 @@ function mostrarCalendario(index) {
 
       <div class="legenda-funcionamento">
         <span><b class="legenda-cor semana"></b> Dias de semana: 09h às 17h30</span>
-        <span><b class="legenda-cor fim"></b> Fins de semana e feriados: 08h30 às 17h30</span>
+        <span><b class="legenda-cor fim"></b> Fins de semana: 08h30 às 17h30</span>
         <span><b class="legenda-cor feriado"></b> Feriados e datas especiais: 08h30 às 17h30</span>
         <span><b class="legenda-cor fechado"></b> Parque fechado</span>
       </div>
@@ -229,22 +240,96 @@ function mostrarCalendario(index) {
   `;
 }
 
+function abrirInfoDia(indexCalendario, numeroDia) {
+  const calendario = CALENDARIOS_FUNCIONAMENTO[indexCalendario];
+  if (!calendario) return;
+
+  const dia = calendario.dias.find((item) => item.dia === numeroDia);
+  if (!dia) return;
+
+  const info = HORARIOS_FUNCIONAMENTO[dia.status];
+  const conteudo = $("#conteudoDiaCalendario");
+
+  if (!info || !conteudo) return;
+
+  const dataTexto = `${String(numeroDia).padStart(2, "0")} de ${
+    calendario.mes
+  } de ${calendario.ano}`;
+
+  if (dia.status === "fechado") {
+    conteudo.innerHTML = `
+      <div class="dia-info fechado">
+        <h2>📅 ${dataTexto}</h2>
+
+        <div class="dia-status vermelho">
+          🔴 Parque fechado
+        </div>
+
+        <p>O parque não estará em funcionamento nesta data.</p>
+
+        <p>Consulte outra data disponível no calendário para planejar sua visita.</p>
+      </div>
+    `;
+
+    abrirModal("modalDiaCalendario");
+    return;
+  }
+
+  conteudo.innerHTML = `
+    <div class="dia-info">
+      <h2>📅 ${dataTexto}</h2>
+
+      <div class="dia-status verde">
+        🟢 Parque aberto
+      </div>
+
+      <div class="dia-bloco">
+        <strong>⏰ Horário de funcionamento</strong>
+        <p>${info.horario}</p>
+      </div>
+
+      <div class="dia-bloco destaque-online">
+        <strong>🎟️ Compra antecipada pelo site</strong>
+
+        <p>
+          Comprando pelo site oficial, você garante desconto exclusivo online,
+          parcelamento e mais praticidade na entrada.
+        </p>
+
+        <ul>
+          <li>Compras online devem ser realizadas com pelo menos 1 dia de antecedência.</li>
+          <li>Não é possível comprar online para utilizar no mesmo dia.</li>
+          <li>Para uso no mesmo dia, a compra é realizada exclusivamente na bilheteria do parque.</li>
+        </ul>
+      </div>
+    </div>
+  `;
+
+  abrirModal("modalDiaCalendario");
+}
+
+/* AJUDA */
+
 const AJUDA = [
   {
     pergunta: "Posso comprar ingresso para hoje pelo site?",
-    resposta: "Não. Compras online devem ser realizadas com pelo menos 1 dia de antecedência."
+    resposta:
+      "Não. Compras online devem ser realizadas com pelo menos 1 dia de antecedência."
   },
   {
     pergunta: "Posso comprar ingresso na bilheteria?",
-    resposta: "Sim. A bilheteria funciona presencialmente nos dias de abertura do parque."
+    resposta:
+      "Sim. A bilheteria funciona presencialmente nos dias de abertura do parque."
   },
   {
     pergunta: "Criança paga ingresso?",
-    resposta: "Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. A partir de 12 anos utilizam ingresso Visitante."
+    resposta:
+      "Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. A partir de 12 anos utilizam ingresso Visitante."
   },
   {
     pergunta: "Posso levar alimentos e bebidas?",
-    resposta: "Não é permitida a entrada com alimentos e bebidas. Exceções: água para consumo pessoal, leite e alimentação para bebês, e alimentos para visitantes com restrições alimentares ou condições de saúde específicas mediante laudo ou documento comprobatório."
+    resposta:
+      "Não é permitida a entrada com alimentos e bebidas. Exceções: água para consumo pessoal, leite e alimentação para bebês, e alimentos para visitantes com restrições alimentares ou condições de saúde específicas mediante laudo ou documento comprobatório."
   },
   {
     pergunta: "Tem estacionamento?",
@@ -252,21 +337,23 @@ const AJUDA = [
   },
   {
     pergunta: "Tem guarda-volumes?",
-    resposta: "Sim. O guarda-volumes fica ao lado da lanchonete e possui cobrança à parte."
+    resposta:
+      "Sim. O guarda-volumes fica ao lado da lanchonete e possui cobrança à parte."
   },
   {
     pergunta: "Quais formas de pagamento são aceitas?",
-    resposta: "Aceitamos PIX, cartões de débito, cartões de crédito e dinheiro. O dinheiro pode ser utilizado para realizar recargas dentro do parque."
+    resposta:
+      "Aceitamos PIX, cartões de débito, cartões de crédito e dinheiro. O dinheiro pode ser utilizado para realizar recargas dentro do parque."
   },
   {
     pergunta: "Posso sair e retornar ao parque?",
-    resposta: "Sim, desde que a pulseira de acesso permaneça intacta. Caso seja retirada ou danificada, será necessário adquirir um novo Day Use."
+    resposta:
+      "Sim, desde que a pulseira de acesso permaneça intacta. Caso seja retirada ou danificada, será necessário adquirir um novo Day Use."
   }
 ];
 
 function renderizarAjuda() {
   const container = $("#ajudaContainer");
-
   if (!container) return;
 
   container.innerHTML = AJUDA.map((item, index) => {
@@ -274,6 +361,7 @@ function renderizarAjuda() {
       <button class="help-item" onclick="abrirResposta(${index})">
         ${item.pergunta}
       </button>
+
       <div class="help-answer hidden" id="resposta-${index}">
         ${item.resposta}
       </div>
@@ -283,8 +371,12 @@ function renderizarAjuda() {
 
 function abrirResposta(index) {
   const resposta = document.getElementById(`resposta-${index}`);
+  if (!resposta) return;
+
   resposta.classList.toggle("hidden");
 }
+
+/* INICIALIZAÇÃO */
 
 document.addEventListener("DOMContentLoaded", () => {
   renderizarBarra();
@@ -306,32 +398,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-document.addEventListener("click", function(e){
 
-    if(!e.target.closest(".accordion-header")){
-        return;
+/* ACCORDION MEIA-ENTRADA */
+
+document.addEventListener("click", function (e) {
+  if (!e.target.closest(".accordion-header")) return;
+
+  const item = e.target.closest(".accordion-item");
+
+  document.querySelectorAll(".accordion-item").forEach((accordion) => {
+    if (accordion !== item) {
+      accordion.classList.remove("active");
+
+      const seta = accordion.querySelector("span");
+      if (seta) seta.innerHTML = "⌄";
     }
+  });
 
-    const item = e.target.closest(".accordion-item");
+  item.classList.toggle("active");
 
-    document.querySelectorAll(".accordion-item").forEach((accordion)=>{
+  const seta = item.querySelector("span");
 
-        if(accordion !== item){
-            accordion.classList.remove("active");
-
-            accordion.querySelector("span").innerHTML = "⌄";
-        }
-
-    });
-
-    item.classList.toggle("active");
-
-    const seta = item.querySelector("span");
-
-    if(item.classList.contains("active")){
-        seta.innerHTML = "⌃";
-    }else{
-        seta.innerHTML = "⌄";
-    }
-
+  if (seta) {
+    seta.innerHTML = item.classList.contains("active") ? "⌃" : "⌄";
+  }
 });
