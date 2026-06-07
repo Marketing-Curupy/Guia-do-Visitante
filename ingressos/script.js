@@ -148,13 +148,39 @@ function normalizeTickets(data) {
 function renderTickets(tickets) {
   ticketsList.innerHTML = tickets
     .map((ticket) => {
+
+      let icon = "🎟️";
+
+      const nome = ticket.name.toLowerCase();
+
+      if (
+        nome.includes("kids") ||
+        nome.includes("criança") ||
+        nome.includes("infantil")
+      ) {
+        icon = "🧒";
+      }
+
+      else if (
+        nome.includes("melhor idade") ||
+        nome.includes("idoso")
+      ) {
+        icon = "👴";
+      }
+
+      else if (
+        nome.includes("individual") ||
+        nome.includes("adulto")
+      ) {
+        icon = "👨";
+      }
+
       return `
         <div class="ticket-card">
-          ${
-            ticket.image
-              ? `<img src="${ticket.image}" alt="${ticket.name}">`
-              : `<div></div>`
-          }
+
+          <div class="ticket-icon">
+            ${icon}
+          </div>
 
           <div>
             <span>${ticket.name}</span>
@@ -162,6 +188,7 @@ function renderTickets(tickets) {
           </div>
 
           <strong>${formatMoney(ticket.price)}</strong>
+
         </div>
       `;
     })
