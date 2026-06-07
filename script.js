@@ -130,7 +130,7 @@ function buscarRapido() {
     texto.includes("preco") ||
     texto.includes("comprar")
   ) {
-    abrirModal("modalIngressos");
+   openIngressosModal();
     campo.value = "";
     return;
   }
