@@ -11,6 +11,8 @@ function abrirModal(id) {
   if (id === "modalCalendario") {
     renderizarCalendarios();
   }
+}
+
 function fecharModal(id) {
   const modal = document.getElementById(id);
   if (!modal) return;
@@ -23,7 +25,6 @@ function hojeISO() {
   const ano = hoje.getFullYear();
   const mes = String(hoje.getMonth() + 1).padStart(2, "0");
   const dia = String(hoje.getDate()).padStart(2, "0");
-
   return `${ano}-${mes}-${dia}`;
 }
 
@@ -112,7 +113,77 @@ function renderizarBarra() {
     </div>
   `;
 }
-/* CALENDÁRIO DE FUNCIONAMENTO */
+
+/* BUSCA */
+
+function buscarRapido() {
+  const campo = document.getElementById("campoBusca");
+  if (!campo) return;
+
+  const texto = campo.value.toLowerCase().trim();
+  if (texto.length < 3) return;
+
+  if (
+    texto.includes("ingresso") ||
+    texto.includes("valor") ||
+    texto.includes("preço") ||
+    texto.includes("preco") ||
+    texto.includes("comprar")
+  ) {
+    abrirModal("modalIngressos");
+    campo.value = "";
+    return;
+  }
+
+  if (
+    texto.includes("calendario") ||
+    texto.includes("calendário") ||
+    texto.includes("funcionamento") ||
+    texto.includes("horario") ||
+    texto.includes("horário") ||
+    texto.includes("abre")
+  ) {
+    abrirModal("modalCalendario");
+    campo.value = "";
+    return;
+  }
+
+  if (
+    texto.includes("meia") ||
+    texto.includes("gratuidade") ||
+    texto.includes("pcd") ||
+    texto.includes("tea")
+  ) {
+    abrirModal("modalMeia");
+    campo.value = "";
+    return;
+  }
+
+  if (texto.includes("hospedagem")) {
+    window.location.href = "hospedagem.html";
+    return;
+  }
+
+  if (
+    texto.includes("associado") ||
+    texto.includes("associação") ||
+    texto.includes("associacao")
+  ) {
+    window.location.href = "associados.html";
+    return;
+  }
+
+  if (
+    texto.includes("mapa") ||
+    texto.includes("chegar") ||
+    texto.includes("localização") ||
+    texto.includes("localizacao")
+  ) {
+    abrirMapa();
+  }
+}
+
+/* CALENDÁRIO */
 
 function renderizarCalendarios() {
   const container = $("#calendariosContainer");
@@ -201,10 +272,25 @@ function mostrarCalendario(index) {
       <p>${calendario.observacao}</p>
 
       <div class="legenda-funcionamento">
-        <span><b class="legenda-cor semana"></b> Dias de semana: 09h às 17h30</span>
-        <span><b class="legenda-cor fim"></b> Fins de semana: 08h30 às 17h30</span>
-        <span><b class="legenda-cor feriado"></b> Feriados e datas especiais: 08h30 às 17h30</span>
-        <span><b class="legenda-cor fechado"></b> Parque fechado</span>
+        <button onclick="filtrarCalendario('dia-semana')">
+          <b class="legenda-cor semana"></b> Dias de semana
+        </button>
+
+        <button onclick="filtrarCalendario('dia-fim-semana')">
+          <b class="legenda-cor fim"></b> Fins de semana
+        </button>
+
+        <button onclick="filtrarCalendario('dia-feriado')">
+          <b class="legenda-cor feriado"></b> Feriados
+        </button>
+
+        <button onclick="filtrarCalendario('dia-fechado')">
+          <b class="legenda-cor fechado"></b> Fechado
+        </button>
+
+        <button onclick="filtrarCalendario(null)">
+          Mostrar todos
+        </button>
       </div>
 
       <div class="cal-grid">
@@ -221,6 +307,16 @@ function mostrarCalendario(index) {
       </div>
     </div>
   `;
+}
+
+function filtrarCalendario(classe) {
+  document.querySelectorAll(".cal-dia").forEach((dia) => {
+    dia.classList.remove("oculto");
+
+    if (classe && !dia.classList.contains(classe)) {
+      dia.classList.add("oculto");
+    }
+  });
 }
 
 function abrirInfoDia(indexCalendario, numeroDia) {
@@ -249,7 +345,6 @@ function abrirInfoDia(indexCalendario, numeroDia) {
         </div>
 
         <p>O parque não estará em funcionamento nesta data.</p>
-
         <p>Consulte outra data disponível no calendário para planejar sua visita.</p>
       </div>
     `;
@@ -269,6 +364,24 @@ function abrirInfoDia(indexCalendario, numeroDia) {
       <div class="dia-bloco">
         <strong>⏰ Horário de funcionamento</strong>
         <p>${info.horario}</p>
+      </div>
+
+      <div class="dia-bloco">
+        <strong>🎟 Valor da bilheteria</strong>
+        <p>Visitante: R$ 86,00</p>
+        <p>Kids: R$ 45,00</p>
+        <p>Convidado: R$ 50,00</p>
+      </div>
+
+      <div class="dia-bloco">
+        <strong>🏨 Hospedagem disponível</strong>
+        <p>Consulte nossas opções de hospedagem para aproveitar melhor sua visita.</p>
+      </div>
+
+      <div class="dia-bloco">
+        <strong>📍 Como chegar</strong>
+        <p>Veja a localização do Curupy no mapa.</p>
+        <button class="btn azul" onclick="abrirMapa()">Abrir mapa</button>
       </div>
 
       <div class="dia-bloco destaque-online">
@@ -291,9 +404,52 @@ function abrirInfoDia(indexCalendario, numeroDia) {
   abrirModal("modalDiaCalendario");
 }
 
+/* MAPA */
+
+function abrirMapa() {
+  if (typeof CONFIG !== "undefined" && CONFIG.googleMaps) {
+    window.open(CONFIG.googleMaps, "_blank");
+  }
+}
+
+/* GALERIA */
+
+function abrirFoto(src) {
+  const foto = $("#fotoAberta");
+  if (!foto) return;
+
+  foto.src = src;
+  abrirModal("modalFoto");
+}
+
 /* AJUDA */
 
 const AJUDA = [
+  {
+    pergunta: "🎟 Ingressos",
+    resposta:
+      "A compra online abre no botão Comprar online. Ela precisa ser feita com pelo menos 1 dia de antecedência."
+  },
+  {
+    pergunta: "📅 Calendário",
+    resposta:
+      "No calendário você consulta os dias de funcionamento, horários, feriados, fins de semana e dias fechados."
+  },
+  {
+    pergunta: "🏨 Hospedagem",
+    resposta:
+      "Acesse a área de hospedagem para conhecer as opções disponíveis."
+  },
+  {
+    pergunta: "💎 Associação",
+    resposta:
+      "O Clube de Associados oferece vantagens exclusivas durante o ano."
+  },
+  {
+    pergunta: "📍 Como chegar",
+    resposta:
+      "Use o botão Como chegar para abrir a localização no mapa."
+  },
   {
     pergunta: "Posso comprar ingresso para hoje pelo site?",
     resposta:
@@ -339,17 +495,32 @@ function renderizarAjuda() {
   const container = $("#ajudaContainer");
   if (!container) return;
 
-  container.innerHTML = AJUDA.map((item, index) => {
-    return `
-      <button class="help-item" onclick="abrirResposta(${index})">
-        ${item.pergunta}
-      </button>
+  container.innerHTML = `
+    <div class="help-intro">
+      <strong>Olá 👋</strong>
+      <p>Posso ajudar com:</p>
+    </div>
 
-      <div class="help-answer hidden" id="resposta-${index}">
-        ${item.resposta}
-      </div>
-    `;
-  }).join("");
+    <div class="chat-opcoes">
+      <button onclick="abrirModal('modalIngressos')">🎟 Ingressos e valores</button>
+      <button onclick="abrirModal('modalCalendario')">📅 Calendário de funcionamento</button>
+      <button onclick="window.location.href='hospedagem.html'">🏨 Hospedagem</button>
+      <button onclick="window.location.href='associados.html'">💎 Associação</button>
+      <button onclick="abrirMapa()">📍 Como chegar</button>
+    </div>
+
+    ${AJUDA.map((item, index) => {
+      return `
+        <button class="help-item" onclick="abrirResposta(${index})">
+          ${item.pergunta}
+        </button>
+
+        <div class="help-answer hidden" id="resposta-${index}">
+          ${item.resposta}
+        </div>
+      `;
+    }).join("")}
+  `;
 }
 
 function abrirResposta(index) {
@@ -368,9 +539,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnMapa = $("#btnMapa");
 
   if (btnMapa) {
-    btnMapa.addEventListener("click", () => {
-      window.open(CONFIG.googleMaps, "_blank");
-    });
+    btnMapa.addEventListener("click", abrirMapa);
   }
 
   document.querySelectorAll(".modal").forEach((modal) => {
