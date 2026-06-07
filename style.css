@@ -573,3 +573,116 @@ details li{
     border-radius:10px;
     font-weight:700;
 }
+.calendario-funcionamento h3{
+  color:var(--azul);
+  margin-bottom:6px;
+  font-size:1.6rem;
+}
+
+.legenda-funcionamento{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:16px 0;
+  font-size:.9rem;
+}
+
+.legenda-funcionamento span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-weight:800;
+}
+
+.legenda-cor{
+  width:18px;
+  height:18px;
+  border-radius:5px;
+  display:inline-block;
+}
+
+.legenda-cor.semana{
+  background:#ffd447;
+}
+
+.legenda-cor.fim{
+  background:#13d5d0;
+}
+
+.legenda-cor.fechado{
+  background:#555;
+}
+
+.cal-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
+}
+
+.cal-grid > div{
+  text-align:center;
+  font-weight:900;
+  color:var(--azul);
+  padding:8px 0;
+}
+
+.cal-dia{
+  border:0;
+  border-radius:14px;
+  min-height:72px;
+  padding:8px;
+  cursor:pointer;
+  font-weight:900;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.cal-dia strong{
+  display:block;
+  font-size:1.25rem;
+}
+
+.cal-dia span{
+  display:block;
+  font-size:.72rem;
+  margin-top:4px;
+}
+
+.dia-semana{
+  background:#ffd447;
+  color:#111;
+}
+
+.dia-fim-semana{
+  background:#13d5d0;
+  color:#073b66;
+}
+
+.dia-feriado{
+  background:#ff4f8b;
+  color:white;
+}
+
+.dia-fechado{
+  background:#555;
+  color:white;
+  opacity:.45;
+}
+
+@media(max-width:760px){
+  .cal-grid{
+    gap:5px;
+  }
+
+  .cal-dia{
+    min-height:52px;
+    padding:5px;
+  }
+
+  .cal-dia strong{
+    font-size:1rem;
+  }
+
+  .cal-dia span{
+    display:none;
+  }
+}
