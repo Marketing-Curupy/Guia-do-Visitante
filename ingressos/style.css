@@ -100,6 +100,21 @@ body {
   color: #9aa5aa;
 }
 
+.day.closed {
+  background: #e9eef2;
+  color: #8a9aa5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.day.closed:hover {
+  transform: none;
+  background: #e9eef2;
+}
+
+.day.closed small {
+  display: none;
+}
 .day.empty {
   background: transparent;
   cursor: default;
