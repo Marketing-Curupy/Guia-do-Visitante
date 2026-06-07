@@ -126,16 +126,11 @@ function renderizarCalendarios() {
 
   if (!container) return;
 
-  if (!CALENDARIOS_FUNCIONAMENTO.length) {
-    container.innerHTML = "<p>Calendário em atualização.</p>";
-    return;
-  }
-
   const botoes = CALENDARIOS_FUNCIONAMENTO
     .map((calendario, index) => {
       return `
         <button onclick="mostrarCalendario(${index})">
-          ${calendario.titulo}
+          ${calendario.mes} ${calendario.ano}
         </button>
       `;
     })
@@ -148,7 +143,7 @@ function renderizarCalendarios() {
       ${botoes}
     </div>
 
-    <div id="calendarioImagem"></div>
+    <div id="calendarioRenderizado"></div>
   `;
 
   mostrarCalendario(0);
@@ -156,12 +151,67 @@ function renderizarCalendarios() {
 
 function mostrarCalendario(index) {
   const calendario = CALENDARIOS_FUNCIONAMENTO[index];
-  const destino = $("#calendarioImagem");
+  const destino = $("#calendarioRenderizado");
+
+  const primeiroDiaSemana = new Date(
+    Number(calendario.ano),
+    index === 0 ? 5 : 6,
+    1
+  ).getDay();
+
+  const espacosVazios = Array.from({ length: primeiroDiaSemana })
+    .map(() => `<div></div>`)
+    .join("");
+
+  const dias = calendario.dias
+    .map((dia) => {
+      const info = HORARIOS_FUNCIONAMENTO[dia.status];
+
+      let mensagem = "";
+
+      if (dia.status === "fechado") {
+        mensagem = "Parque fechado nesta data.";
+      } else {
+        mensagem = `${info.label}: ${info.horario}. Compras pelo site possuem desconto e devem ser realizadas com pelo menos 1 dia de antecedência. Para uso no mesmo dia, a compra é exclusiva na bilheteria do parque.`;
+      }
+
+      return `
+        <button
+          class="cal-dia ${info.classe}"
+          onclick="alert('${mensagem}')"
+          title="${mensagem}"
+        >
+          <strong>${dia.dia}</strong>
+          <span>${dia.status === "fechado" ? "Fechado" : info.horario}</span>
+        </button>
+      `;
+    })
+    .join("");
 
   destino.innerHTML = `
-    <h3>${calendario.titulo}</h3>
-    <p>${calendario.descricao}</p>
-    <img class="calendario-img" src="${calendario.imagem}" alt="${calendario.descricao}">
+    <div class="calendario-funcionamento">
+      <h3>${calendario.mes} ${calendario.ano}</h3>
+      <p>${calendario.observacao}</p>
+
+      <div class="legenda-funcionamento">
+        <span><b class="legenda-cor semana"></b> Dias de semana: 09h às 17h30</span>
+        <span><b class="legenda-cor fim"></b> Fins de semana e feriados: 08h30 às 17h30</span>
+        <span><b class="legenda-cor fechado"></b> Parque fechado</span>
+      </div>
+
+      <div class="cal-grid">
+        <div>Dom</div>
+        <div>Seg</div>
+        <div>Ter</div>
+        <div>Qua</div>
+        <div>Qui</div>
+        <div>Sex</div>
+        <div>Sáb</div>
+
+        ${espacosVazios}
+        ${dias}
+      </div>
+    </div>
   `;
 }
 
