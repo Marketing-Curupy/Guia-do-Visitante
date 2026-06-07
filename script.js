@@ -84,7 +84,7 @@ function renderizarBarra() {
           <span class="barra-precos-title">🎟️ Bilheteria hoje:</span>
           <span class="preco-pill">Visitante ${formatarMoeda(valores.visitante)}</span>
           <span class="preco-pill">Kids ${formatarMoeda(valores.kids)}</span>
-          <span class="preco-pill">Convidado ${formatarMoeda(valores.convidadoSocio)}</span>
+          <span class="preco-pill">Convidado de Sócio ${formatarMoeda(valores.convidadoSocio)}</span>
         </div>
 
         <button class="link-meia" onclick="abrirModal('modalMeia')">
@@ -374,11 +374,6 @@ function abrirInfoDia(indexCalendario, numeroDia) {
       </div>
 
       <div class="dia-bloco">
-        <strong>🏨 Hospedagem disponível</strong>
-        <p>Consulte nossas opções de hospedagem para aproveitar melhor sua visita.</p>
-      </div>
-
-      <div class="dia-bloco">
         <strong>📍 Como chegar</strong>
         <p>Veja a localização do Curupy no mapa.</p>
         <button class="btn azul" onclick="abrirMapa()">Abrir mapa</button>
@@ -428,7 +423,8 @@ const AJUDA = [
   {
     pergunta: "🎟 Ingressos",
     resposta:
-      "A compra online abre no botão Comprar online. Ela precisa ser feita com pelo menos 1 dia de antecedência."
+      "Compra online pelo site oficial com até um dia de antecedencia da data de utilização."
+    "Para utilização no mesmo dia é necessario a compra na bilheteria do Park, sujeito ao valor da tárifa do dia"
   },
   {
     pergunta: "📅 Calendário",
@@ -463,7 +459,7 @@ const AJUDA = [
   {
     pergunta: "Criança paga ingresso?",
     resposta:
-      "Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. A partir de 12 anos utilizam ingresso Visitante."
+      "Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. A partir de 12 anos utilizam ingresso Individual."
   },
   {
     pergunta: "Posso levar alimentos e bebidas?",
