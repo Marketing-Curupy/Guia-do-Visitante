@@ -1,950 +1,661 @@
-```css
-:root {
-  --azul: #073b66;
-  --azul-claro: #dffbff;
-  --rosa: #ff4f8b;
-  --amarelo: #fff3b0;
-  --verde: #12b886;
-  --vermelho: #e03131;
-  --texto: #17324d;
-  --sombra: 0 15px 35px rgba(0, 0, 0, .08);
-  --radius: 28px;
+```js
+function $(selector) {
+  return document.querySelector(selector);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+function abrirModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+
+  modal.classList.add("open");
+
+  if (id === "modalCalendario") {
+    renderizarCalendarios();
+  }
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  color: var(--texto);
-  background: linear-gradient(180deg, #eaffff 0%, #fff6c8 45%, #ffffff 100%);
-  padding-bottom: 100px;
+function fecharModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+
+  modal.classList.remove("open");
 }
 
-/* HERO */
+function hojeISO() {
+  const hoje = new Date();
+  const ano = hoje.getFullYear();
+  const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+  const dia = String(hoje.getDate()).padStart(2, "0");
 
-.hero {
-  text-align: center;
-  padding: 34px 18px 26px;
+  return `${ano}-${mes}-${dia}`;
 }
 
-.hero-logo {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 18px;
+function formatarData(dataISO) {
+  const [ano, mes, dia] = dataISO.split("-").map(Number);
+  const data = new Date(ano, mes - 1, dia);
+
+  return data.toLocaleDateString("pt-BR", {
+    weekday: "long",
+    day: "2-digit",
+    month: "2-digit"
+  });
 }
 
-.hero-logo img {
-  width: 190px;
-  max-width: 80%;
-  height: auto;
-}
+function formatarMoeda(valor) {
+  if (valor === "" || valor === null || valor === undefined) return "";
 
-.hero h1 {
-  color: var(--azul);
-  font-size: clamp(2rem, 5vw, 3.8rem);
-  line-height: 1;
-  margin-bottom: 8px;
-}
-
-.hero h2 {
-  color: #111;
-  font-size: clamp(1.35rem, 3vw, 2.1rem);
-  margin-bottom: 8px;
-}
-
-.hero p {
-  max-width: 720px;
-  margin: 0 auto;
-  font-size: 1.05rem;
-}
-
-/* BUSCA RÁPIDA */
-
-.busca-rapida {
-  width: min(720px, 100%);
-  margin: 24px auto 0;
-}
-
-.busca-rapida label {
-  display: block;
-  font-weight: 900;
-  color: var(--azul);
-  margin-bottom: 8px;
-}
-
-.busca-rapida input {
-  width: 100%;
-  border: 2px solid #d9ecf5;
-  border-radius: 999px;
-  padding: 15px 20px;
-  font-size: 1rem;
-  outline: none;
-  box-shadow: var(--sombra);
-}
-
-.atalhos {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.atalhos button,
-.atalhos a {
-  border: 0;
-  background: white;
-  color: var(--azul);
-  border-radius: 999px;
-  padding: 10px 15px;
-  font-weight: 900;
-  text-decoration: none;
-  box-shadow: var(--sombra);
-  cursor: pointer;
-  transition: .25s ease;
-}
-
-.atalhos button:hover,
-.atalhos a:hover {
-  transform: translateY(-3px);
+  return Number(valor).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
 }
 
 /* BARRA FIXA */
 
-.barra-fixa {
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  background: #ffffff;
-  border-top: 1px solid #e8f6fb;
-  border-bottom: 2px solid #9deafa;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+function buscarDiaAtual() {
+  const hoje = hojeISO();
+  return DADOS_BARRA.find((item) => item.data === hoje);
 }
 
-.barra-inner {
-  width: min(1180px, 100%);
-  margin: 0 auto;
-  padding: 8px 16px;
-  display: grid;
-  grid-template-columns: 1fr 1.65fr auto;
-  gap: 18px;
-  align-items: center;
-}
-
-.barra-status {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.barra-status strong {
-  font-size: 1rem;
-  color: var(--verde);
-}
-
-.barra-status span {
-  font-size: .88rem;
-  font-weight: 700;
-}
-
-.barra-precos {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.barra-precos-title {
-  font-weight: 900;
-  color: var(--rosa);
-  white-space: nowrap;
-}
-
-.preco-pill {
-  border-left: 1px solid #cfd8dc;
-  padding-left: 10px;
-  font-size: .86rem;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-.link-meia {
-  border: 0;
-  background: transparent;
-  color: var(--azul);
-  font-weight: 900;
-  text-decoration: underline;
-  cursor: pointer;
-  font-size: .82rem;
-  white-space: nowrap;
-}
-
-/* CONTEÚDO */
-
-.container {
-  width: min(1120px, calc(100% - 26px));
-  margin: 26px auto;
-}
-
-.card {
-  background: white;
-  border-radius: var(--radius);
-  box-shadow: var(--sombra);
-  padding: 26px;
-  margin-bottom: 20px;
-  transition: .25s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 18px 38px rgba(0, 0, 0, .10);
-}
-
-.card.destaque {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 22px;
-  align-items: center;
-  border-top: 7px solid var(--rosa);
-}
-
-.card h2 {
-  color: var(--azul);
-  margin-bottom: 10px;
-}
-
-.card p {
-  line-height: 1.5;
-}
-
-.aviso {
-  display: inline-block;
-  margin-top: 12px;
-  background: var(--amarelo);
-  color: #8a5a00;
-  border-radius: 14px;
-  padding: 10px 12px;
-  font-weight: 900;
-}
-
-.btn {
-  border: 0;
-  border-radius: 999px;
-  padding: 14px 20px;
-  font-weight: 900;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 46px;
-  transition: .25s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.rosa {
-  background: var(--rosa);
-  color: white;
-}
-
-.azul {
-  background: var(--azul);
-  color: white;
-}
-
-.full {
-  width: 100%;
-  margin-top: 18px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin: 20px 0;
-}
-
-.info div {
-  background: white;
-  border-radius: 22px;
-  padding: 18px;
-  box-shadow: var(--sombra);
-}
-
-.info strong {
-  display: block;
-  color: var(--azul);
-  margin-bottom: 6px;
-}
-
-.info span {
-  display: block;
-}
-
-.info button {
-  border: 0;
-  background: transparent;
-  color: var(--azul);
-  font-weight: 900;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 0;
-}
-
-/* MODAIS */
-
-.modal {
-  display: flex;
-  position: fixed;
-  inset: 0;
-  background: rgba(7, 59, 102, .58);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  padding: 18px;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: .25s ease;
-}
-
-.modal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal-box {
-  background: white;
-  width: min(720px, 100%);
-  max-height: 90vh;
-  overflow: auto;
-  border-radius: 28px;
-  padding: 24px;
-  position: relative;
-  box-shadow: var(--sombra);
-  transform: scale(.95);
-  transition: .25s ease;
-}
-
-.modal.open .modal-box {
-  transform: scale(1);
-}
-
-.modal-box.grande {
-  width: min(1080px, 100%);
-}
-
-.fechar {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 38px;
-  height: 38px;
-  border: 0;
-  border-radius: 999px;
-  background: #eefaff;
-  color: var(--azul);
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 2;
-}
-
-.modal-box h2 {
-  color: var(--azul);
-  padding-right: 42px;
-  margin-bottom: 16px;
-}
-
-/* MODAL INGRESSOS */
-
-.ingressos-pop {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-top: 18px;
-}
-
-.ingresso-card {
-  background: #f8fcff;
-  border: 1px solid #d9ecf5;
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 8px 20px rgba(7, 59, 102, .08);
-}
-
-.ingresso-card h3 {
-  color: var(--azul);
-  margin-bottom: 10px;
-}
-
-.ingresso-card strong {
-  display: block;
-  font-size: 2rem;
-  color: var(--rosa);
-  margin-bottom: 8px;
-}
-
-.ingressos-aviso {
-  margin-top: 20px;
-  background: #fff7d6;
-  border: 1px solid #ffe08a;
-  border-radius: 18px;
-  padding: 18px;
-  color: #6f4b00;
-}
-
-.ingressos-aviso strong {
-  display: block;
-  margin-bottom: 8px;
-}
-
-/* MODAL MEIA ENTRADA */
-
-.meia-modal {
-  padding: 0;
-  overflow: hidden;
-}
-
-.meia-header {
-  background: #0f5cb8;
-  color: white;
-  padding: 22px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.meia-header h2 {
-  color: white;
-  margin: 0;
-  padding-right: 42px;
-}
-
-.meia-fechar {
-  background: white;
-  color: #0f5cb8;
-}
-
-.accordion {
-  padding: 20px;
-}
-
-.accordion-item {
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.accordion-header {
-  width: 100%;
-  background: #eef4fa;
-  border: none;
-  border-radius: 14px;
-  padding: 18px;
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #0f5cb8;
-  font-weight: 700;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.accordion-content {
-  display: none;
-  padding: 10px 15px 25px;
-  color: #61798c;
-  line-height: 1.8;
-}
-
-.accordion-item.active .accordion-content {
-  display: block;
-}
-
-.accordion-content h4 {
-  color: #0f5cb8;
-  margin-top: 20px;
-  margin-bottom: 15px;
-}
-
-.accordion-content ul {
-  padding-left: 25px;
-}
-
-.accordion-content li {
-  margin-bottom: 12px;
-}
-
-.alerta-importante {
-  margin-top: 20px;
-  background: #fff2e8;
-  border-left: 4px solid #ff6b35;
-  color: #b15c1e;
-  padding: 15px;
-  border-radius: 10px;
-  font-weight: 700;
-}
-
-.meia-footer {
-  padding: 0 20px 20px;
-}
-
-/* CALENDÁRIO */
-
-.calendarios-tabs {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.calendarios-tabs button {
-  border: 0;
-  border-radius: 999px;
-  padding: 10px 14px;
-  background: var(--azul);
-  color: white;
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.calendario-funcionamento h3 {
-  color: var(--azul);
-  margin-bottom: 6px;
-  font-size: 1.6rem;
-}
-
-.legenda-funcionamento {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 16px 0;
-  font-size: .9rem;
-}
-
-.legenda-funcionamento button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border: 0;
-  background: white;
-  border-radius: 999px;
-  padding: 9px 12px;
-  color: var(--azul);
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: var(--sombra);
-  transition: .25s ease;
-}
-
-.legenda-funcionamento button:hover {
-  transform: translateY(-2px);
-}
-
-.legenda-cor {
-  width: 18px;
-  height: 18px;
-  border-radius: 5px;
-  display: inline-block;
-}
-
-.legenda-cor.semana {
-  background: #ffd447;
-}
-
-.legenda-cor.fim {
-  background: #13d5d0;
-}
-
-.legenda-cor.feriado {
-  background: #ff4f8b;
-}
-
-.legenda-cor.fechado {
-  background: #555;
-}
+function buscarProximaAbertura() {
+  const hoje = hojeISO();
 
-.cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  return DADOS_BARRA
+    .filter((item) => item.status === "aberto" && item.data > hoje)
+    .sort((a, b) => a.data.localeCompare(b.data))[0];
 }
 
-.cal-grid > div {
-  text-align: center;
-  font-weight: 900;
-  color: var(--azul);
-  padding: 8px 0;
-}
-
-.cal-dia {
-  border: 0;
-  border-radius: 16px;
-  min-height: 82px;
-  padding: 8px;
-  cursor: pointer;
-  font-weight: 900;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
-  transition: .25s ease;
-  position: relative;
-}
-
-.cal-dia:hover {
-  transform: translateY(-3px);
-}
-
-.cal-dia strong {
-  display: block;
-  font-size: 1.25rem;
-}
-
-.cal-dia span {
-  display: block;
-  font-size: .72rem;
-  margin-top: 4px;
-}
-
-.cal-dia::after {
-  content: "";
-  display: block;
-  font-size: .65rem;
-  margin-top: 4px;
-  line-height: 1.2;
-}
-
-.cal-dia:hover::after {
-  content: "🎟 Ingresso disponível";
-}
-
-.dia-fechado:hover::after {
-  content: "🔴 Fechado";
-}
-
-.cal-dia.oculto {
-  opacity: .18;
-  filter: grayscale(1);
-}
-
-.dia-semana {
-  background: #ffd447;
-  color: #111;
-}
-
-.dia-fim-semana {
-  background: #13d5d0;
-  color: #073b66;
-}
-
-.dia-feriado {
-  background: #ff4f8b;
-  color: white;
-}
-
-.dia-fechado {
-  background: #555;
-  color: white;
-  opacity: .45;
-}
-
-/* MODAL DO DIA */
-
-.dia-modal {
-  width: min(560px, 100%);
-}
-
-.dia-info h2 {
-  color: var(--azul);
-  margin-bottom: 14px;
-  padding-right: 36px;
-}
-
-.dia-status {
-  font-size: 1.15rem;
-  font-weight: 900;
-  padding: 12px 14px;
-  border-radius: 14px;
-  margin-bottom: 14px;
-}
-
-.dia-status.verde {
-  background: #e6fcf5;
-  color: #0f8f62;
-}
-
-.dia-status.vermelho {
-  background: #fff0f0;
-  color: #c92a2a;
-}
-
-.dia-bloco {
-  background: #f8fcff;
-  border: 1px solid #d9ecf5;
-  border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 14px;
-}
-
-.dia-bloco strong {
-  display: block;
-  color: var(--azul);
-  margin-bottom: 6px;
-}
-
-.destaque-online {
-  background: #fff7d6;
-  border-color: #ffe08a;
-}
-
-.destaque-online ul {
-  margin-top: 10px;
-  padding-left: 20px;
-}
+function renderizarBarra() {
+  const barra = $("#barraStatus");
+  if (!barra) return;
 
-.destaque-online li {
-  margin-bottom: 8px;
+  const diaAtual = buscarDiaAtual();
+
+  if (diaAtual && diaAtual.status === "aberto") {
+    const valores = diaAtual.valores;
+
+    barra.innerHTML = `
+      <div class="barra-inner">
+        <div class="barra-status status-aberto">
+          <strong>🟢 PARQUE ABERTO AGORA</strong>
+          <span>${formatarData(diaAtual.data)}</span>
+          <span>${diaAtual.horario}</span>
+        </div>
+
+        <div class="barra-precos">
+          <span class="barra-precos-title">🎟️ Bilheteria hoje:</span>
+          <span class="preco-pill">Visitante ${formatarMoeda(valores.visitante)}</span>
+          <span class="preco-pill">Kids ${formatarMoeda(valores.kids)}</span>
+          <span class="preco-pill">Convidado ${formatarMoeda(valores.convidadoSocio)}</span>
+        </div>
+
+        <button class="link-meia" onclick="abrirModal('modalMeia')">
+          ℹ️ Ver regras de meia-entrada
+        </button>
+      </div>
+    `;
+
+    return;
+  }
+
+  const proxima = buscarProximaAbertura();
+
+  barra.innerHTML = `
+    <div class="barra-inner">
+      <div class="barra-status status-fechado">
+        <strong style="color:#e03131;">🔴 Parque fechado hoje</strong>
+        <span>
+          Próximo dia de abertura:
+          ${proxima ? formatarData(proxima.data) : "em breve"}
+        </span>
+        <span id="contadorReabertura"></span>
+      </div>
+
+      <button class="link-meia" onclick="abrirModal('modalMeia')">
+        ℹ️ Ver regras de meia-entrada
+      </button>
+    </div>
+  `;
+
+  if (proxima) {
+    iniciarContadorReabertura(proxima.data);
+  }
+}
+
+function iniciarContadorReabertura(dataISO) {
+  const destino = $("#contadorReabertura");
+  if (!destino) return;
+
+  function atualizar() {
+    const agora = new Date();
+    const [ano, mes, dia] = dataISO.split("-").map(Number);
+    const abertura = new Date(ano, mes - 1, dia, 8, 30, 0);
+
+    const diferenca = abertura - agora;
+
+    if (diferenca <= 0) {
+      destino.innerHTML = "Reabre em breve.";
+      return;
+    }
+
+    const horas = Math.floor(diferenca / 1000 / 60 / 60);
+    const minutos = Math.floor((diferenca / 1000 / 60) % 60);
+
+    destino.innerHTML = `Reabre em: ${horas}h ${minutos}m`;
+  }
+
+  atualizar();
+  setInterval(atualizar, 60000);
+}
+
+/* BUSCA INTELIGENTE */
+
+function buscarRapido() {
+  const campo = document.getElementById("campoBusca");
+  if (!campo) return;
+
+  const texto = campo.value.toLowerCase().trim();
+
+  if (texto.length < 3) return;
+
+  if (
+    texto.includes("ingresso") ||
+    texto.includes("valor") ||
+    texto.includes("preço") ||
+    texto.includes("preco") ||
+    texto.includes("quanto custa") ||
+    texto.includes("bilheteria")
+  ) {
+    abrirModal("modalIngressos");
+    campo.value = "";
+    return;
+  }
+
+  if (
+    texto.includes("calendario") ||
+    texto.includes("calendário") ||
+    texto.includes("funcionamento") ||
+    texto.includes("abre") ||
+    texto.includes("aberto") ||
+    texto.includes("horário") ||
+    texto.includes("horario")
+  ) {
+    abrirModal("modalCalendario");
+    campo.value = "";
+    return;
+  }
+
+  if (
+    texto.includes("meia") ||
+    texto.includes("gratuidade") ||
+    texto.includes("pcd") ||
+    texto.includes("tea") ||
+    texto.includes("idoso") ||
+    texto.includes("estudante")
+  ) {
+    abrirModal("modalMeia");
+    campo.value = "";
+    return;
+  }
+
+  if (
+    texto.includes("hospedagem") ||
+    texto.includes("hotel") ||
+    texto.includes("pousada") ||
+    texto.includes("chalé") ||
+    texto.includes("chale")
+  ) {
+    window.location.href = "hospedagem.html";
+    return;
+  }
+
+  if (
+    texto.includes("associado") ||
+    texto.includes("associação") ||
+    texto.includes("associacao") ||
+    texto.includes("clube")
+  ) {
+    window.location.href = "associados.html";
+    return;
+  }
+
+  if (
+    texto.includes("mapa") ||
+    texto.includes("localização") ||
+    texto.includes("localizacao") ||
+    texto.includes("como chegar") ||
+    texto.includes("endereço") ||
+    texto.includes("endereco")
+  ) {
+    if (typeof CONFIG !== "undefined" && CONFIG.googleMaps) {
+      window.open(CONFIG.googleMaps, "_blank");
+    }
+  }
+}
+
+/* CALENDÁRIO DE FUNCIONAMENTO */
+
+function renderizarCalendarios() {
+  const container = $("#calendariosContainer");
+  if (!container) return;
+
+  const botoes = CALENDARIOS_FUNCIONAMENTO
+    .map((calendario, index) => {
+      return `
+        <button onclick="mostrarCalendario(${index})">
+          ${calendario.mes} ${calendario.ano}
+        </button>
+      `;
+    })
+    .join("");
+
+  container.innerHTML = `
+    <p>Selecione o mês para consultar os dias e horários de funcionamento.</p>
+
+    <div class="calendarios-tabs">
+      ${botoes}
+    </div>
+
+    <div id="calendarioRenderizado"></div>
+  `;
+
+  mostrarCalendario(0);
+}
+
+function obterNumeroMes(nomeMes) {
+  const meses = {
+    Janeiro: 0,
+    Fevereiro: 1,
+    Março: 2,
+    Abril: 3,
+    Maio: 4,
+    Junho: 5,
+    Julho: 6,
+    Agosto: 7,
+    Setembro: 8,
+    Outubro: 9,
+    Novembro: 10,
+    Dezembro: 11
+  };
+
+  return meses[nomeMes];
+}
+
+function mostrarCalendario(index) {
+  const calendario = CALENDARIOS_FUNCIONAMENTO[index];
+  const destino = $("#calendarioRenderizado");
+
+  if (!calendario || !destino) return;
+
+  const mesNumero = obterNumeroMes(calendario.mes);
+
+  const primeiroDiaSemana = new Date(
+    Number(calendario.ano),
+    mesNumero,
+    1
+  ).getDay();
+
+  const espacosVazios = Array.from({ length: primeiroDiaSemana })
+    .map(() => `<div></div>`)
+    .join("");
+
+  const dias = calendario.dias
+    .map((dia) => {
+      const info = HORARIOS_FUNCIONAMENTO[dia.status];
+      if (!info) return "";
+
+      return `
+        <button
+          class="cal-dia ${info.classe}"
+          onclick="abrirInfoDia(${index}, ${dia.dia})"
+          title="${dia.status === "fechado" ? "Parque fechado" : info.horario}"
+        >
+          <strong>${dia.dia}</strong>
+          <span>${dia.status === "fechado" ? "Fechado" : info.horario}</span>
+        </button>
+      `;
+    })
+    .join("");
+
+  destino.innerHTML = `
+    <div class="calendario-funcionamento">
+      <h3>${calendario.mes} ${calendario.ano}</h3>
+      <p>${calendario.observacao}</p>
+
+      <div class="legenda-funcionamento">
+        <button onclick="filtrarCalendario('dia-semana')">
+          <b class="legenda-cor semana"></b>
+          Dias de semana
+        </button>
+
+        <button onclick="filtrarCalendario('dia-fim-semana')">
+          <b class="legenda-cor fim"></b>
+          Fins de semana
+        </button>
+
+        <button onclick="filtrarCalendario('dia-feriado')">
+          <b class="legenda-cor feriado"></b>
+          Feriados
+        </button>
+
+        <button onclick="filtrarCalendario('dia-fechado')">
+          <b class="legenda-cor fechado"></b>
+          Fechado
+        </button>
+
+        <button onclick="filtrarCalendario(null)">
+          Mostrar todos
+        </button>
+      </div>
+
+      <div class="cal-grid">
+        <div>Dom</div>
+        <div>Seg</div>
+        <div>Ter</div>
+        <div>Qua</div>
+        <div>Qui</div>
+        <div>Sex</div>
+        <div>Sáb</div>
+
+        ${espacosVazios}
+        ${dias}
+      </div>
+    </div>
+  `;
+}
+
+function filtrarCalendario(classe) {
+  document.querySelectorAll(".cal-dia").forEach((dia) => {
+    dia.classList.remove("oculto");
+
+    if (classe && !dia.classList.contains(classe)) {
+      dia.classList.add("oculto");
+    }
+  });
+}
+
+function abrirInfoDia(indexCalendario, numeroDia) {
+  const calendario = CALENDARIOS_FUNCIONAMENTO[indexCalendario];
+  if (!calendario) return;
+
+  const dia = calendario.dias.find((item) => item.dia === numeroDia);
+  if (!dia) return;
+
+  const info = HORARIOS_FUNCIONAMENTO[dia.status];
+  const conteudo = $("#conteudoDiaCalendario");
+
+  if (!info || !conteudo) return;
+
+  const dataTexto = `${String(numeroDia).padStart(2, "0")} de ${
+    calendario.mes
+  } de ${calendario.ano}`;
+
+  if (dia.status === "fechado") {
+    conteudo.innerHTML = `
+      <div class="dia-info fechado">
+        <h2>📅 ${dataTexto}</h2>
+
+        <div class="dia-status vermelho">
+          🔴 Parque fechado
+        </div>
+
+        <p>
+          O parque não estará em funcionamento nesta data.
+        </p>
+
+        <p>
+          Consulte outra data disponível no calendário
+          para planejar sua visita.
+        </p>
+      </div>
+    `;
+
+    abrirModal("modalDiaCalendario");
+    return;
+  }
+
+  conteudo.innerHTML = `
+    <div class="dia-info">
+      <h2>📅 ${dataTexto}</h2>
+
+      <div class="dia-status verde">
+        🟢 Parque aberto
+      </div>
+
+      <div class="dia-bloco">
+        <strong>⏰ Horário de funcionamento</strong>
+        <p>${info.horario}</p>
+      </div>
+
+      <div class="dia-bloco">
+        <strong>🎟 Valor do ingresso</strong>
+        <p>Visitante: R$ 86,00</p>
+        <p>Kids: R$ 45,00</p>
+        <p>Convidado: R$ 50,00</p>
+      </div>
+
+      <div class="dia-bloco">
+        <strong>🏨 Hospedagem disponível</strong>
+        <p>
+          Consulte nossas opções de hospedagem para
+          aproveitar melhor sua visita.
+        </p>
+      </div>
+
+      <div class="dia-bloco">
+        <strong>📍 Como chegar</strong>
+        <p>
+          Veja a localização do Curupy no mapa.
+        </p>
+        <button class="btn azul" onclick="abrirMapa()">
+          Abrir mapa
+        </button>
+      </div>
+
+      <div class="dia-bloco destaque-online">
+        <strong>🎟️ Compra antecipada pelo site</strong>
+
+        <p>
+          Comprando pelo site oficial, você garante desconto exclusivo online,
+          parcelamento e mais praticidade na entrada.
+        </p>
+
+        <ul>
+          <li>Compras online devem ser realizadas com pelo menos 1 dia de antecedência.</li>
+          <li>Não é possível comprar online para utilizar no mesmo dia.</li>
+          <li>Para uso no mesmo dia, a compra é realizada exclusivamente na bilheteria do parque.</li>
+        </ul>
+      </div>
+    </div>
+  `;
+
+  abrirModal("modalDiaCalendario");
+}
+
+/* MAPA */
+
+function abrirMapa() {
+  if (typeof CONFIG !== "undefined" && CONFIG.googleMaps) {
+    window.open(CONFIG.googleMaps, "_blank");
+  }
 }
 
 /* GALERIA */
 
-.galeria h2 {
-  color: var(--azul);
-  margin-bottom: 16px;
+function abrirFoto(src) {
+  const foto = $("#fotoAberta");
+  if (!foto) return;
+
+  foto.src = src;
+  abrirModal("modalFoto");
 }
 
-.galeria-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+/* AJUDA / ASSISTENTE */
+
+const AJUDA = [
+  {
+    pergunta: "🎟 Ingressos",
+    resposta:
+      "Os ingressos podem ser comprados antecipadamente pelo site, com pelo menos 1 dia de antecedência. Para uso no mesmo dia, a compra deve ser feita na bilheteria."
+  },
+  {
+    pergunta: "📅 Calendário",
+    resposta:
+      "No calendário você pode consultar os dias de funcionamento, horários, feriados, fins de semana e dias em que o parque estará fechado."
+  },
+  {
+    pergunta: "🏨 Hospedagem",
+    resposta:
+      "O Curupy possui opções de hospedagem para quem deseja aproveitar melhor a experiência. Acesse a área de hospedagem para conhecer."
+  },
+  {
+    pergunta: "💎 Associação",
+    resposta:
+      "O Clube de Associados oferece vantagens exclusivas durante o ano. Consulte a área de associação para saber mais."
+  },
+  {
+    pergunta: "📍 Como chegar",
+    resposta:
+      "Você pode abrir o mapa pelo botão Como chegar e seguir a rota até o Curupy Acqua Park."
+  },
+  {
+    pergunta: "Posso comprar ingresso para hoje pelo site?",
+    resposta:
+      "Não. Compras online devem ser realizadas com pelo menos 1 dia de antecedência."
+  },
+  {
+    pergunta: "Posso comprar ingresso na bilheteria?",
+    resposta:
+      "Sim. A bilheteria funciona presencialmente nos dias de abertura do parque."
+  },
+  {
+    pergunta: "Criança paga ingresso?",
+    resposta:
+      "Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. A partir de 12 anos utilizam ingresso Visitante."
+  },
+  {
+    pergunta: "Posso levar alimentos e bebidas?",
+    resposta:
+      "Não é permitida a entrada com alimentos e bebidas. Exceções: água para consumo pessoal, leite e alimentação para bebês, e alimentos para visitantes com restrições alimentares ou condições de saúde específicas mediante laudo ou documento comprobatório."
+  },
+  {
+    pergunta: "Tem estacionamento?",
+    resposta:
+      "Sim. O estacionamento do parque é gratuito."
+  },
+  {
+    pergunta: "Tem guarda-volumes?",
+    resposta:
+      "Sim. O guarda-volumes fica ao lado da lanchonete e possui cobrança à parte."
+  },
+  {
+    pergunta: "Quais formas de pagamento são aceitas?",
+    resposta:
+      "Aceitamos PIX, cartões de débito, cartões de crédito e dinheiro. O dinheiro pode ser utilizado para realizar recargas dentro do parque."
+  },
+  {
+    pergunta: "Posso sair e retornar ao parque?",
+    resposta:
+      "Sim, desde que a pulseira de acesso permaneça intacta. Caso seja retirada ou danificada, será necessário adquirir um novo Day Use."
+  }
+];
+
+function renderizarAjuda() {
+  const container = $("#ajudaContainer");
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="help-intro">
+      <strong>Olá 👋</strong>
+      <p>Posso ajudar com:</p>
+    </div>
+
+    <div class="chat-opcoes">
+      <button onclick="abrirModal('modalIngressos')">
+        🎟 Ingressos e valores
+      </button>
+
+      <button onclick="abrirModal('modalCalendario')">
+        📅 Calendário de funcionamento
+      </button>
+
+      <button onclick="window.location.href='hospedagem.html'">
+        🏨 Hospedagem
+      </button>
+
+      <button onclick="window.location.href='associados.html'">
+        💎 Associação
+      </button>
+
+      <button onclick="abrirMapa()">
+        📍 Como chegar
+      </button>
+    </div>
+
+    ${AJUDA.map((item, index) => {
+      return `
+        <button class="help-item" onclick="abrirResposta(${index})">
+          ${item.pergunta}
+        </button>
+
+        <div class="help-answer hidden" id="resposta-${index}">
+          ${item.resposta}
+        </div>
+      `;
+    }).join("")}
+  `;
 }
 
-.galeria-grid img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 24px;
-  cursor: pointer;
-  box-shadow: var(--sombra);
-  transition: .25s ease;
+function abrirResposta(index) {
+  const resposta = document.getElementById(`resposta-${index}`);
+  if (!resposta) return;
+
+  resposta.classList.toggle("hidden");
 }
 
-.galeria-grid img:hover {
-  transform: scale(1.03);
-}
+/* INICIALIZAÇÃO */
 
-.foto-box {
-  width: min(900px, 95%);
-  position: relative;
-}
+document.addEventListener("DOMContentLoaded", () => {
+  renderizarBarra();
+  renderizarAjuda();
 
-.foto-box img {
-  width: 100%;
-  border-radius: 28px;
-  display: block;
-}
+  const btnMapa = $("#btnMapa");
 
-/* AJUDA */
-
-.ajuda {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 999;
-  border: 0;
-  border-radius: 999px;
-  padding: 15px 20px;
-  background: var(--azul);
-  color: white;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
-}
-
-.help-intro {
-  background: #f8fcff;
-  border: 1px solid #d9ecf5;
-  border-radius: 18px;
-  padding: 16px;
-  margin-bottom: 14px;
-}
-
-.chat-opcoes {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.chat-opcoes button {
-  border: 1px solid #d9ecf5;
-  background: #f8fcff;
-  border-radius: 18px;
-  padding: 14px;
-  text-align: left;
-  color: var(--azul);
-  font-weight: 900;
-  cursor: pointer;
-}
-
-.help-item {
-  width: 100%;
-  border: 1px solid #d9ecf5;
-  background: #f8fcff;
-  border-radius: 16px;
-  padding: 14px;
-  text-align: left;
-  color: var(--azul);
-  font-weight: 900;
-  margin-bottom: 10px;
-  cursor: pointer;
-  transition: .25s ease;
-}
-
-.help-item:hover {
-  transform: translateY(-2px);
-}
-
-.help-answer {
-  background: #fff;
-  border-left: 4px solid var(--azul);
-  padding: 12px;
-  margin: -4px 0 12px;
-  border-radius: 10px;
-}
-
-.hidden {
-  display: none;
-}
-
-/* MOBILE */
-
-@media (max-width: 760px) {
-  .hero {
-    padding: 26px 16px 20px;
+  if (btnMapa) {
+    btnMapa.addEventListener("click", abrirMapa);
   }
 
-  .hero-logo img {
-    width: 155px;
-  }
+  document.querySelectorAll(".modal").forEach((modal) => {
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.classList.remove("open");
+      }
+    });
+  });
+});
 
-  .hero h1 {
-    font-size: 2rem;
-  }
+/* ACCORDION MEIA-ENTRADA */
 
-  .hero h2 {
-    font-size: 1.35rem;
-  }
+document.addEventListener("click", function (e) {
+  if (!e.target.closest(".accordion-header")) return;
 
-  .hero p {
-    font-size: .95rem;
-  }
+  const item = e.target.closest(".accordion-item");
 
-  .barra-inner {
-    display: block;
-    padding: 6px 10px;
-  }
+  document.querySelectorAll(".accordion-item").forEach((accordion) => {
+    if (accordion !== item) {
+      accordion.classList.remove("active");
 
-  .barra-status {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px 8px;
-    align-items: center;
-  }
+      const seta = accordion.querySelector("span");
+      if (seta) seta.innerHTML = "⌄";
+    }
+  });
 
-  .barra-status strong {
-    font-size: .82rem;
-  }
+  item.classList.toggle("active");
 
-  .barra-status span {
-    font-size: .74rem;
-  }
+  const seta = item.querySelector("span");
 
-  .barra-precos {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 7px;
-    margin-top: 3px;
-    padding-bottom: 2px;
+  if (seta) {
+    seta.innerHTML = item.classList.contains("active") ? "⌃" : "⌄";
   }
-
-  .barra-precos-title {
-    font-size: .72rem;
-    flex: 0 0 auto;
-  }
-
-  .preco-pill {
-    border-left: 0;
-    padding-left: 0;
-    font-size: .72rem;
-    flex: 0 0 auto;
-  }
-
-  .link-meia {
-    display: block;
-    margin-top: 2px;
-    font-size: .7rem;
-    text-align: left;
-  }
-
-  .card.destaque {
-    grid-template-columns: 1fr;
-  }
-
-  .grid,
-  .info,
-  .ingressos-pop {
-    grid-template-columns: 1fr;
-  }
-
-  .card {
-    padding: 22px;
-  }
-
-  .accordion-header {
-    font-size: 16px;
-    padding: 15px;
-  }
-
-  .cal-grid {
-    gap: 5px;
-  }
-
-  .cal-dia {
-    min-height: 56px;
-    padding: 5px;
-  }
-
-  .cal-dia strong {
-    font-size: 1rem;
-  }
-
-  .cal-dia span,
-  .cal-dia::after {
-    display: none;
-  }
-
-  .galeria-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .galeria-grid img {
-    height: 130px;
-  }
-
-  .ajuda {
-    left: 16px;
-    right: 16px;
-    bottom: 14px;
-  }
-}
+});
 ```
