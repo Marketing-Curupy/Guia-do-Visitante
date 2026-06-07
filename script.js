@@ -11,12 +11,6 @@ function abrirModal(id) {
   if (id === "modalCalendario") {
     renderizarCalendarios();
   }
-
-  if (id === "modalIngressos") {
-    carregarIngressos();
-  }
-}
-
 function fecharModal(id) {
   const modal = document.getElementById(id);
   if (!modal) return;
@@ -118,17 +112,6 @@ function renderizarBarra() {
     </div>
   `;
 }
-
-/* POP-UP DE INGRESSOS */
-
-function carregarIngressos() {
-  const iframe = $("#iframeIngressos");
-
-  if (iframe && !iframe.src) {
-    iframe.src = CONFIG.ingressosOnline;
-  }
-}
-
 /* CALENDÁRIO DE FUNCIONAMENTO */
 
 function renderizarCalendarios() {
