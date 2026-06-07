@@ -11,7 +11,7 @@ const DADOS_BARRA = [
     valores: {
       visitante: 86,
       kids: 45,
-      convidadoSocio: 50
+      convidadoSocio: 55
     }
   },
 
@@ -20,9 +20,9 @@ const DADOS_BARRA = [
     status: "aberto",
     horario: "08h30 às 17h30",
     valores: {
-      visitante: 86,
-      kids: 45,
-      convidadoSocio: 50
+      visitante: 124,
+      kids: 55,
+      convidadoSocio: 78
     }
   },
 
@@ -33,7 +33,7 @@ const DADOS_BARRA = [
     valores: {
       visitante: 86,
       kids: 45,
-      convidadoSocio: 50
+      convidadoSocio: 55
     }
   },
 
@@ -42,9 +42,9 @@ const DADOS_BARRA = [
     status: "aberto",
     horario: "08h30 às 17h30",
     valores: {
-      visitante: 86,
-      kids: 45,
-      convidadoSocio: 50
+      visitante: 124,
+      kids: 55,
+      convidadoSocio: 78
     }
   },
 
@@ -53,29 +53,15 @@ const DADOS_BARRA = [
     status: "aberto",
     horario: "08h30 às 17h30",
     valores: {
-      visitante: 86,
-      kids: 45,
-      convidadoSocio: 50
+      visitante: 124,
+      kids: 55,
+      convidadoSocio: 78
     }
   }
 ];
 
-// ========================================
-// CONFIGURAÇÕES GERAIS
-// ========================================
-
 const CONFIG = {
-
-  // Sistema de ingressos
-  ingressosOnline:
-    "http://172.19.0.6:3003/ingressos",
-
-  // Google Maps
-  googleMaps:
-    "https://maps.google.com/?q=Curupy+Acqua+Park",
-
-  // WhatsApp geral
-  whatsappGeral:
-    "https://wa.me/5566999999999"
-
+  ingressosOnline: "http://172.19.0.6:3000/ingressos",
+  googleMaps: "https://maps.google.com/?q=Curupy+Acqua+Park",
+  whatsappGeral: "https://wa.me/5566999999999"
 };
