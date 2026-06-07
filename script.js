@@ -242,3 +242,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+document.addEventListener("click", function(e){
+
+    if(!e.target.closest(".accordion-header")){
+        return;
+    }
+
+    const item = e.target.closest(".accordion-item");
+
+    document.querySelectorAll(".accordion-item").forEach((accordion)=>{
+
+        if(accordion !== item){
+            accordion.classList.remove("active");
+
+            accordion.querySelector("span").innerHTML = "⌄";
+        }
+
+    });
+
+    item.classList.toggle("active");
+
+    const seta = item.querySelector("span");
+
+    if(item.classList.contains("active")){
+        seta.innerHTML = "⌃";
+    }else{
+        seta.innerHTML = "⌄";
+    }
+
+});
