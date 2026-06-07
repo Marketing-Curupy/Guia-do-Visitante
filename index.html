@@ -9,7 +9,10 @@
 
 <body>
   <header class="hero">
-    <div class="logo">CURUPY</div>
+    <div class="hero-logo">
+      <img src="assets/logo-curupy.png" alt="Curupy Acqua Park">
+    </div>
+
     <h1>Bem-vindo</h1>
     <h2>Como podemos ajudar com a sua visita ao Curupy?</h2>
     <p>Encontre informações sobre ingressos, funcionamento, hospedagem, associação e muito mais.</p>
@@ -24,7 +27,10 @@
         <p>Garanta sua visita antecipadamente com desconto e parcelamento exclusivo pelo site oficial.</p>
         <p class="aviso">Compras online devem ser realizadas com pelo menos 1 dia de antecedência.</p>
       </div>
-      <button class="btn rosa" onclick="abrirModal('modalIngressos')">Ver valores e datas disponíveis</button>
+
+      <button class="btn rosa" onclick="abrirModal('modalIngressos')">
+        Ver valores e datas disponíveis
+      </button>
     </section>
 
     <section class="grid">
@@ -54,9 +60,20 @@
     </section>
 
     <section class="info">
-      <div>🚗 <strong>Estacionamento</strong><span>Gratuito</span></div>
-      <div>🎒 <strong>Guarda-volumes</strong><span>Pago à parte</span></div>
-      <div>ℹ️ <strong>Meia-entrada</strong><button onclick="abrirModal('modalMeia')">Ver regras</button></div>
+      <div>
+        🚗 <strong>Estacionamento</strong>
+        <span>Gratuito</span>
+      </div>
+
+      <div>
+        🎒 <strong>Guarda-volumes</strong>
+        <span>Pago à parte</span>
+      </div>
+
+      <div>
+        ℹ️ <strong>Meia-entrada</strong>
+        <button onclick="abrirModal('modalMeia')">Ver regras</button>
+      </div>
     </section>
   </main>
 
@@ -66,7 +83,7 @@
     <div class="modal-box grande">
       <button class="fechar" onclick="fecharModal('modalIngressos')">×</button>
       <h2>🎟️ Ingressos e valores</h2>
-     <iframe id="iframeIngressos" title="Ingressos e valores"></iframe>
+      <iframe id="iframeIngressos" title="Ingressos e valores"></iframe>
     </div>
   </div>
 
@@ -77,145 +94,77 @@
       <div id="calendariosContainer"></div>
     </div>
   </div>
-<div class="modal" id="modalDiaCalendario">
-  <div class="modal-box dia-modal">
-    <button class="fechar" onclick="fecharModal('modalDiaCalendario')">×</button>
 
-    <div id="conteudoDiaCalendario"></div>
-
-    <button class="btn rosa full" onclick="fecharModal('modalDiaCalendario')">
-      Fechar
-    </button>
-  </div>
-</div>
- <div class="modal" id="modalMeia">
-  <div class="modal-box meia-modal">
-
-    <div class="meia-header">
-      <h2>Política de Meia-Entrada e Gratuidade</h2>
-
-      <button class="fechar" onclick="fecharModal('modalMeia')">
-        ×
-      </button>
+  <div class="modal" id="modalDiaCalendario">
+    <div class="modal-box dia-modal">
+      <button class="fechar" onclick="fecharModal('modalDiaCalendario')">×</button>
+      <div id="conteudoDiaCalendario"></div>
+      <button class="btn rosa full" onclick="fecharModal('modalDiaCalendario')">Fechar</button>
     </div>
+  </div>
 
-    <div class="accordion">
+  <div class="modal" id="modalMeia">
+    <div class="modal-box meia-modal">
+      <div class="meia-header">
+        <h2>Política de Meia-Entrada e Gratuidade</h2>
+        <button class="fechar meia-fechar" onclick="fecharModal('modalMeia')">×</button>
+      </div>
 
-      <div class="accordion-item active">
-        <button class="accordion-header">
-          Meia-Entrada
-          <span>⌃</span>
-        </button>
+      <div class="accordion">
+        <div class="accordion-item active">
+          <button class="accordion-header">Meia-Entrada <span>⌃</span></button>
+          <div class="accordion-content">
+            <p>A meia-entrada é válida exclusivamente sobre o valor da tabela padrão da portaria.</p>
+            <p>A venda de ingressos com meia-entrada é realizada somente na bilheteria, no dia da visita, mediante apresentação da documentação original e válida.</p>
 
-        <div class="accordion-content">
+            <h4>Têm direito à meia-entrada:</h4>
+            <ul>
+              <li>Estudantes com carteira estudantil válida.</li>
+              <li>Professores da rede Estadual ou Municipal de Mato Grosso mediante identificação funcional válida.</li>
+              <li>Doadores regulares de sangue e doadores de medula óssea mediante comprovação válida.</li>
+              <li>Pessoas com 60 anos ou mais mediante documento oficial com foto.</li>
+            </ul>
 
-          <p>
-            A meia-entrada é válida exclusivamente sobre o valor da tabela padrão da portaria.
-          </p>
-
-          <p>
-            A venda de ingressos com meia-entrada é realizada somente na bilheteria, no dia da visita, mediante apresentação da documentação original e válida.
-          </p>
-
-          <h4>Têm direito à meia-entrada:</h4>
-
-          <ul>
-            <li>Estudantes com carteira estudantil válida.</li>
-
-            <li>
-              Professores da rede Estadual ou Municipal de Mato Grosso mediante identificação funcional válida.
-            </li>
-
-            <li>
-              Doadores regulares de sangue e doadores de medula óssea mediante comprovação válida.
-            </li>
-
-            <li>
-              Pessoas com 60 anos ou mais mediante documento oficial com foto.
-            </li>
-          </ul>
-
-          <div class="alerta-importante">
-            Importante: não serão aceitas cópias, fotografias ou documentos vencidos.
+            <div class="alerta-importante">
+              Importante: não serão aceitas cópias, fotografias ou documentos vencidos.
+            </div>
           </div>
+        </div>
 
+        <div class="accordion-item">
+          <button class="accordion-header">Gratuidade para PCD <span>⌄</span></button>
+          <div class="accordion-content">
+            <p>Pessoas com Deficiência possuem direito à gratuidade mediante apresentação de documento oficial que comprove a condição.</p>
+            <p>O direito ao acompanhante será analisado conforme a documentação apresentada.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">Gratuidade para TEA <span>⌄</span></button>
+          <div class="accordion-content">
+            <p>Pessoas com Transtorno do Espectro Autista possuem direito à gratuidade mediante apresentação da CIPTEA ou documento oficial que comprove a condição.</p>
+            <p>Nestes casos também é garantido o direito ao acompanhante.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">Regras para Acompanhantes <span>⌄</span></button>
+          <div class="accordion-content">
+            <ul>
+              <li>Ter idade mínima de 18 anos.</li>
+              <li>Apresentar documento oficial com foto.</li>
+            </ul>
+            <p>A validação será realizada pela equipe da bilheteria.</p>
+          </div>
         </div>
       </div>
 
-      <div class="accordion-item">
-
-        <button class="accordion-header">
-          Gratuidade para PCD
-          <span>⌄</span>
-        </button>
-
-        <div class="accordion-content">
-
-          <p>
-            Pessoas com Deficiência possuem direito à gratuidade mediante apresentação de documento oficial que comprove a condição.
-          </p>
-
-          <p>
-            O direito ao acompanhante será analisado conforme a documentação apresentada.
-          </p>
-
-        </div>
-
+      <div class="meia-footer">
+        <button class="btn rosa full" onclick="fecharModal('modalMeia')">Entendi</button>
       </div>
-
-      <div class="accordion-item">
-
-        <button class="accordion-header">
-          Gratuidade para TEA
-          <span>⌄</span>
-        </button>
-
-        <div class="accordion-content">
-
-          <p>
-            Pessoas com Transtorno do Espectro Autista possuem direito à gratuidade mediante apresentação da CIPTEA ou documento oficial que comprove a condição.
-          </p>
-
-          <p>
-            Nestes casos também é garantido o direito ao acompanhante.
-          </p>
-
-        </div>
-
-      </div>
-
-      <div class="accordion-item">
-
-        <button class="accordion-header">
-          Regras para Acompanhantes
-          <span>⌄</span>
-        </button>
-
-        <div class="accordion-content">
-
-          <ul>
-            <li>Ter idade mínima de 18 anos.</li>
-            <li>Apresentar documento oficial com foto.</li>
-          </ul>
-
-          <p>
-            A validação será realizada pela equipe da bilheteria.
-          </p>
-
-        </div>
-
-      </div>
-
     </div>
-
-    <button
-      class="btn rosa full"
-      onclick="fecharModal('modalMeia')">
-      Entendi
-    </button>
-
   </div>
-</div>
+
   <div class="modal" id="modalAjuda">
     <div class="modal-box">
       <button class="fechar" onclick="fecharModal('modalAjuda')">×</button>
