@@ -82,7 +82,7 @@ function renderizarBarra() {
 
         <div class="barra-precos">
           <span class="barra-precos-title">🎟️ Bilheteria hoje:</span>
-          <span class="preco-pill">Visitante ${formatarMoeda(valores.visitante)}</span>
+          <span class="preco-pill">Adulto ${formatarMoeda(valores.visitante)}</span>
           <span class="preco-pill">Kids ${formatarMoeda(valores.kids)}</span>
           <span class="preco-pill">Convidado de Sócio ${formatarMoeda(valores.convidadoSocio)}</span>
         </div>
@@ -318,6 +318,7 @@ function filtrarCalendario(classe) {
     }
   });
 }
+
 function gerarValoresBilheteria(status) {
   const fimOuFeriado =
     status === "fimDeSemana" ||
@@ -343,6 +344,7 @@ function gerarValoresBilheteria(status) {
     </div>
   `;
 }
+
 function abrirInfoDia(indexCalendario, numeroDia) {
   const calendario = CALENDARIOS_FUNCIONAMENTO[indexCalendario];
   if (!calendario) return;
@@ -390,11 +392,10 @@ function abrirInfoDia(indexCalendario, numeroDia) {
         <p>${info.horario}</p>
       </div>
 
-     ${gerarValoresBilheteria(dia.status)}
+      ${gerarValoresBilheteria(dia.status)}
 
       <div class="dia-bloco">
         <strong>📍 Como chegar</strong>
-        <p>Veja a localização do Curupy no mapa.</p>
         <button class="btn azul" onclick="abrirMapa()">Abrir mapa</button>
       </div>
 
@@ -442,8 +443,7 @@ const AJUDA = [
   {
     pergunta: "🎟 Ingressos",
     resposta:
-      resposta:
-  "Compra online pelo site oficial com até um dia de antecedência da data de utilização. Para utilização no mesmo dia é necessária a compra na bilheteria do parque, sujeita ao valor da tarifa do dia."
+      "Compra online pelo site oficial com até um dia de antecedência da data de utilização. Para utilização no mesmo dia é necessária a compra na bilheteria do parque, sujeita ao valor da tarifa do dia."
   },
   {
     pergunta: "📅 Calendário",
