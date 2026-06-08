@@ -249,7 +249,7 @@ function ehPromocional(ticket) {
   const nome = removeAccents(ticket.name.toLowerCase());
 
   const categoriasNormais = [
-    "individual",
+    "dia de semana",
     "kids",
     "melhor idade"
   ];
