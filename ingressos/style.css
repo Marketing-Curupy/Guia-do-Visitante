@@ -98,6 +98,7 @@ body {
 .day.past {
   background: #edf0f2;
   color: #9aa5aa;
+  cursor: not-allowed;
 }
 
 .day.closed {
@@ -115,6 +116,7 @@ body {
 .day.closed small {
   display: none;
 }
+
 .day.empty {
   background: transparent;
   cursor: default;
@@ -123,6 +125,10 @@ body {
 .day.available {
   background: #0578A7;
   color: #fff;
+}
+
+.day.available:hover {
+  background: #04668f;
 }
 
 .day small {
@@ -135,7 +141,7 @@ body {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.55);
+  background: rgba(0, 0, 0, .55);
   display: none;
   align-items: center;
   justify-content: center;
@@ -180,34 +186,33 @@ body {
   padding: 14px;
   margin-bottom: 12px;
   display: grid;
-  grid-template-columns: 72px 1fr auto;
+  grid-template-columns: 64px 1fr auto;
   gap: 14px;
   align-items: center;
+  transition: .2s ease;
+}
+
+.ticket-card:hover {
+  transform: translateY(-2px);
 }
 
 .ticket-icon {
-  width: 60px;
-  height: 60px;
-
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 18px;
-
-  background: #f3fbff;
-  border: 1px solid #d8edf7;
-
+  border-radius: 16px;
+  background: #eef8fd;
+  border: 1px solid #d7edf7;
   flex-shrink: 0;
 }
 
 .ticket-icon svg {
-  width: 28px;
-  height: 28px;
-
+  width: 26px;
+  height: 26px;
   fill: none;
   stroke: #0578A7;
-
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -276,7 +281,7 @@ body {
   font-size: 15px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 12px 30px rgba(255,12,88,.35);
+  box-shadow: 0 12px 30px rgba(255, 12, 88, .35);
 }
 
 #chooseBtn:disabled {
@@ -314,6 +319,7 @@ body {
   color: #0578A7;
   font-weight: 900;
   text-align: center;
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 560px) {
@@ -325,21 +331,53 @@ body {
     padding: 16px;
   }
 
+  .calendar-header h2 {
+    font-size: 20px;
+  }
+
+  .calendar-header button {
+    width: 40px;
+    height: 40px;
+    font-size: 28px;
+  }
+
+  .weekdays,
+  .calendar-grid {
+    gap: 5px;
+  }
+
+  .weekdays span {
+    font-size: 11px;
+  }
+
   .day {
     min-height: 52px;
     border-radius: 12px;
+    font-size: 13px;
   }
 
   .ticket-card {
-    grid-template-columns: 60px 1fr;
+    grid-template-columns: 52px 1fr;
+    gap: 12px;
   }
 
-  .ticket-card img {
-    width: 60px;
-    height: 60px;
+  .ticket-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+  }
+
+  .ticket-icon svg {
+    width: 24px;
+    height: 24px;
   }
 
   .ticket-card strong {
     grid-column: 2;
+    font-size: 18px;
+  }
+
+  .modal-content {
+    padding: 22px;
   }
 }
