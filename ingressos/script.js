@@ -259,6 +259,7 @@ function ehPromocional(ticket) {
 
   const categoriasNormais = [
     "day use - dia de semana",
+    "day use - final de semana e feriados",
     "kids",
     "melhor idade"
   ];
