@@ -1077,3 +1077,51 @@ body {
     height: 88vh;
   }
 }
+
+/* HERO NOVO */
+
+@media (min-width: 992px){
+
+    .hero-layout{
+        width:min(1400px,100%);
+        margin:auto;
+
+        display:grid;
+        grid-template-columns:320px 1fr;
+        gap:60px;
+
+        align-items:center;
+    }
+
+    .hero-logo{
+        margin:0;
+        padding-right:50px;
+
+        border-right:2px solid rgba(7,59,102,.12);
+    }
+
+    .hero-logo img{
+        width:300px;
+        margin:0;
+    }
+
+    .hero-content{
+        text-align:center;
+    }
+
+    .hero-content h1{
+        font-size:78px;
+    }
+
+    .hero-content h2{
+        font-size:42px;
+    }
+
+    .hero-content p{
+        font-size:18px;
+    }
+
+    .hero-content .busca-rapida{
+        max-width:820px;
+    }
+}
