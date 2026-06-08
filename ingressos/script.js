@@ -293,6 +293,7 @@ function getTicketIcon(ticket) {
   const nome = ticket.name.toLowerCase();
   const descricao = ticket.description.toLowerCase();
 
+  // DUPLO
   if (
     nome.includes("duplo") ||
     descricao.includes("duplo") ||
@@ -300,14 +301,16 @@ function getTicketIcon(ticket) {
   ) {
     return `
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="9" cy="8" r="2.5"></circle>
-        <circle cx="15" cy="8" r="2.5"></circle>
-        <path d="M4.5 18a4.5 4.5 0 0 1 9 0"></path>
-        <path d="M10.5 18a4.5 4.5 0 0 1 9 0"></path>
+        <path d="M4 8.5h16a2 2 0 0 1 2 2v1a2 2 0 0 0 0 3v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1a2 2 0 0 0 0-3v-1a2 2 0 0 1 2-2Z"></path>
+        <path d="M8 8.5v9"></path>
+        <path d="M13 11h5"></path>
+        <path d="M13 15h5"></path>
+        <path d="M5 5.5h14"></path>
       </svg>
     `;
   }
 
+  // KIDS
   if (
     nome.includes("kids") ||
     nome.includes("infantil") ||
@@ -316,31 +319,37 @@ function getTicketIcon(ticket) {
   ) {
     return `
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="8" r="3"></circle>
-        <path d="M8 7L6.5 5.5"></path>
-        <path d="M16 7L17.5 5.5"></path>
-        <path d="M6.5 19a5.5 5.5 0 0 1 11 0"></path>
+        <path d="M5 7h14a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9a2 2 0 0 1 2-2Z"></path>
+        <path d="M9 7v10"></path>
+        <path d="M13 12h4"></path>
+        <path d="M15 10v4"></path>
       </svg>
     `;
   }
 
+  // MELHOR IDADE
   if (
     nome.includes("melhor idade") ||
     nome.includes("idoso")
   ) {
     return `
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="7" r="3"></circle>
-        <path d="M12 10v10"></path>
-        <path d="M8 14h8"></path>
+        <path d="M5 7h14a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9a2 2 0 0 1 2-2Z"></path>
+        <path d="M9 7v10"></path>
+        <path d="M14 11.5h3"></path>
+        <path d="M15.5 10v3"></path>
+        <path d="M14 15h3"></path>
       </svg>
     `;
   }
 
+  // DAY USE NORMAL
   return `
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="8" r="3"></circle>
-      <path d="M6.5 19a5.5 5.5 0 0 1 11 0"></path>
+      <path d="M5 7h14a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9a2 2 0 0 1 2-2Z"></path>
+      <path d="M9 7v10"></path>
+      <path d="M13 10.5h5"></path>
+      <path d="M13 14.5h5"></path>
     </svg>
   `;
 }
