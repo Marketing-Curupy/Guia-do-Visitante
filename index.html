@@ -12,38 +12,48 @@
 
 <body>
   <header class="hero">
+
+  <div class="hero-topo">
+
     <div class="hero-logo">
-  <a href="https://curupy.com.br" target="_blank">
-    <img src="logo-curupy.png" alt="Curupy Acqua Park">
-  </a>
-</div>
-
-    <h1>Bem-vindo</h1>
-    <h2>Como podemos ajudar com a sua visita ao Curupy?</h2>
-
-    <p>
-      Encontre informações sobre ingressos, funcionamento,
-      hospedagem, associação e muito mais.
-    </p>
-
-    <div class="busca-rapida">
-      <label for="campoBusca">🔍 O que você procura?</label>
-
-      <input
-        id="campoBusca"
-        type="text"
-        placeholder="Digite sua dúvida..."
-        oninput="buscarRapido()"
-      />
-
-      <div class="atalhos">
-        <button onclick="openIngressosModal()">🎟 Ingressos</button>
-        <button onclick="abrirModal('modalCalendario')">📅 Calendário</button>
-        <button onclick="abrirEmBreve('Hospedagem')">🏨 Hospedagem</button>
-        <button onclick="abrirEmBreve('Clube de Associados')">💎 Associação</button>
-      </div>
+      <img src="logo-curupy.png" alt="Curupy Acqua Park">
     </div>
-  </header>
+
+    <div class="hero-conteudo">
+
+      <h1>Bem-vindo</h1>
+
+      <h2>Como podemos ajudar com a sua visita ao Curupy?</h2>
+
+      <p>
+        Encontre informações sobre ingressos, funcionamento,
+        hospedagem, associação e muito mais.
+      </p>
+
+      <div class="busca-rapida">
+        <label for="campoBusca">🔍 O que você procura?</label>
+
+        <input
+          id="campoBusca"
+          type="text"
+          placeholder="Digite sua dúvida..."
+          oninput="buscarRapido()"
+        />
+
+        <div class="atalhos">
+          <button onclick="openIngressosModal()">🎟 Ingressos</button>
+          <button onclick="abrirModal('modalCalendario')">📅 Calendário</button>
+          <button onclick="abrirEmBreve('Hospedagem')">🏨 Hospedagem</button>
+          <button onclick="abrirEmBreve('Clube de Associados')">💎 Associação</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
 
   <section id="barraStatus" class="barra-fixa"></section>
 
