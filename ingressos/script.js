@@ -1,3 +1,6 @@
+const AVAILABLE_DATES_API =
+  "https://sofalta.eu/api/baratheon/v5/empreendimentos/curupyacquapark/web/vendaingressos/ingressos";
+
 const API_BASE =
   "https://sofalta.eu/api/baratheon/v4/empreendimentos/curupyacquapark/produtos/ingressos/web?data=";
 
@@ -6,6 +9,9 @@ const CHECKOUT_BASE =
 
 let currentDate = new Date();
 let selectedDate = null;
+
+let datasDisponiveis = new Set();
+const cacheDatas = {};
 
 const monthTitle = document.getElementById("monthTitle");
 const calendarGrid = document.getElementById("calendarGrid");
@@ -17,23 +23,33 @@ const ticketsList = document.getElementById("ticketsList");
 const termsCheck = document.getElementById("termsCheck");
 const chooseBtn = document.getElementById("chooseBtn");
 
-const cacheDatas = {};
-
 document.addEventListener("DOMContentLoaded", async () => {
-  await renderCalendar();
+  await carregarDatasDisponiveis();
+  renderCalendar();
 
-  if (termsCheck) {
-    termsCheck.addEventListener("change", () => {
-      chooseBtn.disabled = !termsCheck.checked;
-    });
-  }
+  termsCheck.addEventListener("change", () => {
+    chooseBtn.disabled = !termsCheck.checked;
+  });
 
-  if (chooseBtn) {
-    chooseBtn.addEventListener("click", goToCheckout);
-  }
+  chooseBtn.addEventListener("click", goToCheckout);
 });
 
-async function renderCalendar() {
+async function carregarDatasDisponiveis() {
+  try {
+    const response = await fetch(AVAILABLE_DATES_API);
+    const data = await response.json();
+
+    const objeto = data.object || data || {};
+
+    datasDisponiveis = new Set(
+      Object.keys(objeto).filter((key) => /^\d{4}-\d{2}-\d{2}$/.test(key))
+    );
+  } catch (error) {
+    datasDisponiveis = new Set();
+  }
+}
+
+function renderCalendar() {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
@@ -46,10 +62,7 @@ async function renderCalendar() {
 
   const firstDay = new Date(year, month, 1).getDay();
   const lastDate = new Date(year, month + 1, 0).getDate();
-
-  calendarGrid.innerHTML = `
-    <div class="loading">Carregando datas disponíveis...</div>
-  `;
+  const today = getTodayISO();
 
   let html = "";
 
@@ -59,12 +72,27 @@ async function renderCalendar() {
 
   for (let day = 1; day <= lastDate; day++) {
     const dateISO = toISODate(year, month, day);
-    const today = getTodayISO();
+    const disponivelNoSofalta = datasDisponiveis.has(dateISO);
 
     const classes = ["day"];
 
     if (dateISO === today) {
       classes.push("today");
+    }
+
+    if (!disponivelNoSofalta) {
+      classes.push("closed");
+
+      html += `
+        <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}')">
+          ${day}
+        </button>
+      `;
+      continue;
+    }
+
+    if (dateISO <= today) {
+      classes.push("past");
 
       html += `
         <button class="${classes.join(" ")}" onclick="selectToday('${dateISO}')">
@@ -72,75 +100,41 @@ async function renderCalendar() {
           <small>hoje</small>
         </button>
       `;
-
       continue;
     }
 
-    if (dateISO < today) {
-      classes.push("past");
+    classes.push("available");
 
-      html += `
-        <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}', 'passado')">
-          ${day}
-        </button>
-      `;
-
-      continue;
-    }
-
-    const temIngresso = await verificarIngressosDisponiveis(dateISO);
-
-    if (temIngresso) {
-      classes.push("available");
-
-      html += `
-        <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
-          ${day}
-          <small>online</small>
-        </button>
-      `;
-    } else {
-      classes.push("closed");
-
-      html += `
-        <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}', 'fechado')">
-          ${day}
-        </button>
-      `;
-    }
+    html += `
+      <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
+        ${day}
+        <small>online</small>
+      </button>
+    `;
   }
 
   calendarGrid.innerHTML = html;
 }
 
-async function verificarIngressosDisponiveis(dateISO) {
-  if (cacheDatas[dateISO]) {
-    return cacheDatas[dateISO].length > 0;
-  }
-
-  try {
-    const response = await fetch(API_BASE + dateISO);
-
-    if (!response.ok) {
-      cacheDatas[dateISO] = [];
-      return false;
-    }
-
-    const data = await response.json();
-    const tickets = normalizeTickets(data);
-
-    cacheDatas[dateISO] = tickets;
-
-    return tickets.length > 0;
-  } catch (error) {
-    cacheDatas[dateISO] = [];
-    return false;
-  }
-}
-
 async function changeMonth(direction) {
   currentDate.setMonth(currentDate.getMonth() + direction);
-  await renderCalendar();
+  renderCalendar();
+}
+
+function selectClosedDate(dateISO) {
+  selectedDate = null;
+
+  openModal();
+  modalDate.textContent = formatDateBR(dateISO);
+
+  closedMessage.style.display = "block";
+  openContent.style.display = "none";
+
+  closedMessage.innerHTML = `
+    <strong>Parque fechado nesta data</strong>
+    <p>Não há funcionamento nas segundas e terças.</p>
+    <p>Escolha uma data marcada como <strong>online</strong> no calendário.</p>
+  `;
 }
 
 function selectToday(dateISO) {
@@ -154,43 +148,9 @@ function selectToday(dateISO) {
 
   closedMessage.innerHTML = `
     <strong>Ingressos para hoje somente na bilheteria</strong>
-
-    <p>
-      Os ingressos para o dia de hoje são vendidos somente na bilheteria do parque.
-    </p>
-
-    <p>
-      Os valores da bilheteria são diferentes dos valores da compra antecipada online.
-    </p>
-
-    <p>
-      Para comprar online, é necessário adquirir o ingresso com pelo menos 1 dia de antecedência.
-    </p>
-  `;
-}
-
-function selectClosedDate(dateISO, tipo) {
-  selectedDate = null;
-
-  openModal();
-  modalDate.textContent = formatDateBR(dateISO);
-
-  closedMessage.style.display = "block";
-  openContent.style.display = "none";
-
-  if (tipo === "passado") {
-    closedMessage.innerHTML = `
-      <strong>Data encerrada</strong>
-      <p>Esta data já passou e não está mais disponível para compra online.</p>
-      <p>Escolha uma próxima data disponível no calendário.</p>
-    `;
-    return;
-  }
-
-  closedMessage.innerHTML = `
-    <strong>Parque fechado ou sem venda online</strong>
-    <p>Não há ingressos online disponíveis para esta data.</p>
-    <p>Consulte outra data disponível no calendário.</p>
+    <p>Os ingressos para o dia de hoje são vendidos somente na bilheteria do parque.</p>
+    <p>Os valores da bilheteria são diferentes dos valores da compra antecipada online.</p>
+    <p>Para comprar online, é necessário adquirir o ingresso com pelo menos 1 dia de antecedência.</p>
   `;
 }
 
@@ -198,10 +158,12 @@ async function selectDate(dateISO) {
   selectedDate = dateISO;
 
   openModal();
-
   modalDate.textContent = formatDateBR(dateISO);
+
   termsCheck.checked = false;
   chooseBtn.disabled = true;
+
+  showOpenContent();
 
   ticketsList.innerHTML = `
     <div class="loading">Carregando ingressos disponíveis...</div>
@@ -223,15 +185,12 @@ async function selectDate(dateISO) {
     }
 
     if (!tickets.length) {
-      selectClosedDate(dateISO, "fechado");
+      selectClosedDate(dateISO);
       return;
     }
 
-    showOpenContent();
     renderTickets(tickets);
   } catch (error) {
-    showOpenContent();
-
     ticketsList.innerHTML = `
       <div class="closed-message" style="display:block">
         <strong>Não foi possível carregar os ingressos.</strong>
@@ -258,7 +217,6 @@ function normalizeTickets(data) {
         id: ticket.iditens || ticket.id || "",
         name: ticket.nome || "Ingresso",
         description: cleanText(ticket.descricao || ""),
-        image: ticket.imagem || "",
         price: Number(price || 0),
         quantity: ticket.ingressosParaGerar || 1
       };
@@ -269,12 +227,10 @@ function normalizeTickets(data) {
 function renderTickets(tickets) {
   ticketsList.innerHTML = tickets
     .map((ticket) => {
-      const icon = getTicketIcon(ticket);
-
       return `
         <div class="ticket-card">
           <div class="ticket-icon">
-            ${icon}
+            ${getTicketIcon(ticket)}
           </div>
 
           <div>
@@ -293,24 +249,22 @@ function getTicketIcon(ticket) {
   const nome = ticket.name.toLowerCase();
   const descricao = ticket.description.toLowerCase();
 
-  // DUPLO
   if (
     nome.includes("duplo") ||
     descricao.includes("duplo") ||
     ticket.quantity === 2
   ) {
     return `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 8.5h16a2 2 0 0 1 2 2v1a2 2 0 0 0 0 3v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1a2 2 0 0 0 0-3v-1a2 2 0 0 1 2-2Z"></path>
-        <path d="M8 8.5v9"></path>
+      <svg viewBox="0 0 24 24">
+        <path d="M5 8h14a2 2 0 0 1 2 2v1.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.2a2 2 0 0 0 0-3.6V10a2 2 0 0 1 2-2Z"></path>
+        <path d="M8 8v10"></path>
         <path d="M13 11h5"></path>
         <path d="M13 15h5"></path>
-        <path d="M5 5.5h14"></path>
+        <path d="M6 5h12"></path>
       </svg>
     `;
   }
 
-  // KIDS
   if (
     nome.includes("kids") ||
     nome.includes("infantil") ||
@@ -318,38 +272,36 @@ function getTicketIcon(ticket) {
     nome.includes("crianca")
   ) {
     return `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 7h14a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9a2 2 0 0 1 2-2Z"></path>
-        <path d="M9 7v10"></path>
-        <path d="M13 12h4"></path>
-        <path d="M15 10v4"></path>
+      <svg viewBox="0 0 24 24">
+        <path d="M5 8h14a2 2 0 0 1 2 2v1.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.2a2 2 0 0 0 0-3.6V10a2 2 0 0 1 2-2Z"></path>
+        <path d="M8 8v10"></path>
+        <path d="M14 12h4"></path>
+        <path d="M16 10v4"></path>
       </svg>
     `;
   }
 
-  // MELHOR IDADE
   if (
     nome.includes("melhor idade") ||
     nome.includes("idoso")
   ) {
     return `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 7h14a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9a2 2 0 0 1 2-2Z"></path>
-        <path d="M9 7v10"></path>
-        <path d="M14 11.5h3"></path>
-        <path d="M15.5 10v3"></path>
-        <path d="M14 15h3"></path>
+      <svg viewBox="0 0 24 24">
+        <path d="M5 8h14a2 2 0 0 1 2 2v1.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.2a2 2 0 0 0 0-3.6V10a2 2 0 0 1 2-2Z"></path>
+        <path d="M8 8v10"></path>
+        <path d="M14 12h4"></path>
+        <path d="M16 10v4"></path>
+        <path d="M14 15h4"></path>
       </svg>
     `;
   }
 
-  // DAY USE NORMAL
   return `
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M5 7h14a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9a2 2 0 0 1 2-2Z"></path>
-      <path d="M9 7v10"></path>
-      <path d="M13 10.5h5"></path>
-      <path d="M13 14.5h5"></path>
+    <svg viewBox="0 0 24 24">
+      <path d="M5 8h14a2 2 0 0 1 2 2v1.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.2a2 2 0 0 0 0-3.6V10a2 2 0 0 1 2-2Z"></path>
+      <path d="M8 8v10"></path>
+      <path d="M13 11h5"></path>
+      <path d="M13 15h5"></path>
     </svg>
   `;
 }
