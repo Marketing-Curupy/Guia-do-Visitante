@@ -76,6 +76,7 @@ body {
 }
 
 .day {
+  position: relative;
   min-height: 64px;
   border: none;
   border-radius: 16px;
@@ -95,10 +96,9 @@ body {
   outline: 3px solid #F3CB05;
 }
 
-.day.past {
+.day.today-blocked {
   background: #edf0f2;
-  color: #9aa5aa;
-  cursor: pointer;
+  color: #7d8d96;
 }
 
 .day.closed {
@@ -110,10 +110,6 @@ body {
 .day.closed:hover {
   transform: none;
   background: #e9eef2;
-}
-
-.day.closed small {
-  display: none;
 }
 
 .day.empty {
@@ -135,6 +131,23 @@ body {
   font-size: 10px;
   margin-top: 4px;
   font-weight: 700;
+}
+
+.promo-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 19px;
+  height: 19px;
+  border-radius: 999px;
+  background: #FF0C58;
+  color: #fff;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px !important;
+  font-weight: 900;
+  box-shadow: 0 4px 10px rgba(255, 12, 88, .35);
 }
 
 .modal {
@@ -181,6 +194,7 @@ body {
 
 .ticket-card {
   background: #f4fbff;
+  border: 1px solid #d7edf7;
   border-radius: 18px;
   padding: 14px;
   margin-bottom: 12px;
@@ -193,6 +207,13 @@ body {
 
 .ticket-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(5, 120, 167, .10);
+}
+
+.ticket-promo {
+  background: linear-gradient(180deg, #fff8fb 0%, #ffffff 100%);
+  border: 2px solid #FF0C58;
+  box-shadow: 0 10px 24px rgba(255, 12, 88, .10);
 }
 
 .ticket-icon {
@@ -201,22 +222,27 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 16px;
-  background: #eef8fd;
-  border: 1px solid #d7edf7;
+  border-radius: 18px;
+  background: #0578A7;
   flex-shrink: 0;
+  box-shadow: 0 10px 18px rgba(5, 120, 167, .18);
 }
 
 .ticket-icon svg {
-  width: 26px;
-  height: 26px;
+  width: 31px;
+  height: 31px;
   fill: none;
-  stroke: #0578A7;
-  stroke-width: 1.8;
+  stroke: #fff;
+  stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
+.ticket-info {
+  min-width: 0;
+}
+
+.ticket-name,
 .ticket-card span {
   display: block;
   color: #0578A7;
@@ -225,8 +251,10 @@ body {
 }
 
 .ticket-card small {
+  display: block;
   color: #455a64;
   line-height: 1.35;
+  margin-top: 4px;
 }
 
 .ticket-card strong {
@@ -235,38 +263,17 @@ body {
   white-space: nowrap;
 }
 
-.notice-box {
-  background: #f4f8fb;
-  border: 1px solid #dce6ee;
-  border-radius: 18px;
-  padding: 20px;
-  margin-top: 20px;
-  color: #5d707a;
-}
-
-.notice-box h3 {
-  color: #0578A7;
-  margin-top: 0;
-}
-
-.notice-box p {
-  margin-bottom: 9px;
-  line-height: 1.45;
-}
-
-.check-line {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #0578A7;
+.promo-badge {
+  width: fit-content;
+  background: #FF0C58;
+  color: #fff !important;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 11px !important;
   font-weight: 900;
-  margin-top: 16px;
-}
-
-.check-line input {
-  width: 24px;
-  height: 24px;
-  accent-color: #ff6b2c;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  margin-bottom: 7px;
 }
 
 #chooseBtn {
@@ -281,12 +288,6 @@ body {
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 12px 30px rgba(255, 12, 88, .35);
-}
-
-#chooseBtn:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-  box-shadow: none;
 }
 
 .redirect-text {
@@ -355,6 +356,12 @@ body {
     font-size: 13px;
   }
 
+  .promo-dot {
+    width: 17px;
+    height: 17px;
+    font-size: 10px !important;
+  }
+
   .ticket-card {
     grid-template-columns: 52px 1fr;
     gap: 12px;
@@ -367,8 +374,8 @@ body {
   }
 
   .ticket-icon svg {
-    width: 24px;
-    height: 24px;
+    width: 27px;
+    height: 27px;
   }
 
   .ticket-card strong {
