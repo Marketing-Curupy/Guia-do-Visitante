@@ -196,13 +196,34 @@ body {
 }
 
 .card.destaque {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  align-items: center;
+  gap: 30px;
+
   border-top: 7px solid var(--rosa);
 }
 
+.card.destaque .btn {
+  width: 100%;
+}
+
+.card.destaque .aviso {
+  max-width: 700px;
+}
+
+@media (max-width: 768px) {
+
+  .card.destaque {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .card.destaque .btn {
+    width: 100%;
+  }
+
+}
 .card h2 {
   color: var(--azul);
   margin-bottom: 10px;
