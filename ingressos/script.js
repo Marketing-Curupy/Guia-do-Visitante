@@ -16,16 +16,10 @@ const modalDate = document.getElementById("modalDate");
 const closedMessage = document.getElementById("closedMessage");
 const openContent = document.getElementById("openContent");
 const ticketsList = document.getElementById("ticketsList");
-const termsCheck = document.getElementById("termsCheck");
 const chooseBtn = document.getElementById("chooseBtn");
 
 document.addEventListener("DOMContentLoaded", async () => {
   await renderCalendar();
-
-  termsCheck.addEventListener("change", () => {
-    chooseBtn.disabled = !termsCheck.checked;
-  });
-
   chooseBtn.addEventListener("click", goToCheckout);
 });
 
@@ -33,26 +27,21 @@ async function renderCalendar() {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const title = new Date(year, month, 1).toLocaleDateString("pt-BR", {
+  monthTitle.textContent = new Date(year, month, 1).toLocaleDateString("pt-BR", {
     month: "long",
     year: "numeric"
   });
-
-  monthTitle.textContent = title;
 
   const firstDay = new Date(year, month, 1).getDay();
   const lastDate = new Date(year, month + 1, 0).getDate();
   const today = getTodayISO();
 
-  calendarGrid.innerHTML = `
-    <div class="loading">Carregando datas disponíveis...</div>
-  `;
+  calendarGrid.innerHTML = `<div class="loading">Carregando datas disponíveis...</div>`;
 
   const consultas = [];
 
   for (let day = 1; day <= lastDate; day++) {
-    const dateISO = toISODate(year, month, day);
-    consultas.push(verificarIngressosDisponiveis(dateISO));
+    consultas.push(verificarIngressosDisponiveis(toISODate(year, month, day)));
   }
 
   await Promise.all(consultas);
@@ -67,12 +56,10 @@ async function renderCalendar() {
     const dateISO = toISODate(year, month, day);
     const tickets = cacheDatas[dateISO] || [];
     const temIngresso = tickets.length > 0;
-
+    const temPromocao = tickets.some(ehPromocional);
     const classes = ["day"];
 
-    if (dateISO === today) {
-      classes.push("today");
-    }
+    if (dateISO === today) classes.push("today");
 
     if (temIngresso && dateISO > today) {
       classes.push("available");
@@ -80,6 +67,7 @@ async function renderCalendar() {
       html += `
         <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
           ${day}
+          ${temPromocao ? `<span class="promo-dot">%</span>` : ""}
           <small>online</small>
         </button>
       `;
@@ -87,11 +75,12 @@ async function renderCalendar() {
     }
 
     if (temIngresso && dateISO === today) {
-      classes.push("past");
+      classes.push("today-blocked");
 
       html += `
         <button class="${classes.join(" ")}" onclick="selectToday('${dateISO}')">
           ${day}
+          ${temPromocao ? `<span class="promo-dot">%</span>` : ""}
           <small>hoje</small>
         </button>
       `;
@@ -124,12 +113,10 @@ async function verificarIngressosDisponiveis(dateISO) {
     }
 
     const data = await response.json();
-    const tickets = normalizeTickets(data);
+    cacheDatas[dateISO] = normalizeTickets(data);
 
-    cacheDatas[dateISO] = tickets;
-
-    return tickets.length > 0;
-  } catch (error) {
+    return cacheDatas[dateISO].length > 0;
+  } catch {
     cacheDatas[dateISO] = [];
     return false;
   }
@@ -140,7 +127,7 @@ async function changeMonth(direction) {
   await renderCalendar();
 }
 
-function selectClosedDate(dateISO) {
+async function selectClosedDate(dateISO) {
   selectedDate = null;
 
   openModal();
@@ -151,8 +138,20 @@ function selectClosedDate(dateISO) {
 
   closedMessage.innerHTML = `
     <strong>Parque fechado nesta data</strong>
-    <p>Não há funcionamento ou venda online disponível para esta data.</p>
-    <p>Escolha uma data marcada como <strong>online</strong> no calendário.</p>
+    <p>Hoje o parque está fechado. Consulte a próxima data de abertura.</p>
+    <p class="loading">Buscando próxima data disponível...</p>
+  `;
+
+  const nextDate = await findNextOpenDate(dateISO);
+
+  closedMessage.innerHTML = `
+    <strong>Parque fechado nesta data</strong>
+    <p>Hoje o parque está fechado. Consulte a próxima data de abertura.</p>
+    ${
+      nextDate
+        ? `<p><strong>Próxima data de abertura:</strong> ${formatDateBR(nextDate)}</p>`
+        : `<p>Não encontramos uma próxima data disponível no momento.</p>`
+    }
   `;
 }
 
@@ -166,7 +165,7 @@ function selectToday(dateISO) {
   openContent.style.display = "none";
 
   closedMessage.innerHTML = `
-    <strong>Ingressos para hoje somente na bilheteria</strong>
+    <strong>Compra online indisponível para hoje</strong>
     <p>Os ingressos para o dia de hoje são vendidos somente na bilheteria do parque.</p>
     <p>Os valores da bilheteria são diferentes dos valores da compra antecipada online.</p>
     <p>Para comprar online, é necessário adquirir o ingresso com pelo menos 1 dia de antecedência.</p>
@@ -179,44 +178,23 @@ async function selectDate(dateISO) {
   openModal();
   modalDate.textContent = formatDateBR(dateISO);
 
-  termsCheck.checked = false;
-  chooseBtn.disabled = true;
-
   showOpenContent();
 
-  ticketsList.innerHTML = `
-    <div class="loading">Carregando ingressos disponíveis...</div>
-  `;
+  ticketsList.innerHTML = `<div class="loading">Carregando ingressos disponíveis...</div>`;
 
-  try {
-    let tickets = cacheDatas[dateISO];
+  let tickets = cacheDatas[dateISO];
 
-    if (!tickets) {
-      const response = await fetch(API_BASE + dateISO);
-
-      if (!response.ok) {
-        throw new Error("Erro ao consultar ingressos.");
-      }
-
-      const data = await response.json();
-      tickets = normalizeTickets(data);
-      cacheDatas[dateISO] = tickets;
-    }
-
-    if (!tickets.length) {
-      selectClosedDate(dateISO);
-      return;
-    }
-
-    renderTickets(tickets);
-  } catch (error) {
-    ticketsList.innerHTML = `
-      <div class="closed-message" style="display:block">
-        <strong>Não foi possível carregar os ingressos.</strong>
-        <p>Tente novamente em alguns instantes.</p>
-      </div>
-    `;
+  if (!tickets) {
+    await verificarIngressosDisponiveis(dateISO);
+    tickets = cacheDatas[dateISO] || [];
   }
+
+  if (!tickets.length) {
+    selectClosedDate(dateISO);
+    return;
+  }
+
+  renderTickets(tickets);
 }
 
 function normalizeTickets(data) {
@@ -246,15 +224,18 @@ function normalizeTickets(data) {
 function renderTickets(tickets) {
   ticketsList.innerHTML = tickets
     .map((ticket) => {
+      const promocional = ehPromocional(ticket);
+
       return `
-        <div class="ticket-card">
+        <div class="ticket-card ${promocional ? "ticket-promo" : ""}">
           <div class="ticket-icon">
-            ${getTicketIcon(ticket)}
+            ${ticketIconSvg()}
           </div>
 
-          <div>
-            <span>${ticket.name}</span>
-            <small>${ticket.description}</small>
+          <div class="ticket-info">
+            ${promocional ? `<span class="promo-badge">Oferta especial</span>` : ""}
+            <span class="ticket-name">${ticket.name}</span>
+            <small>${getCategoriaIdade(ticket)}</small>
           </div>
 
           <strong>${formatMoney(ticket.price)}</strong>
@@ -264,65 +245,52 @@ function renderTickets(tickets) {
     .join("");
 }
 
-function getTicketIcon(ticket) {
-  const nome = ticket.name.toLowerCase();
-  const descricao = ticket.description.toLowerCase();
+function ehPromocional(ticket) {
+  const nome = removeAccents(ticket.name.toLowerCase());
 
-  if (
-    nome.includes("duplo") ||
-    descricao.includes("duplo") ||
-    ticket.quantity === 2
-  ) {
-    return `
-      <svg viewBox="0 0 24 24">
-        <path d="M5 8h14a2 2 0 0 1 2 2v1.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.2a2 2 0 0 0 0-3.6V10a2 2 0 0 1 2-2Z"></path>
-        <path d="M8 8v10"></path>
-        <path d="M13 11h5"></path>
-        <path d="M13 15h5"></path>
-        <path d="M6 5h12"></path>
-      </svg>
-    `;
-  }
+  const categoriasNormais = [
+    "individual",
+    "kids",
+    "melhor idade"
+  ];
 
-  if (
-    nome.includes("kids") ||
-    nome.includes("infantil") ||
-    nome.includes("criança") ||
-    nome.includes("crianca")
-  ) {
-    return `
-      <svg viewBox="0 0 24 24">
-        <path d="M5 8h14a2 2 0 0 1 2 2v1.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.2a2 2 0 0 0 0-3.6V10a2 2 0 0 1 2-2Z"></path>
-        <path d="M8 8v10"></path>
-        <path d="M14 12h4"></path>
-        <path d="M16 10v4"></path>
-      </svg>
-    `;
-  }
+  return !categoriasNormais.some((categoria) => nome.includes(categoria));
+}
 
-  if (
-    nome.includes("melhor idade") ||
-    nome.includes("idoso")
-  ) {
-    return `
-      <svg viewBox="0 0 24 24">
-        <path d="M5 8h14a2 2 0 0 1 2 2v1.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.2a2 2 0 0 0 0-3.6V10a2 2 0 0 1 2-2Z"></path>
-        <path d="M8 8v10"></path>
-        <path d="M14 12h4"></path>
-        <path d="M16 10v4"></path>
-        <path d="M14 15h4"></path>
-      </svg>
-    `;
-  }
+function getCategoriaIdade(ticket) {
+  const nome = removeAccents(ticket.name.toLowerCase());
 
+  if (nome.includes("kids")) return "5 a 11 anos";
+  if (nome.includes("melhor idade")) return "60 anos ou mais";
+  if (nome.includes("individual")) return "12 a 59 anos";
+  if (nome.includes("duplo")) return "2 ingressos";
+
+  return "Categoria promocional";
+}
+
+function ticketIconSvg() {
   return `
-    <svg viewBox="0 0 24 24">
-      <path d="M5 8h14a2 2 0 0 1 2 2v1.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.2a2 2 0 0 0 0-3.6V10a2 2 0 0 1 2-2Z"></path>
-      <path d="M8 8v10"></path>
-      <path d="M13 11h5"></path>
-      <path d="M13 15h5"></path>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7C4 5.9 4.9 5 6 5H18C19.1 5 20 5.9 20 7V10C18.9 10 18 10.9 18 12C18 13.1 18.9 14 20 14V17C20 18.1 19.1 19 18 19H6C4.9 19 4 18.1 4 17V14C5.1 14 6 13.1 6 12C6 10.9 5.1 10 4 10V7Z"></path>
+      <path d="M12 8V16"></path>
     </svg>
   `;
+}
+
+async function findNextOpenDate(fromDateISO) {
+  const start = new Date(fromDateISO + "T00:00:00");
+
+  for (let i = 1; i <= 90; i++) {
+    const next = new Date(start);
+    next.setDate(start.getDate() + i);
+
+    const dateISO = toISODate(next.getFullYear(), next.getMonth(), next.getDate());
+    const hasTickets = await verificarIngressosDisponiveis(dateISO);
+
+    if (hasTickets) return dateISO;
+  }
+
+  return null;
 }
 
 function openModal() {
@@ -339,7 +307,7 @@ function showOpenContent() {
 }
 
 function goToCheckout() {
-  if (!selectedDate || chooseBtn.disabled) return;
+  if (!selectedDate) return;
 
   const checkoutDate = formatDateForCheckout(selectedDate);
   const encodedDate = btoa(checkoutDate);
@@ -361,6 +329,12 @@ function cleanText(text) {
     .replace(/<[^>]*>/g, "")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function removeAccents(text) {
+  return String(text)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
 function formatDateBR(dateISO) {
