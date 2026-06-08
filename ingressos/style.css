@@ -322,6 +322,46 @@ body {
   grid-column: 1 / -1;
 }
 
+.notice-box {
+  background: #f4f8fb;
+  border: 1px solid #dce6ee;
+  border-radius: 18px;
+  padding: 20px;
+  margin-top: 20px;
+  color: #5d707a;
+}
+
+.notice-box h3 {
+  color: #0578A7;
+  margin-top: 0;
+}
+
+.notice-box p {
+  margin-bottom: 9px;
+  line-height: 1.45;
+}
+
+.check-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #0578A7;
+  font-weight: 900;
+  margin-top: 16px;
+}
+
+.check-line input {
+  width: 24px;
+  height: 24px;
+  accent-color: #FF0C58;
+}
+
+#chooseBtn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 @media (max-width: 560px) {
   .container {
     padding: 16px;
