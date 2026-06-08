@@ -1,6 +1,3 @@
-const AVAILABLE_DATES_API =
-  "https://sofalta.eu/api/baratheon/v5/empreendimentos/curupyacquapark/web/vendaingressos/ingressos";
-
 const API_BASE =
   "https://sofalta.eu/api/baratheon/v4/empreendimentos/curupyacquapark/produtos/ingressos/web?data=";
 
@@ -10,7 +7,6 @@ const CHECKOUT_BASE =
 let currentDate = new Date();
 let selectedDate = null;
 
-let datasDisponiveis = new Set();
 const cacheDatas = {};
 
 const monthTitle = document.getElementById("monthTitle");
@@ -24,8 +20,7 @@ const termsCheck = document.getElementById("termsCheck");
 const chooseBtn = document.getElementById("chooseBtn");
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await carregarDatasDisponiveis();
-  renderCalendar();
+  await renderCalendar();
 
   termsCheck.addEventListener("change", () => {
     chooseBtn.disabled = !termsCheck.checked;
@@ -34,22 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   chooseBtn.addEventListener("click", goToCheckout);
 });
 
-async function carregarDatasDisponiveis() {
-  try {
-    const response = await fetch(AVAILABLE_DATES_API);
-    const data = await response.json();
-
-    const objeto = data.object || data || {};
-
-    datasDisponiveis = new Set(
-      Object.keys(objeto).filter((key) => /^\d{4}-\d{2}-\d{2}$/.test(key))
-    );
-  } catch (error) {
-    datasDisponiveis = new Set();
-  }
-}
-
-function renderCalendar() {
+async function renderCalendar() {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
@@ -64,6 +44,19 @@ function renderCalendar() {
   const lastDate = new Date(year, month + 1, 0).getDate();
   const today = getTodayISO();
 
+  calendarGrid.innerHTML = `
+    <div class="loading">Carregando datas disponíveis...</div>
+  `;
+
+  const consultas = [];
+
+  for (let day = 1; day <= lastDate; day++) {
+    const dateISO = toISODate(year, month, day);
+    consultas.push(verificarIngressosDisponiveis(dateISO));
+  }
+
+  await Promise.all(consultas);
+
   let html = "";
 
   for (let i = 0; i < firstDay; i++) {
@@ -72,7 +65,8 @@ function renderCalendar() {
 
   for (let day = 1; day <= lastDate; day++) {
     const dateISO = toISODate(year, month, day);
-    const disponivelNoSofalta = datasDisponiveis.has(dateISO);
+    const tickets = cacheDatas[dateISO] || [];
+    const temIngresso = tickets.length > 0;
 
     const classes = ["day"];
 
@@ -80,18 +74,19 @@ function renderCalendar() {
       classes.push("today");
     }
 
-    if (!disponivelNoSofalta) {
-      classes.push("closed");
+    if (temIngresso && dateISO > today) {
+      classes.push("available");
 
       html += `
-        <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}')">
+        <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
           ${day}
+          <small>online</small>
         </button>
       `;
       continue;
     }
 
-    if (dateISO <= today) {
+    if (temIngresso && dateISO === today) {
       classes.push("past");
 
       html += `
@@ -103,12 +98,11 @@ function renderCalendar() {
       continue;
     }
 
-    classes.push("available");
+    classes.push("closed");
 
     html += `
-      <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
+      <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}')">
         ${day}
-        <small>online</small>
       </button>
     `;
   }
@@ -116,9 +110,34 @@ function renderCalendar() {
   calendarGrid.innerHTML = html;
 }
 
+async function verificarIngressosDisponiveis(dateISO) {
+  if (Array.isArray(cacheDatas[dateISO])) {
+    return cacheDatas[dateISO].length > 0;
+  }
+
+  try {
+    const response = await fetch(API_BASE + dateISO);
+
+    if (!response.ok) {
+      cacheDatas[dateISO] = [];
+      return false;
+    }
+
+    const data = await response.json();
+    const tickets = normalizeTickets(data);
+
+    cacheDatas[dateISO] = tickets;
+
+    return tickets.length > 0;
+  } catch (error) {
+    cacheDatas[dateISO] = [];
+    return false;
+  }
+}
+
 async function changeMonth(direction) {
   currentDate.setMonth(currentDate.getMonth() + direction);
-  renderCalendar();
+  await renderCalendar();
 }
 
 function selectClosedDate(dateISO) {
@@ -132,7 +151,7 @@ function selectClosedDate(dateISO) {
 
   closedMessage.innerHTML = `
     <strong>Parque fechado nesta data</strong>
-    <p>Não há funcionamento nas segundas e terças.</p>
+    <p>Não há funcionamento ou venda online disponível para esta data.</p>
     <p>Escolha uma data marcada como <strong>online</strong> no calendário.</p>
   `;
 }
