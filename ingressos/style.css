@@ -98,14 +98,13 @@ body {
 .day.past {
   background: #edf0f2;
   color: #9aa5aa;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .day.closed {
   background: #e9eef2;
   color: #8a9aa5;
-  cursor: not-allowed;
-  pointer-events: none;
+  cursor: pointer;
 }
 
 .day.closed:hover {
