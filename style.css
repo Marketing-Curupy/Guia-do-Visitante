@@ -935,6 +935,32 @@ body {
   line-height: 1;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(0,0,0,.18);
+}
+
+.btn-ingressos {
+  width: 100%;
+  max-width: 460px;
+  min-height: 58px;
+  font-size: 1.05rem;
+  letter-spacing: .2px;
+  box-shadow: 0 14px 34px rgba(255, 79, 139, .32);
+}
+
+.dia-passado {
+  background: #b8b8b8 !important;
+  color: white !important;
+  opacity: .75;
+}
+
+.dia-passado:hover::after {
+  content: "Data encerrada";
+}
+
+@media (max-width: 760px) {
+  .btn-ingressos {
+    max-width: 100%;
+  }
+}
 
 .btn-ingressos {
   width: 100%;
