@@ -37,8 +37,8 @@
       <div class="atalhos">
         <button onclick="openIngressosModal()">🎟 Ingressos</button>
         <button onclick="abrirModal('modalCalendario')">📅 Calendário</button>
-        <a href="#hospedagem">🏨 Hospedagem</a>
-        <a href="#associacao">💎 Associação</a>
+        <button onclick="abrirEmBreve('Hospedagem')">🏨 Hospedagem</button>
+        <button onclick="abrirEmBreve('Clube de Associados')">💎 Associação</button>
       </div>
     </div>
   </header>
@@ -77,27 +77,29 @@
         </button>
       </article>
 
-      <article class="card" id="hospedagem">
+      <article class="card card-em-breve">
+        <span class="tag-em-breve">Em breve</span>
         <h2>🏨 Hospedagem</h2>
         <p>
           Em breve você poderá conhecer nossas opções de hospedagem
-          para aproveitar o Curupy com mais conforto.
+          para aproveitar o Curupy com ainda mais conforto.
         </p>
 
-        <button class="btn azul" disabled style="opacity: .65; cursor: not-allowed;">
-          Em breve
+        <button class="btn azul" onclick="abrirEmBreve('Hospedagem')">
+          Avise-me quando lançar
         </button>
       </article>
 
-      <article class="card" id="associacao">
+      <article class="card card-em-breve">
+        <span class="tag-em-breve">Em breve</span>
         <h2>💎 Clube de Associados</h2>
         <p>
           Em breve você poderá conhecer as vantagens exclusivas
           do Clube de Associados Curupy.
         </p>
 
-        <button class="btn azul" disabled style="opacity: .65; cursor: not-allowed;">
-          Em breve
+        <button class="btn azul" onclick="abrirEmBreve('Clube de Associados')">
+          Saber mais em breve
         </button>
       </article>
 
@@ -144,12 +146,16 @@
     ❓ Tire sua dúvida
   </button>
 
+  <nav class="barra-acoes-mobile">
+    <button onclick="openIngressosModal()">🎟 Comprar</button>
+    <button onclick="abrirModal('modalCalendario')">📅 Calendário</button>
+    <button onclick="abrirMapa()">📍 Chegar</button>
+  </nav>
+
   <div class="modal" id="modalCalendario">
     <div class="modal-box grande">
       <button class="fechar" onclick="fecharModal('modalCalendario')">×</button>
-
       <h2>📅 Calendário de funcionamento</h2>
-
       <div id="calendariosContainer"></div>
     </div>
   </div>
@@ -157,12 +163,8 @@
   <div class="modal" id="modalDiaCalendario">
     <div class="modal-box dia-modal">
       <button class="fechar" onclick="fecharModal('modalDiaCalendario')">×</button>
-
       <div id="conteudoDiaCalendario"></div>
-
-      <button class="btn rosa full" onclick="fecharModal('modalDiaCalendario')">
-        Fechar
-      </button>
+      <button class="btn rosa full" onclick="fecharModal('modalDiaCalendario')">Fechar</button>
     </div>
   </div>
 
@@ -175,19 +177,11 @@
 
       <div class="accordion">
         <div class="accordion-item active">
-          <button class="accordion-header">
-            Meia-Entrada <span>⌃</span>
-          </button>
+          <button class="accordion-header">Meia-Entrada <span>⌃</span></button>
 
           <div class="accordion-content">
-            <p>
-              A meia-entrada é válida exclusivamente sobre o valor da tabela padrão da portaria.
-            </p>
-
-            <p>
-              A venda de ingressos com meia-entrada é realizada somente na bilheteria,
-              no dia da visita, mediante apresentação da documentação original e válida.
-            </p>
+            <p>A meia-entrada é válida exclusivamente sobre o valor da tabela padrão da portaria.</p>
+            <p>A venda de ingressos com meia-entrada é realizada somente na bilheteria, no dia da visita, mediante apresentação da documentação original e válida.</p>
 
             <h4>Têm direito à meia-entrada:</h4>
 
@@ -205,44 +199,23 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-header">
-            Gratuidade para PCD <span>⌄</span>
-          </button>
-
+          <button class="accordion-header">Gratuidade para PCD <span>⌄</span></button>
           <div class="accordion-content">
-            <p>
-              Pessoas com Deficiência possuem direito à gratuidade mediante apresentação
-              de documento oficial que comprove a condição.
-            </p>
-
-            <p>
-              O direito ao acompanhante será analisado conforme a documentação apresentada.
-            </p>
+            <p>Pessoas com Deficiência possuem direito à gratuidade mediante apresentação de documento oficial que comprove a condição.</p>
+            <p>O direito ao acompanhante será analisado conforme a documentação apresentada.</p>
           </div>
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-header">
-            Gratuidade para TEA <span>⌄</span>
-          </button>
-
+          <button class="accordion-header">Gratuidade para TEA <span>⌄</span></button>
           <div class="accordion-content">
-            <p>
-              Pessoas com Transtorno do Espectro Autista possuem direito à gratuidade
-              mediante apresentação da CIPTEA ou documento oficial que comprove a condição.
-            </p>
-
-            <p>
-              Nestes casos também é garantido o direito ao acompanhante.
-            </p>
+            <p>Pessoas com Transtorno do Espectro Autista possuem direito à gratuidade mediante apresentação da CIPTEA ou documento oficial que comprove a condição.</p>
+            <p>Nestes casos também é garantido o direito ao acompanhante.</p>
           </div>
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-header">
-            Regras para Acompanhantes <span>⌄</span>
-          </button>
-
+          <button class="accordion-header">Regras para Acompanhantes <span>⌄</span></button>
           <div class="accordion-content">
             <ul>
               <li>Ter idade mínima de 18 anos.</li>
@@ -255,9 +228,7 @@
       </div>
 
       <div class="meia-footer">
-        <button class="btn rosa full" onclick="fecharModal('modalMeia')">
-          Entendi
-        </button>
+        <button class="btn rosa full" onclick="fecharModal('modalMeia')">Entendi</button>
       </div>
     </div>
   </div>
@@ -265,9 +236,7 @@
   <div class="modal" id="modalAjuda">
     <div class="modal-box">
       <button class="fechar" onclick="fecharModal('modalAjuda')">×</button>
-
       <h2>❓ Assistente Curupy</h2>
-
       <div id="ajudaContainer"></div>
     </div>
   </div>
@@ -275,8 +244,18 @@
   <div class="modal" id="modalFoto">
     <div class="foto-box">
       <button class="fechar" onclick="fecharModal('modalFoto')">×</button>
-
       <img id="fotoAberta" src="" alt="Foto Curupy">
+    </div>
+  </div>
+
+  <div class="modal" id="modalEmBreve">
+    <div class="modal-box">
+      <button class="fechar" onclick="fecharModal('modalEmBreve')">×</button>
+      <h2 id="tituloEmBreve">Em breve</h2>
+      <p id="textoEmBreve">
+        Esta área está em desenvolvimento e será disponibilizada em breve.
+      </p>
+      <button class="btn rosa full" onclick="fecharModal('modalEmBreve')">Entendi</button>
     </div>
   </div>
 
@@ -292,46 +271,8 @@
     </div>
   </div>
 
-  <nav class="barra-acoes-mobile">
-    <button onclick="openIngressosModal()">🎟 Comprar</button>
-    <button onclick="abrirModal('modalCalendario')">📅 Calendário</button>
-    <button id="btnMapaMobile">📍 Chegar</button>
-  </nav>
-
   <script src="dados-barra.js"></script>
   <script src="calendarios.js"></script>
   <script src="script.js"></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const btnMapaMobile = document.getElementById("btnMapaMobile");
-      const btnMapa = document.getElementById("btnMapa");
-
-      if (btnMapaMobile && btnMapa) {
-        btnMapaMobile.addEventListener("click", function () {
-          btnMapa.click();
-        });
-      }
-
-      document.querySelectorAll(".accordion-header").forEach(function (header) {
-        header.addEventListener("click", function () {
-          const item = header.parentElement;
-          const span = header.querySelector("span");
-          const ativo = item.classList.contains("active");
-
-          document.querySelectorAll(".accordion-item").forEach(function (acc) {
-            acc.classList.remove("active");
-            const accSpan = acc.querySelector(".accordion-header span");
-            if (accSpan) accSpan.textContent = "⌄";
-          });
-
-          if (!ativo) {
-            item.classList.add("active");
-            if (span) span.textContent = "⌃";
-          }
-        });
-      });
-    });
-  </script>
 </body>
 </html>
