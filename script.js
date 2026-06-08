@@ -50,8 +50,6 @@ function formatarMoeda(valor) {
 
 /* BARRA FIXA */
 
-/* BARRA FIXA */
-
 function parqueJaFechouHoje() {
   const agora = new Date();
   const hora = agora.getHours();
@@ -62,11 +60,16 @@ function parqueJaFechouHoje() {
 
 function montarDataISO(ano, mesNome, dia) {
   const mesNumero = obterNumeroMes(mesNome) + 1;
+
   return `${ano}-${String(mesNumero).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
 }
 
 function buscarDiaAtualNoCalendario() {
   const hoje = hojeISO();
+
+  if (typeof CALENDARIOS_FUNCIONAMENTO === "undefined") {
+    return null;
+  }
 
   for (const calendario of CALENDARIOS_FUNCIONAMENTO) {
     for (const dia of calendario.dias) {
@@ -89,6 +92,10 @@ function buscarDiaAtualNoCalendario() {
 function buscarProximaAberturaNoCalendario() {
   const hoje = hojeISO();
 
+  if (typeof CALENDARIOS_FUNCIONAMENTO === "undefined") {
+    return null;
+  }
+
   const aberturas = [];
 
   CALENDARIOS_FUNCIONAMENTO.forEach((calendario) => {
@@ -109,26 +116,21 @@ function buscarProximaAberturaNoCalendario() {
     });
   });
 
-  return aberturas.sort((a, b) => a.data.localeCompare(b.data))[0];
+  return aberturas.sort((a, b) => a.data.localeCompare(b.data))[0] || null;
 }
 
 function gerarValoresBarra(status) {
-  const fimOuFeriado =
-    status === "fimDeSemana" ||
-    status === "feriado";
-
-  if (fimOuFeriado) {
-    return {
-      visitante: 124,
-      kids: 55,
-      convidadoSocio: 78
-    };
+  if (
+    typeof VALORES_BILHETERIA !== "undefined" &&
+    VALORES_BILHETERIA[status]
+  ) {
+    return VALORES_BILHETERIA[status];
   }
 
   return {
-    visitante: 86,
-    kids: 45,
-    convidadoSocio: 55
+    visitante: 0,
+    kids: 0,
+    convidadoSocio: 0
   };
 }
 
@@ -137,6 +139,7 @@ function renderizarBarra() {
   if (!barra) return;
 
   const diaAtual = buscarDiaAtualNoCalendario();
+
   const hojeAberto =
     diaAtual &&
     diaAtual.status !== "fechado" &&
