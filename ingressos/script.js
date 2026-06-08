@@ -226,51 +226,57 @@ function renderTickets(tickets) {
 
 function getTicketIcon(ticket) {
   const nome = ticket.name.toLowerCase();
-  const descricao = ticket.description.toLowerCase();
 
-  if (
-    nome.includes("duplo") ||
-    descricao.includes("duplo") ||
-    ticket.quantity === 2
-  ) {
+  // DUPLO
+  if (nome.includes("duplo")) {
     return `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M7 7h8a2 2 0 0 1 2 2v1.2a1.8 1.8 0 0 0 0 3.6V15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-1.2a1.8 1.8 0 0 0 0-3.6V9a2 2 0 0 1 2-2Z"/>
-        <path d="M10 7v10"/>
-        <path d="M9 4h8a2 2 0 0 1 2 2v1"/>
+      <svg viewBox="0 0 24 24">
+        <circle cx="9" cy="8" r="2.5"/>
+        <circle cx="15" cy="8" r="2.5"/>
+        <path d="M4.5 18a4.5 4.5 0 0 1 9 0"/>
+        <path d="M10.5 18a4.5 4.5 0 0 1 9 0"/>
       </svg>
     `;
   }
 
+  // KIDS
   if (
     nome.includes("kids") ||
-    nome.includes("criança") ||
-    nome.includes("infantil")
+    nome.includes("infantil") ||
+    nome.includes("criança")
   ) {
     return `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
         <circle cx="12" cy="8" r="3"/>
+        <path d="M8 7L6.5 5.5"/>
+        <path d="M16 7L17.5 5.5"/>
         <path d="M6.5 19a5.5 5.5 0 0 1 11 0"/>
-        <path d="M8 7 6.5 5.5"/>
-        <path d="M16 7l1.5-1.5"/>
       </svg>
     `;
   }
 
+  // MELHOR IDADE
   if (
     nome.includes("melhor idade") ||
     nome.includes("idoso")
   ) {
     return `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
         <circle cx="12" cy="7" r="3"/>
         <path d="M12 10v10"/>
         <path d="M8 14h8"/>
-        <path d="M15 20h3"/>
-        <path d="M12 20H8"/>
       </svg>
     `;
   }
+
+  // DAY USE NORMAL
+  return `
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="3"/>
+      <path d="M6.5 19a5.5 5.5 0 0 1 11 0"/>
+    </svg>
+  `;
+}
 
   return `
     <svg viewBox="0 0 24 24" aria-hidden="true">
