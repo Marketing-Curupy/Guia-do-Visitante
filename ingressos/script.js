@@ -22,11 +22,15 @@ const cacheDatas = {};
 document.addEventListener("DOMContentLoaded", async () => {
   await renderCalendar();
 
-  termsCheck.addEventListener("change", () => {
-    chooseBtn.disabled = !termsCheck.checked;
-  });
+  if (termsCheck) {
+    termsCheck.addEventListener("change", () => {
+      chooseBtn.disabled = !termsCheck.checked;
+    });
+  }
 
-  chooseBtn.addEventListener("click", goToCheckout);
+  if (chooseBtn) {
+    chooseBtn.addEventListener("click", goToCheckout);
+  }
 });
 
 async function renderCalendar() {
@@ -134,12 +138,10 @@ async function selectDate(dateISO) {
   selectedDate = dateISO;
 
   openModal();
-  modalDate.textContent = formatDateBR(dateISO);
 
+  modalDate.textContent = formatDateBR(dateISO);
   termsCheck.checked = false;
   chooseBtn.disabled = true;
-
-  showOpenContent();
 
   ticketsList.innerHTML = `
     <div class="loading">Carregando ingressos disponíveis...</div>
@@ -165,8 +167,11 @@ async function selectDate(dateISO) {
       return;
     }
 
+    showOpenContent();
     renderTickets(tickets);
   } catch (error) {
+    showOpenContent();
+
     ticketsList.innerHTML = `
       <div class="closed-message" style="display:block">
         <strong>Não foi possível carregar os ingressos.</strong>
@@ -185,8 +190,8 @@ function normalizeTickets(data) {
     .map((ticket) => {
       const price =
         ticket?.tarifarios?.[0]?.valor ??
-        ticket?.valor ??
         ticket?.valorOriginal ??
+        ticket?.valor ??
         0;
 
       return {
@@ -194,7 +199,7 @@ function normalizeTickets(data) {
         name: ticket.nome || "Ingresso",
         description: cleanText(ticket.descricao || ""),
         image: ticket.imagem || "",
-        price,
+        price: Number(price || 0),
         quantity: ticket.ingressosParaGerar || 1
       };
     })
@@ -226,64 +231,56 @@ function renderTickets(tickets) {
 
 function getTicketIcon(ticket) {
   const nome = ticket.name.toLowerCase();
+  const descricao = ticket.description.toLowerCase();
 
-  // DUPLO
-  if (nome.includes("duplo")) {
+  if (
+    nome.includes("duplo") ||
+    descricao.includes("duplo") ||
+    ticket.quantity === 2
+  ) {
     return `
-      <svg viewBox="0 0 24 24">
-        <circle cx="9" cy="8" r="2.5"/>
-        <circle cx="15" cy="8" r="2.5"/>
-        <path d="M4.5 18a4.5 4.5 0 0 1 9 0"/>
-        <path d="M10.5 18a4.5 4.5 0 0 1 9 0"/>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="9" cy="8" r="2.5"></circle>
+        <circle cx="15" cy="8" r="2.5"></circle>
+        <path d="M4.5 18a4.5 4.5 0 0 1 9 0"></path>
+        <path d="M10.5 18a4.5 4.5 0 0 1 9 0"></path>
       </svg>
     `;
   }
 
-  // KIDS
   if (
     nome.includes("kids") ||
     nome.includes("infantil") ||
-    nome.includes("criança")
+    nome.includes("criança") ||
+    nome.includes("crianca")
   ) {
     return `
-      <svg viewBox="0 0 24 24">
-        <circle cx="12" cy="8" r="3"/>
-        <path d="M8 7L6.5 5.5"/>
-        <path d="M16 7L17.5 5.5"/>
-        <path d="M6.5 19a5.5 5.5 0 0 1 11 0"/>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="3"></circle>
+        <path d="M8 7L6.5 5.5"></path>
+        <path d="M16 7L17.5 5.5"></path>
+        <path d="M6.5 19a5.5 5.5 0 0 1 11 0"></path>
       </svg>
     `;
   }
 
-  // MELHOR IDADE
   if (
     nome.includes("melhor idade") ||
     nome.includes("idoso")
   ) {
     return `
-      <svg viewBox="0 0 24 24">
-        <circle cx="12" cy="7" r="3"/>
-        <path d="M12 10v10"/>
-        <path d="M8 14h8"/>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="7" r="3"></circle>
+        <path d="M12 10v10"></path>
+        <path d="M8 14h8"></path>
       </svg>
     `;
   }
 
-  // DAY USE NORMAL
-  return `
-    <svg viewBox="0 0 24 24">
-      <circle cx="12" cy="8" r="3"/>
-      <path d="M6.5 19a5.5 5.5 0 0 1 11 0"/>
-    </svg>
-  `;
-}
-
   return `
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M5 7h14a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9a2 2 0 0 1 2-2Z"/>
-      <path d="M9 7v10"/>
-      <path d="M13 10h4"/>
-      <path d="M13 14h4"/>
+      <circle cx="12" cy="8" r="3"></circle>
+      <path d="M6.5 19a5.5 5.5 0 0 1 11 0"></path>
     </svg>
   `;
 }
