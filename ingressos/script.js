@@ -17,8 +17,10 @@ const ticketsList = document.getElementById("ticketsList");
 const termsCheck = document.getElementById("termsCheck");
 const chooseBtn = document.getElementById("chooseBtn");
 
-document.addEventListener("DOMContentLoaded", () => {
-  renderCalendar();
+const cacheDatas = {};
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await renderCalendar();
 
   termsCheck.addEventListener("change", () => {
     chooseBtn.disabled = !termsCheck.checked;
@@ -27,19 +29,23 @@ document.addEventListener("DOMContentLoaded", () => {
   chooseBtn.addEventListener("click", goToCheckout);
 });
 
-function renderCalendar() {
+async function renderCalendar() {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
   const title = new Date(year, month, 1).toLocaleDateString("pt-BR", {
     month: "long",
-    year: "numeric",
+    year: "numeric"
   });
 
   monthTitle.textContent = title;
 
   const firstDay = new Date(year, month, 1).getDay();
   const lastDate = new Date(year, month + 1, 0).getDate();
+
+  calendarGrid.innerHTML = `
+    <div class="loading">Carregando datas disponíveis...</div>
+  `;
 
   let html = "";
 
@@ -53,24 +59,75 @@ function renderCalendar() {
 
     const classes = ["day"];
 
-    if (dateISO === today) classes.push("today");
-    if (dateISO <= today) classes.push("past");
-    if (dateISO > today) classes.push("available");
+    if (dateISO === today) {
+      classes.push("today");
+    }
 
-    html += `
-      <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
-        ${day}
-        ${dateISO > today ? "<small>online</small>" : ""}
-      </button>
-    `;
+    if (dateISO <= today) {
+      classes.push("past");
+
+      html += `
+        <button class="${classes.join(" ")}" disabled>
+          ${day}
+        </button>
+      `;
+
+      continue;
+    }
+
+    const temIngresso = await verificarIngressosDisponiveis(dateISO);
+
+    if (temIngresso) {
+      classes.push("available");
+
+      html += `
+        <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
+          ${day}
+          <small>online</small>
+        </button>
+      `;
+    } else {
+      classes.push("closed");
+
+      html += `
+        <button class="${classes.join(" ")}" disabled>
+          ${day}
+        </button>
+      `;
+    }
   }
 
   calendarGrid.innerHTML = html;
 }
 
-function changeMonth(direction) {
+async function verificarIngressosDisponiveis(dateISO) {
+  if (cacheDatas[dateISO]) {
+    return cacheDatas[dateISO].length > 0;
+  }
+
+  try {
+    const response = await fetch(API_BASE + dateISO);
+
+    if (!response.ok) {
+      cacheDatas[dateISO] = [];
+      return false;
+    }
+
+    const data = await response.json();
+    const tickets = normalizeTickets(data);
+
+    cacheDatas[dateISO] = tickets;
+
+    return tickets.length > 0;
+  } catch (error) {
+    cacheDatas[dateISO] = [];
+    return false;
+  }
+}
+
+async function changeMonth(direction) {
   currentDate.setMonth(currentDate.getMonth() + direction);
-  renderCalendar();
+  await renderCalendar();
 }
 
 async function selectDate(dateISO) {
@@ -82,11 +139,6 @@ async function selectDate(dateISO) {
   termsCheck.checked = false;
   chooseBtn.disabled = true;
 
-  if (dateISO <= getTodayISO()) {
-    showClosedMessage();
-    return;
-  }
-
   showOpenContent();
 
   ticketsList.innerHTML = `
@@ -94,22 +146,22 @@ async function selectDate(dateISO) {
   `;
 
   try {
-    const response = await fetch(API_BASE + dateISO);
+    let tickets = cacheDatas[dateISO];
 
-    if (!response.ok) {
-      throw new Error("Erro ao consultar ingressos.");
+    if (!tickets) {
+      const response = await fetch(API_BASE + dateISO);
+
+      if (!response.ok) {
+        throw new Error("Erro ao consultar ingressos.");
+      }
+
+      const data = await response.json();
+      tickets = normalizeTickets(data);
+      cacheDatas[dateISO] = tickets;
     }
 
-    const data = await response.json();
-    const tickets = normalizeTickets(data);
-
     if (!tickets.length) {
-      ticketsList.innerHTML = `
-        <div class="closed-message" style="display:block">
-          <strong>Nenhum ingresso online disponível para esta data.</strong>
-          <p>Tente selecionar outra data no calendário.</p>
-        </div>
-      `;
+      showClosedMessage();
       return;
     }
 
@@ -129,55 +181,33 @@ function normalizeTickets(data) {
     ? data
     : data.itens || data.produtos || data.ingressos || [];
 
-  return list.map((ticket) => {
-    const price =
-      ticket?.tarifarios?.[0]?.valor ??
-      ticket?.valor ??
-      ticket?.valorOriginal ??
-      0;
+  return list
+    .map((ticket) => {
+      const price =
+        ticket?.tarifarios?.[0]?.valor ??
+        ticket?.valor ??
+        ticket?.valorOriginal ??
+        0;
 
-    return {
-      name: ticket.nome || "Ingresso",
-      description: cleanText(ticket.descricao || ""),
-      image: ticket.imagem || "",
-      price,
-    };
-  });
+      return {
+        id: ticket.iditens || ticket.id || "",
+        name: ticket.nome || "Ingresso",
+        description: cleanText(ticket.descricao || ""),
+        image: ticket.imagem || "",
+        price,
+        quantity: ticket.ingressosParaGerar || 1
+      };
+    })
+    .filter((ticket) => ticket.price > 0);
 }
 
 function renderTickets(tickets) {
   ticketsList.innerHTML = tickets
     .map((ticket) => {
-
-      let icon = "🎟️";
-
-      const nome = ticket.name.toLowerCase();
-
-      if (
-        nome.includes("kids") ||
-        nome.includes("criança") ||
-        nome.includes("infantil")
-      ) {
-        icon = "🧒";
-      }
-
-      else if (
-        nome.includes("melhor idade") ||
-        nome.includes("idoso")
-      ) {
-        icon = "👴";
-      }
-
-      else if (
-        nome.includes("individual") ||
-        nome.includes("adulto")
-      ) {
-        icon = "👨";
-      }
+      const icon = getTicketIcon(ticket);
 
       return `
         <div class="ticket-card">
-
           <div class="ticket-icon">
             ${icon}
           </div>
@@ -188,11 +218,68 @@ function renderTickets(tickets) {
           </div>
 
           <strong>${formatMoney(ticket.price)}</strong>
-
         </div>
       `;
     })
     .join("");
+}
+
+function getTicketIcon(ticket) {
+  const nome = ticket.name.toLowerCase();
+  const descricao = ticket.description.toLowerCase();
+
+  if (
+    nome.includes("duplo") ||
+    descricao.includes("duplo") ||
+    ticket.quantity === 2
+  ) {
+    return `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 7h8a2 2 0 0 1 2 2v1.2a1.8 1.8 0 0 0 0 3.6V15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-1.2a1.8 1.8 0 0 0 0-3.6V9a2 2 0 0 1 2-2Z"/>
+        <path d="M10 7v10"/>
+        <path d="M9 4h8a2 2 0 0 1 2 2v1"/>
+      </svg>
+    `;
+  }
+
+  if (
+    nome.includes("kids") ||
+    nome.includes("criança") ||
+    nome.includes("infantil")
+  ) {
+    return `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="3"/>
+        <path d="M6.5 19a5.5 5.5 0 0 1 11 0"/>
+        <path d="M8 7 6.5 5.5"/>
+        <path d="M16 7l1.5-1.5"/>
+      </svg>
+    `;
+  }
+
+  if (
+    nome.includes("melhor idade") ||
+    nome.includes("idoso")
+  ) {
+    return `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="7" r="3"/>
+        <path d="M12 10v10"/>
+        <path d="M8 14h8"/>
+        <path d="M15 20h3"/>
+        <path d="M12 20H8"/>
+      </svg>
+    `;
+  }
+
+  return `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 7h14a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9a2 2 0 0 1 2-2Z"/>
+      <path d="M9 7v10"/>
+      <path d="M13 10h4"/>
+      <path d="M13 14h4"/>
+    </svg>
+  `;
 }
 
 function openModal() {
@@ -227,7 +314,7 @@ function formatMoney(value) {
 
   return number.toLocaleString("pt-BR", {
     style: "currency",
-    currency: "BRL",
+    currency: "BRL"
   });
 }
 
@@ -240,13 +327,11 @@ function cleanText(text) {
 
 function formatDateBR(dateISO) {
   const [year, month, day] = dateISO.split("-");
-
   return `${day}/${month}/${year}`;
 }
 
 function formatDateForCheckout(dateISO) {
   const [year, month, day] = dateISO.split("-");
-
   return `${day}-${month}-${year}`;
 }
 
