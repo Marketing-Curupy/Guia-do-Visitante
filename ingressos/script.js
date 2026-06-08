@@ -249,7 +249,7 @@ function ehPromocional(ticket) {
   const nome = removeAccents(ticket.name.toLowerCase());
 
   const categoriasNormais = [
-    "dia de semana",
+    "DAY USE - DIA DE SEMANA",
     "kids",
     "melhor idade"
   ];
@@ -262,7 +262,7 @@ function getCategoriaIdade(ticket) {
 
   if (nome.includes("kids")) return "5 a 11 anos";
   if (nome.includes("melhor idade")) return "60 anos ou mais";
-  if (nome.includes("individual")) return "12 a 59 anos";
+  if (nome.includes("DAY USE - DIA DE SEMANA")) return "12 a 59 anos";
   if (nome.includes("duplo")) return "2 ingressos";
 
   return "Categoria promocional";
