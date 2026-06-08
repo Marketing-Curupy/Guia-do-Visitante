@@ -16,10 +16,16 @@ const modalDate = document.getElementById("modalDate");
 const closedMessage = document.getElementById("closedMessage");
 const openContent = document.getElementById("openContent");
 const ticketsList = document.getElementById("ticketsList");
+const termsCheck = document.getElementById("termsCheck");
 const chooseBtn = document.getElementById("chooseBtn");
 
 document.addEventListener("DOMContentLoaded", async () => {
   await renderCalendar();
+
+  termsCheck.addEventListener("change", () => {
+    chooseBtn.disabled = !termsCheck.checked;
+  });
+
   chooseBtn.addEventListener("click", goToCheckout);
 });
 
@@ -178,6 +184,9 @@ async function selectDate(dateISO) {
   openModal();
   modalDate.textContent = formatDateBR(dateISO);
 
+  termsCheck.checked = false;
+  chooseBtn.disabled = true;
+
   showOpenContent();
 
   ticketsList.innerHTML = `<div class="loading">Carregando ingressos disponíveis...</div>`;
@@ -249,7 +258,7 @@ function ehPromocional(ticket) {
   const nome = removeAccents(ticket.name.toLowerCase());
 
   const categoriasNormais = [
-    "DAY USE - DIA DE SEMANA",
+    "day use - dia de semana",
     "kids",
     "melhor idade"
   ];
@@ -262,7 +271,7 @@ function getCategoriaIdade(ticket) {
 
   if (nome.includes("kids")) return "5 a 11 anos";
   if (nome.includes("melhor idade")) return "60 anos ou mais";
-  if (nome.includes("DAY USE - DIA DE SEMANA")) return "12 a 59 anos";
+  if (nome.includes("day use - dia de semana")) return "12 a 59 anos";
   if (nome.includes("duplo")) return "2 ingressos";
 
   return "Categoria promocional";
@@ -307,7 +316,7 @@ function showOpenContent() {
 }
 
 function goToCheckout() {
-  if (!selectedDate) return;
+  if (!selectedDate || chooseBtn.disabled) return;
 
   const checkoutDate = formatDateForCheckout(selectedDate);
   const encodedDate = btoa(checkoutDate);
