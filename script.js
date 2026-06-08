@@ -532,16 +532,6 @@ function abrirFoto(src) {
 
 const AJUDA = [
   {
-    pergunta: "🎟 Ingressos",
-    resposta:
-      "Compra online pelo site oficial com até um dia de antecedência da data de utilização. Para utilização no mesmo dia é necessária a compra na bilheteria do parque, sujeita ao valor da tarifa do dia."
-  },
-  {
-    pergunta: "📅 Calendário",
-    resposta:
-      "No calendário você consulta os dias de funcionamento, horários, feriados, fins de semana e dias fechados."
-  },
-  {
     pergunta: "🏨 Hospedagem",
     resposta:
       "Acesse a área de hospedagem para conhecer as opções disponíveis."
@@ -611,7 +601,6 @@ function renderizarAjuda() {
     <button onclick="openIngressosModal()">
   🎟 Ingressos e valores
 </button>
-      <button onclick="abrirModal('modalCalendario')">📅 Calendário de funcionamento</button>
       <button onclick="window.location.href='hospedagem.html'">🏨 Hospedagem</button>
       <button onclick="window.location.href='associados.html'">💎 Associação</button>
       <button onclick="abrirMapa()">📍 Como chegar</button>
