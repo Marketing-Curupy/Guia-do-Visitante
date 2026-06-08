@@ -267,13 +267,26 @@ function mostrarCalendario(index) {
       const info = HORARIOS_FUNCIONAMENTO[dia.status];
       if (!info) return "";
 
+      const dataISO = `${calendario.ano}-${String(mesNumero + 1).padStart(2, "0")}-${String(dia.dia).padStart(2, "0")}`;
+      const dataPassada = dataISO < hojeISO();
+
+      const classeDia = dataPassada
+        ? "dia-passado"
+        : info.classe;
+
+      const textoDia = dataPassada
+        ? "Encerrado"
+        : dia.status === "fechado"
+          ? "Fechado"
+          : info.horario;
+
       return `
         <button
-          class="cal-dia ${info.classe}"
+          class="cal-dia ${classeDia}"
           onclick="abrirInfoDia(${index}, ${dia.dia})"
         >
           <strong>${dia.dia}</strong>
-          <span>${dia.status === "fechado" ? "Fechado" : info.horario}</span>
+          <span>${textoDia}</span>
         </button>
       `;
     })
