@@ -42,39 +42,25 @@
       <h2 id="modalDate"></h2>
 
       <div id="closedMessage" class="closed-message">
-        <strong>Ingressos disponíveis somente na bilheteria</strong>
-        <p>Os ingressos para o dia de hoje são vendidos somente na bilheteria do parque.</p>
-        <p>Para comprar online, escolha uma data com pelo menos 1 dia de antecedência.</p>
+        <strong id="closedTitle"></strong>
+        <p id="closedText"></p>
+        <p id="nextOpenDate"></p>
       </div>
 
       <div id="openContent">
         <div id="ticketsList"></div>
 
-        <div class="notice-box">
-          <h3>⚠️ Antes de continuar</h3>
-          <p>Compras online devem ser realizadas com pelo menos 1 dia de antecedência.</p>
-          <p>Não é possível comprar ingressos online para uso no mesmo dia.</p>
-          <p>A meia-entrada é vendida exclusivamente na bilheteria mediante comprovação.</p>
-          <p>Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial.</p>
-
-          <label class="check-line">
-            <input type="checkbox" id="termsCheck" />
-            <span>Li e estou ciente das condições acima.</span>
-          </label>
-        </div>
-
-        <button id="chooseBtn" disabled>
+        <button id="chooseBtn">
           ESCOLHER INGRESSOS PARA ESTA DATA
         </button>
 
         <p class="redirect-text">
-          Você será direcionado para o Só Falta para concluir sua compra.
+          Você será direcionado para o Só Falta Eu para concluir sua compra.
         </p>
       </div>
     </div>
   </div>
 
-  <script src="script.js"></script>
-  <script src="script.js?v=11"></script>
+  <script src="script.js?v=12"></script>
 </body>
 </html>
