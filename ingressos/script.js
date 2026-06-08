@@ -65,13 +65,22 @@ async function renderCalendar() {
 
     if (dateISO === today) {
       classes.push("today");
+
+      html += `
+        <button class="${classes.join(" ")}" onclick="selectToday('${dateISO}')">
+          ${day}
+          <small>hoje</small>
+        </button>
+      `;
+
+      continue;
     }
 
-    if (dateISO <= today) {
+    if (dateISO < today) {
       classes.push("past");
 
       html += `
-        <button class="${classes.join(" ")}" disabled>
+        <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}', 'passado')">
           ${day}
         </button>
       `;
@@ -94,7 +103,7 @@ async function renderCalendar() {
       classes.push("closed");
 
       html += `
-        <button class="${classes.join(" ")}" disabled>
+        <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}', 'fechado')">
           ${day}
         </button>
       `;
@@ -134,6 +143,57 @@ async function changeMonth(direction) {
   await renderCalendar();
 }
 
+function selectToday(dateISO) {
+  selectedDate = null;
+
+  openModal();
+  modalDate.textContent = formatDateBR(dateISO);
+
+  closedMessage.style.display = "block";
+  openContent.style.display = "none";
+
+  closedMessage.innerHTML = `
+    <strong>Ingressos para hoje somente na bilheteria</strong>
+
+    <p>
+      Os ingressos para o dia de hoje são vendidos somente na bilheteria do parque.
+    </p>
+
+    <p>
+      Os valores da bilheteria são diferentes dos valores da compra antecipada online.
+    </p>
+
+    <p>
+      Para comprar online, é necessário adquirir o ingresso com pelo menos 1 dia de antecedência.
+    </p>
+  `;
+}
+
+function selectClosedDate(dateISO, tipo) {
+  selectedDate = null;
+
+  openModal();
+  modalDate.textContent = formatDateBR(dateISO);
+
+  closedMessage.style.display = "block";
+  openContent.style.display = "none";
+
+  if (tipo === "passado") {
+    closedMessage.innerHTML = `
+      <strong>Data encerrada</strong>
+      <p>Esta data já passou e não está mais disponível para compra online.</p>
+      <p>Escolha uma próxima data disponível no calendário.</p>
+    `;
+    return;
+  }
+
+  closedMessage.innerHTML = `
+    <strong>Parque fechado ou sem venda online</strong>
+    <p>Não há ingressos online disponíveis para esta data.</p>
+    <p>Consulte outra data disponível no calendário.</p>
+  `;
+}
+
 async function selectDate(dateISO) {
   selectedDate = dateISO;
 
@@ -163,7 +223,7 @@ async function selectDate(dateISO) {
     }
 
     if (!tickets.length) {
-      showClosedMessage();
+      selectClosedDate(dateISO, "fechado");
       return;
     }
 
@@ -291,11 +351,6 @@ function openModal() {
 
 function closeModal() {
   dateModal.classList.remove("active");
-}
-
-function showClosedMessage() {
-  closedMessage.style.display = "block";
-  openContent.style.display = "none";
 }
 
 function showOpenContent() {
