@@ -63,13 +63,23 @@ function buscarProximaAbertura() {
     .sort((a, b) => a.data.localeCompare(b.data))[0];
 }
 
+function parqueJaFechouHoje() {
+  const agora = new Date();
+  const hora = agora.getHours();
+  const minuto = agora.getMinutes();
+
+  return hora > 17 || (hora === 17 && minuto >= 30);
+}
+
 function renderizarBarra() {
   const barra = $("#barraStatus");
   if (!barra) return;
 
+  const hoje = hojeISO();
   const diaAtual = buscarDiaAtual();
+  const fechouPorHorario = diaAtual && diaAtual.status === "aberto" && parqueJaFechouHoje();
 
-  if (diaAtual && diaAtual.status === "aberto") {
+  if (diaAtual && diaAtual.status === "aberto" && !fechouPorHorario) {
     const valores = diaAtual.valores;
 
     barra.innerHTML = `
@@ -96,15 +106,18 @@ function renderizarBarra() {
     return;
   }
 
-  const proxima = buscarProximaAbertura();
+  const proxima = DADOS_BARRA
+    .filter((item) => item.status === "aberto" && item.data > hoje)
+    .sort((a, b) => a.data.localeCompare(b.data))[0];
 
   barra.innerHTML = `
-    <div class="barra-inner">
+    <div class="barra-inner barra-fechado">
       <div class="barra-status">
-        <strong style="color:#e03131;">🔴 Parque fechado hoje</strong>
-        <span>Próximo dia de abertura: ${
-          proxima ? formatarData(proxima.data) : "em breve"
-        }</span>
+        <strong style="color:#e03131;">🔴 Parque fechado agora</strong>
+        <span>
+          Próxima abertura:
+          ${proxima ? formatarData(proxima.data) : "em breve"}
+        </span>
       </div>
 
       <button class="link-meia" onclick="abrirModal('modalMeia')">
