@@ -186,22 +186,28 @@ body {
 }
 
 .ticket-icon {
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
-  background: #eefaff;
-  color: #0578A7;
-  border: 1px solid #cfeefa;
+
+  border-radius: 18px;
+
+  background: #f3fbff;
+  border: 1px solid #d8edf7;
+
+  flex-shrink: 0;
 }
 
 .ticket-icon svg {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
+
   fill: none;
-  stroke: currentColor;
+  stroke: #0578A7;
+
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
