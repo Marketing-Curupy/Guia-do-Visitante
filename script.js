@@ -50,18 +50,7 @@ function formatarMoeda(valor) {
 
 /* BARRA FIXA */
 
-function buscarDiaAtual() {
-  const hoje = hojeISO();
-  return DADOS_BARRA.find((item) => item.data === hoje);
-}
-
-function buscarProximaAbertura() {
-  const hoje = hojeISO();
-
-  return DADOS_BARRA
-    .filter((item) => item.status === "aberto" && item.data > hoje)
-    .sort((a, b) => a.data.localeCompare(b.data))[0];
-}
+/* BARRA FIXA */
 
 function parqueJaFechouHoje() {
   const agora = new Date();
@@ -71,23 +60,98 @@ function parqueJaFechouHoje() {
   return hora > 17 || (hora === 17 && minuto >= 30);
 }
 
+function montarDataISO(ano, mesNome, dia) {
+  const mesNumero = obterNumeroMes(mesNome) + 1;
+  return `${ano}-${String(mesNumero).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+}
+
+function buscarDiaAtualNoCalendario() {
+  const hoje = hojeISO();
+
+  for (const calendario of CALENDARIOS_FUNCIONAMENTO) {
+    for (const dia of calendario.dias) {
+      const dataISO = montarDataISO(calendario.ano, calendario.mes, dia.dia);
+
+      if (dataISO === hoje) {
+        return {
+          ...dia,
+          data: dataISO,
+          mes: calendario.mes,
+          ano: calendario.ano
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
+function buscarProximaAberturaNoCalendario() {
+  const hoje = hojeISO();
+
+  const aberturas = [];
+
+  CALENDARIOS_FUNCIONAMENTO.forEach((calendario) => {
+    calendario.dias.forEach((dia) => {
+      const dataISO = montarDataISO(calendario.ano, calendario.mes, dia.dia);
+
+      if (dataISO > hoje && dia.status !== "fechado") {
+        const info = HORARIOS_FUNCIONAMENTO[dia.status];
+
+        aberturas.push({
+          ...dia,
+          data: dataISO,
+          mes: calendario.mes,
+          ano: calendario.ano,
+          horario: info ? info.horario : ""
+        });
+      }
+    });
+  });
+
+  return aberturas.sort((a, b) => a.data.localeCompare(b.data))[0];
+}
+
+function gerarValoresBarra(status) {
+  const fimOuFeriado =
+    status === "fimDeSemana" ||
+    status === "feriado";
+
+  if (fimOuFeriado) {
+    return {
+      visitante: 124,
+      kids: 55,
+      convidadoSocio: 78
+    };
+  }
+
+  return {
+    visitante: 86,
+    kids: 45,
+    convidadoSocio: 55
+  };
+}
+
 function renderizarBarra() {
   const barra = $("#barraStatus");
   if (!barra) return;
 
-  const hoje = hojeISO();
-  const diaAtual = buscarDiaAtual();
-  const fechouPorHorario = diaAtual && diaAtual.status === "aberto" && parqueJaFechouHoje();
+  const diaAtual = buscarDiaAtualNoCalendario();
+  const hojeAberto =
+    diaAtual &&
+    diaAtual.status !== "fechado" &&
+    !parqueJaFechouHoje();
 
-  if (diaAtual && diaAtual.status === "aberto" && !fechouPorHorario) {
-    const valores = diaAtual.valores;
+  if (hojeAberto) {
+    const info = HORARIOS_FUNCIONAMENTO[diaAtual.status];
+    const valores = gerarValoresBarra(diaAtual.status);
 
     barra.innerHTML = `
       <div class="barra-inner">
         <div class="barra-status">
           <strong>🟢 Parque aberto hoje</strong>
           <span>${formatarData(diaAtual.data)}</span>
-          <span>${diaAtual.horario}</span>
+          <span>${info ? info.horario : ""}</span>
         </div>
 
         <div class="barra-precos">
@@ -106,9 +170,7 @@ function renderizarBarra() {
     return;
   }
 
-  const proxima = DADOS_BARRA
-    .filter((item) => item.status === "aberto" && item.data > hoje)
-    .sort((a, b) => a.data.localeCompare(b.data))[0];
+  const proxima = buscarProximaAberturaNoCalendario();
 
   barra.innerHTML = `
     <div class="barra-inner barra-fechado">
@@ -116,7 +178,7 @@ function renderizarBarra() {
         <strong style="color:#e03131;">🔴 Parque fechado agora</strong>
         <span>
           Próxima abertura:
-          ${proxima ? formatarData(proxima.data) : "em breve"}
+          ${proxima ? `${formatarData(proxima.data)} • ${proxima.horario}` : "em breve"}
         </span>
       </div>
 
