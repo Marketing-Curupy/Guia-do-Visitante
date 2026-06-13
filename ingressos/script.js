@@ -142,25 +142,34 @@ async function selectClosedDate(dateISO) {
   closedMessage.style.display = "block";
   openContent.style.display = "none";
 
-  closedMessage.innerHTML = `
-    <strong>Parque fechado nesta data</strong>
-    <p>Compras para o mesmo dia de utilização somente na bilheteria. Compras online com 1 dia de antecedêmcia.</p>
-    <p class="loading">Buscando próxima data disponível...</p>
-  `;
+closedMessage.innerHTML = `
+  <strong>Parque fechado nesta data</strong>
 
-  const nextDate = await findNextOpenDate(dateISO);
+  <p>
+    🎟 Compras para utilização no mesmo dia são realizadas
+    exclusivamente na bilheteria do parque.
+  </p>
 
-  closedMessage.innerHTML = `
-    <strong>Parque fechado nesta data</strong>
-    <p>Hoje o parque está fechado. Consulte a próxima data de abertura.</p>
-    ${
-      nextDate
-        ? `<p><strong>Próxima data de abertura:</strong> ${formatDateBR(nextDate)}</p>`
-        : `<p>Não encontramos uma próxima data disponível no momento.</p>`
-    }
-  `;
-}
+  <p>
+    💻 Compras online devem ser realizadas com pelo menos
+    1 dia de antecedência.
+  </p>
 
+  ${
+    nextDate
+      ? `
+        <p>
+          <strong>Próxima data de abertura:</strong><br>
+          ${formatDateBR(nextDate)}
+        </p>
+      `
+      : `
+        <p>
+          Não encontramos uma próxima data disponível no momento.
+        </p>
+      `
+  }
+`;
 function selectToday(dateISO) {
   selectedDate = null;
 
