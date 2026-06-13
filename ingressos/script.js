@@ -144,7 +144,7 @@ async function selectClosedDate(dateISO) {
 
   closedMessage.innerHTML = `
     <strong>Parque fechado nesta data</strong>
-    <p>Hoje o parque está fechado. Consulte a próxima data de abertura.</p>
+    <p>Compras para o mesmo dia de utilização somente na bilheteria. Compras online com 1 dia de antecedêmcia.</p>
     <p class="loading">Buscando próxima data disponível...</p>
   `;
 
