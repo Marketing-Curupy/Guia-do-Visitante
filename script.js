@@ -660,12 +660,12 @@ const AJUDA = [
   {
     pergunta: "Criança paga ingresso?",
     resposta:
-      "Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. A partir de 12 anos utilizam ingresso Individual."
+      "Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. Caso não seja apresentado o ducomento oficial da crinça comprovando a idade o valor cobrado será o valor integral conforme a tabela vigente do dia na bilheteria.A partir de 12 anos utilizam ingresso Individual."
   },
   {
     pergunta: "Posso levar alimentos e bebidas?",
     resposta:
-      "Não é permitida a entrada com alimentos e bebidas. Exceções: água para consumo pessoal, leite e alimentação para bebês, e alimentos para visitantes com restrições alimentares ou condições de saúde específicas mediante laudo ou documento comprobatório."
+      "Não é permitida a entrada com alimentos e bebidas. Exceções: água para consumo pessoal, em dúvida entre em contato com a portaria do park"
   },
   {
     pergunta: "Tem estacionamento?",
@@ -675,17 +675,17 @@ const AJUDA = [
   {
     pergunta: "Tem guarda-volumes?",
     resposta:
-      "Sim. O guarda-volumes fica ao lado da lanchonete e possui cobrança à parte."
+      "Sim. O guarda-volumes fica no espaço da lanchonete e possui cobrança à parte."
   },
   {
     pergunta: "Quais formas de pagamento são aceitas?",
     resposta:
-      "Aceitamos PIX, cartões de débito, cartões de crédito e dinheiro. O dinheiro pode ser utilizado para realizar recargas dentro do parque."
+      "Aceitamos PIX, cartões de débito, cartões de crédito e Pulseira consumo. O dinheiro pode ser utilizado para realizar recargas da pulseira na sorveteria dentro do parque."
   },
   {
-    pergunta: "Posso sair e retornar ao parque?",
+    pergunta: "Posso sair e retornar ao parque no mesmo dia?",
     resposta:
-      "Sim, desde que a pulseira de acesso permaneça intacta. Caso seja retirada ou danificada, será necessário adquirir um novo Day Use."
+      "Sim, desde que a pulseira de acesso do dia permaneça intacta. Caso seja retirada ou danificada, será necessário adquirir um novo Day Use."
   }
 ];
 
