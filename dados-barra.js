@@ -14,7 +14,7 @@ const CONFIG = {
 // ========================================
 
 const VALORES_BILHETERIA = {
-  diaSemana: {
+  semana: {
     visitante: 86,
     kids: 45,
     convidadoSocio: 55
