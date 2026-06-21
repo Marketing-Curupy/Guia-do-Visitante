@@ -1,28 +1,11 @@
 const FOTOS_GALERIA = [
-  {
-    src: "assets/galeria/foto-1.jpg",
-    titulo: "Piscinas do Curupy"
-  },
-  {
-    src: "assets/galeria/foto-2.jpg",
-    titulo: "Diversão em família"
-  },
-  {
-    src: "assets/galeria/foto-3.jpg",
-    titulo: "Toboáguas"
-  },
-  {
-    src: "assets/galeria/foto-4.jpg",
-    titulo: "Área infantil"
-  },
-  {
-    src: "assets/galeria/foto-5.jpg",
-    titulo: "Momentos no parque"
-  },
-  {
-    src: "assets/galeria/foto-6.jpg",
-    titulo: "Curupy Acqua Park"
-  }
+  { src: "galeria/foto-1.jpg", titulo: "Acqua Rampa" },
+  { src: "galeria/foto-2.jpg", titulo: "Aqcua Half" },
+  { src: "galeria/foto-3.png", titulo: "Torre de Toboáguas" },
+  { src: "galeria/foto-4.JPG", titulo: "Ilha da Magia" },
+  { src: "galeria/foto-5.png", titulo: "Piscina de Ondas infantil" },
+  { src: "galeria/foto-6.jpg", titulo: "Piscina de Ondas adulto" },
+  { src: "galeria/foto-7.jpg", titulo: "Playground" }
 ];
 
 function renderizarGaleriaCurupy() {
