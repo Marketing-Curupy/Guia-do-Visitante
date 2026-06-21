@@ -134,19 +134,14 @@
       <button onclick="abrirModal('modalMeia')"><span>ℹ️</span><strong>Meia-entrada</strong><small>Ver regras</small><em>›</em></button>
     </section>
 
-    <section class="galeria container">
-      <div class="section-title">
-        <h2>Conheça o Curupy</h2>
-        <p>Um pouco da experiência que espera por você.</p>
-      </div>
-      <div class="galeria-grid">
-        <img src="assets/galeria-1.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
-        <img src="assets/galeria-2.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
-        <img src="assets/galeria-3.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
-        <img src="assets/galeria-4.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
-      </div>
-    </section>
-  </main>
+<section class="galeria-dinamica container">
+  <div class="section-title">
+    <h2>Conheça o Curupy</h2>
+    <p>Veja alguns momentos do parque.</p>
+  </div>
+
+  <div id="galeriaCurupy" class="galeria-masonry"></div>
+</section>
 
   <footer class="footer-curupy">
     <div class="footer-wave" aria-hidden="true"></div>
