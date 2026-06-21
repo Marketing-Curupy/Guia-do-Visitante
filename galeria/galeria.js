@@ -16,7 +16,7 @@ function renderizarGaleriaCurupy() {
     <button
       type="button"
       class="foto-card ${index === 0 ? "foto-grande" : ""}"
-      onclick="abrirFoto('${foto.src}')"
+      onclick="abrirFotoModal('${foto.src}')"
       aria-label="${foto.titulo}"
     >
       <img src="${foto.src}" alt="${foto.titulo}" loading="lazy">
