@@ -202,7 +202,7 @@ button{
 .busca-box{
   display:flex;
   align-items:center;
-  background:#fff;
+  background:#ff0c58;
   border:1px solid #d9ecf5;
   border-radius:999px;
   box-shadow:0 12px 30px rgba(7,59,102,.10);
