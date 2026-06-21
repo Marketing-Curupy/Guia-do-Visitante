@@ -1,3 +1,4 @@
+```javascript
 function $(selector) {
   return document.querySelector(selector);
 }
@@ -25,6 +26,7 @@ function hojeISO() {
   const ano = hoje.getFullYear();
   const mes = String(hoje.getMonth() + 1).padStart(2, "0");
   const dia = String(hoje.getDate()).padStart(2, "0");
+
   return `${ano}-${mes}-${dia}`;
 }
 
@@ -48,7 +50,9 @@ function formatarMoeda(valor) {
   });
 }
 
-/* BARRA FIXA */
+/* ============================= */
+/* BARRA DE STATUS */
+/* ============================= */
 
 function parqueJaFechouHoje() {
   const agora = new Date();
@@ -192,34 +196,54 @@ function renderizarBarra() {
   `;
 }
 
-/* BUSCA */
+/* ============================= */
+/* BUSCA RÁPIDA */
+/* ============================= */
+
+function textoContem(texto, palavras) {
+  return palavras.some((palavra) => texto.includes(palavra));
+}
 
 function buscarRapido() {
   const campo = document.getElementById("campoBusca");
   if (!campo) return;
 
   const texto = campo.value.toLowerCase().trim();
+
   if (texto.length < 3) return;
 
   if (
-    texto.includes("ingresso") ||
-    texto.includes("valor") ||
-    texto.includes("preço") ||
-    texto.includes("preco") ||
-    texto.includes("comprar")
+    textoContem(texto, [
+      "ingresso",
+      "ingressos",
+      "valor",
+      "valores",
+      "preço",
+      "preco",
+      "comprar",
+      "compra",
+      "ticket",
+      "bilheteria"
+    ])
   ) {
-   openIngressosModal();
+    openIngressosModal();
     campo.value = "";
     return;
   }
 
   if (
-    texto.includes("calendario") ||
-    texto.includes("calendário") ||
-    texto.includes("funcionamento") ||
-    texto.includes("horario") ||
-    texto.includes("horário") ||
-    texto.includes("abre")
+    textoContem(texto, [
+      "calendario",
+      "calendário",
+      "funcionamento",
+      "horario",
+      "horário",
+      "abre",
+      "aberto",
+      "fechado",
+      "dia",
+      "data"
+    ])
   ) {
     abrirModal("modalCalendario");
     campo.value = "";
@@ -227,45 +251,98 @@ function buscarRapido() {
   }
 
   if (
-    texto.includes("meia") ||
-    texto.includes("gratuidade") ||
-    texto.includes("pcd") ||
-    texto.includes("tea")
+    textoContem(texto, [
+      "meia",
+      "meia entrada",
+      "meia-entrada",
+      "gratuidade",
+      "pcd",
+      "tea",
+      "autista",
+      "idoso",
+      "estudante",
+      "professor"
+    ])
   ) {
     abrirModal("modalMeia");
     campo.value = "";
     return;
   }
 
-  if (texto.includes("hospedagem")) {
-    window.location.href = "hospedagem.html";
-    return;
-  }
-
   if (
-    texto.includes("associado") ||
-    texto.includes("associação") ||
-    texto.includes("associacao")
+    textoContem(texto, [
+      "hospedagem",
+      "hotel",
+      "pousada",
+      "dormir",
+      "hospedar"
+    ])
   ) {
-    window.location.href = "associados.html";
+    abrirEmBreve("Hospedagem");
+    campo.value = "";
     return;
   }
 
   if (
-    texto.includes("mapa") ||
-    texto.includes("chegar") ||
-    texto.includes("localização") ||
-    texto.includes("localizacao")
+    textoContem(texto, [
+      "associado",
+      "associados",
+      "associação",
+      "associacao",
+      "clube",
+      "sócio",
+      "socio"
+    ])
+  ) {
+    abrirEmBreve("Clube de Associados");
+    campo.value = "";
+    return;
+  }
+
+  if (
+    textoContem(texto, [
+      "mapa",
+      "chegar",
+      "localização",
+      "localizacao",
+      "endereço",
+      "endereco",
+      "rota",
+      "gps"
+    ])
   ) {
     abrirMapa();
+    campo.value = "";
+    return;
+  }
+
+  if (
+    textoContem(texto, [
+      "ajuda",
+      "dúvida",
+      "duvida",
+      "atendimento",
+      "whatsapp",
+      "falar"
+    ])
+  ) {
+    abrirModal("modalAjuda");
+    campo.value = "";
   }
 }
 
+/* ============================= */
 /* CALENDÁRIO */
+/* ============================= */
 
 function renderizarCalendarios() {
   const container = $("#calendariosContainer");
   if (!container) return;
+
+  if (typeof CALENDARIOS_FUNCIONAMENTO === "undefined") {
+    container.innerHTML = "<p>Calendário indisponível no momento.</p>";
+    return;
+  }
 
   const botoes = CALENDARIOS_FUNCIONAMENTO
     .map((calendario, index) => {
@@ -335,9 +412,7 @@ function mostrarCalendario(index) {
       const dataISO = `${calendario.ano}-${String(mesNumero + 1).padStart(2, "0")}-${String(dia.dia).padStart(2, "0")}`;
       const dataPassada = dataISO < hojeISO();
 
-      const classeDia = dataPassada
-        ? "dia-passado"
-        : info.classe;
+      const classeDia = dataPassada ? "dia-passado" : info.classe;
 
       const textoDia = dataPassada
         ? "Encerrado"
@@ -360,7 +435,7 @@ function mostrarCalendario(index) {
   destino.innerHTML = `
     <div class="calendario-funcionamento">
       <h3>${calendario.mes} ${calendario.ano}</h3>
-      <p>${calendario.observacao}</p>
+      <p>${calendario.observacao || ""}</p>
 
       <div class="legenda-funcionamento">
         <button onclick="filtrarCalendario('dia-semana')">
@@ -448,9 +523,7 @@ function abrirInfoDia(indexCalendario, numeroDia) {
 
   if (!info || !conteudo) return;
 
-  const dataTexto = `${String(numeroDia).padStart(2, "0")} de ${
-    calendario.mes
-  } de ${calendario.ano}`;
+  const dataTexto = `${String(numeroDia).padStart(2, "0")} de ${calendario.mes} de ${calendario.ano}`;
 
   if (dia.status === "fechado") {
     conteudo.innerHTML = `
@@ -510,15 +583,42 @@ function abrirInfoDia(indexCalendario, numeroDia) {
   abrirModal("modalDiaCalendario");
 }
 
+/* ============================= */
+/* EM BREVE */
+/* ============================= */
+
+function abrirEmBreve(titulo) {
+  const tituloModal = $("#tituloEmBreve");
+  const textoModal = $("#textoEmBreve");
+
+  if (tituloModal) {
+    tituloModal.textContent = titulo || "Em breve";
+  }
+
+  if (textoModal) {
+    textoModal.textContent =
+      "Esta área está em desenvolvimento e será disponibilizada em breve.";
+  }
+
+  abrirModal("modalEmBreve");
+}
+
+/* ============================= */
 /* MAPA */
+/* ============================= */
 
 function abrirMapa() {
   if (typeof CONFIG !== "undefined" && CONFIG.googleMaps) {
     window.open(CONFIG.googleMaps, "_blank");
+    return;
   }
+
+  window.open("https://www.google.com/maps/search/?api=1&query=Curupy+Acqua+Park", "_blank");
 }
 
+/* ============================= */
 /* GALERIA */
+/* ============================= */
 
 function abrirFoto(src) {
   const foto = $("#fotoAberta");
@@ -528,18 +628,20 @@ function abrirFoto(src) {
   abrirModal("modalFoto");
 }
 
+/* ============================= */
 /* AJUDA */
+/* ============================= */
 
 const AJUDA = [
   {
     pergunta: "🏨 Hospedagem",
     resposta:
-      "Acesse a área de hospedagem para conhecer as opções disponíveis."
+      "A área de hospedagem está em desenvolvimento e será disponibilizada em breve."
   },
   {
     pergunta: "💎 Associação",
     resposta:
-      "O Clube de Associados oferece vantagens exclusivas durante o ano."
+      "O Clube de Associados Curupy terá informações completas em breve."
   },
   {
     pergunta: "📍 Como chegar",
@@ -568,7 +670,8 @@ const AJUDA = [
   },
   {
     pergunta: "Tem estacionamento?",
-    resposta: "Sim. O estacionamento do parque é gratuito."
+    resposta:
+      "Sim. O estacionamento do parque é gratuito."
   },
   {
     pergunta: "Tem guarda-volumes?",
@@ -594,15 +697,13 @@ function renderizarAjuda() {
   container.innerHTML = `
     <div class="help-intro">
       <strong>Olá 👋</strong>
-      <p>Posso ajudar com:</p>
+      <p>Escolha uma opção ou consulte uma dúvida frequente:</p>
     </div>
 
     <div class="chat-opcoes">
-    <button onclick="openIngressosModal()">
-  🎟 Ingressos e valores
-</button>
-      <button onclick="window.location.href='hospedagem.html'">🏨 Hospedagem</button>
-      <button onclick="window.location.href='associados.html'">💎 Associação</button>
+      <button onclick="openIngressosModal()">🎟 Ingressos e valores</button>
+      <button onclick="abrirEmBreve('Hospedagem')">🏨 Hospedagem</button>
+      <button onclick="abrirEmBreve('Clube de Associados')">💎 Associação</button>
       <button onclick="abrirMapa()">📍 Como chegar</button>
     </div>
 
@@ -627,11 +728,47 @@ function abrirResposta(index) {
   resposta.classList.toggle("hidden");
 }
 
+/* ============================= */
+/* MODAL DE INGRESSOS */
+/* ============================= */
+
+function openIngressosModal() {
+  const modal = document.getElementById("ingressosModal");
+
+  if (modal) {
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeIngressosModal() {
+  const modal = document.getElementById("ingressosModal");
+
+  if (modal) {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+}
+
+/* ============================= */
+/* ANIMAÇÕES LEVES */
+/* ============================= */
+
+function ativarAnimacoes() {
+  document.querySelectorAll(".card, .atalho-card, .info button").forEach((item, index) => {
+    item.style.animationDelay = `${index * 0.06}s`;
+    item.classList.add("animar-entrada");
+  });
+}
+
+/* ============================= */
 /* INICIALIZAÇÃO */
+/* ============================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   renderizarBarra();
   renderizarAjuda();
+  ativarAnimacoes();
 
   const btnMapa = $("#btnMapa");
 
@@ -648,7 +785,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+/* ============================= */
 /* ACCORDION MEIA-ENTRADA */
+/* ============================= */
 
 document.addEventListener("click", function (e) {
   if (!e.target.closest(".accordion-header")) return;
@@ -672,21 +811,4 @@ document.addEventListener("click", function (e) {
     seta.innerHTML = item.classList.contains("active") ? "⌃" : "⌄";
   }
 });
-
-function openIngressosModal() {
-  const modal = document.getElementById("ingressosModal");
-
-  if (modal) {
-    modal.classList.add("active");
-    document.body.style.overflow = "hidden";
-  }
-}
-
-function closeIngressosModal() {
-  const modal = document.getElementById("ingressosModal");
-
-  if (modal) {
-    modal.classList.remove("active");
-    document.body.style.overflow = "";
-  }
-}
+```
