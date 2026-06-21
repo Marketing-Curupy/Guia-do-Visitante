@@ -1484,7 +1484,7 @@ button{
 .foto-card img{
   width:100%;
   height:100%;
-  min-height:300px;
+  min-height:260px;
   object-fit:cover;
   display:block;
 }
@@ -1494,7 +1494,7 @@ button{
 }
 
 .foto-grande img{
-  min-height:520px;
+  min-height:380px;
 }
 
 .foto-overlay{
