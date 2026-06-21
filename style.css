@@ -1530,3 +1530,162 @@ button{
   }
 
 }
+
+.social-icons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
+
+.social-icons a{
+  width:42px;
+  height:42px;
+  border-radius:999px;
+  background:#fff;
+  color:#073b66;
+  display:grid;
+  place-items:center;
+  font-size:0;
+  text-decoration:none;
+  font-weight:900;
+}
+
+.social-icons a::first-letter{
+  font-size:18px;
+}
+
+.social-icons a:nth-child(1)::before{content:"📷";font-size:20px;}
+.social-icons a:nth-child(2)::before{content:"f";font-size:22px;}
+.social-icons a:nth-child(3)::before{content:"♪";font-size:22px;}
+.social-icons a:nth-child(4)::before{content:"▶";font-size:20px;}
+
+.atendimento-opcoes button{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.atendimento-opcoes small{
+  color:#4b657d;
+  font-weight:700;
+}
+
+.help-separador{
+  border:0;
+  border-top:1px solid #d9ecf5;
+  margin:16px 0;
+}
+
+@media(max-width:980px){
+  .galeria-dinamica{
+    margin-top:34px;
+    margin-bottom:18px;
+  }
+
+  .section-title{
+    margin-bottom:16px;
+    padding:0 2px;
+  }
+
+  .section-title h2{
+    font-size:30px;
+    line-height:1.05;
+  }
+
+  .section-title p{
+    font-size:15px;
+  }
+
+  .galeria-masonry{
+    display:flex;
+    overflow-x:auto;
+    gap:14px;
+    padding:2px 14px 14px;
+    margin-left:-14px;
+    margin-right:-14px;
+    scroll-snap-type:x mandatory;
+  }
+
+  .foto-card,
+  .foto-grande{
+    flex:0 0 78%;
+    min-height:230px;
+    border-radius:22px;
+    scroll-snap-align:start;
+  }
+
+  .foto-card img,
+  .foto-grande img{
+    min-height:230px;
+    height:230px;
+  }
+
+  .foto-overlay{
+    padding:14px;
+  }
+
+  .foto-overlay span{
+    font-size:15px;
+  }
+
+  .footer-curupy{
+    margin-top:42px;
+  }
+
+  .footer-wave{
+    height:45px;
+    background:
+      radial-gradient(70px 35px at 10% 0,#fff 98%,transparent 100%),
+      radial-gradient(90px 45px at 40% 0,#fff 98%,transparent 100%),
+      radial-gradient(100px 50px at 78% 0,#fff 98%,transparent 100%);
+  }
+
+  .footer-inner{
+    padding:28px 0 36px;
+    gap:22px;
+  }
+
+  .footer-inner img{
+    width:150px;
+  }
+
+  .footer-inner p{
+    font-size:1.35rem;
+  }
+
+  .social-icons{
+    justify-content:center;
+  }
+
+  .barra-inner{
+    padding:14px;
+  }
+
+  .barra-status strong{
+    display:block;
+    font-size:15px;
+    margin-bottom:4px;
+  }
+
+  .barra-status span{
+    display:block;
+    font-size:13px;
+  }
+
+  .barra-precos{
+    gap:8px;
+    margin-top:10px;
+  }
+
+  .barra-precos-title,
+  .preco-pill{
+    font-size:13px;
+  }
+
+  .link-meia{
+    min-height:42px;
+    border-radius:14px;
+    font-size:13px;
+  }
+}
