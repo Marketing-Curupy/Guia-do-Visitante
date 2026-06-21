@@ -1,3 +1,4 @@
+console.log("GALERIA CARREGADA");
 const FOTOS_GALERIA = [
   { src: "galeria/foto-1.jpg", titulo: "Acqua Rampa" },
   { src: "galeria/foto-2.jpg", titulo: "Acqua Half" },
