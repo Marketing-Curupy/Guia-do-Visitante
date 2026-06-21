@@ -695,16 +695,28 @@ function renderizarAjuda() {
 
   container.innerHTML = `
     <div class="help-intro">
-      <strong>Olá 👋</strong>
-      <p>Escolha uma opção ou consulte uma dúvida frequente:</p>
+      <strong>Ainda com dúvidas?</strong>
+      <p>Entre em contato conosco. Escolha o setor correto:</p>
     </div>
 
-    <div class="chat-opcoes">
-      <button onclick="openIngressosModal()">🎟 Ingressos e valores</button>
-      <button onclick="abrirEmBreve('Hospedagem')">🏨 Hospedagem</button>
-      <button onclick="abrirEmBreve('Clube de Associados')">💎 Associação</button>
-      <button onclick="abrirMapa()">📍 Como chegar</button>
+    <div class="chat-opcoes atendimento-opcoes">
+      <button onclick="abrirWhatsAppPortaria()">
+        🎟️ Ingressos, meia-entrada, acesso e entrada no parque
+        <small>Fale com a Portaria</small>
+      </button>
+
+      <button onclick="abrirPaginaHospedagem()">
+        🏨 Reservas e hospedagem
+        <small>Ir para página de hospedagem</small>
+      </button>
+
+      <button onclick="abrirPaginaAssociados()">
+        💎 Sou associado
+        <small>Ir para página de associados</small>
+      </button>
     </div>
+
+    <hr class="help-separador">
 
     ${AJUDA.map((item, index) => {
       return `
@@ -720,11 +732,16 @@ function renderizarAjuda() {
   `;
 }
 
-function abrirResposta(index) {
-  const resposta = document.getElementById(`resposta-${index}`);
-  if (!resposta) return;
+function abrirWhatsAppPortaria() {
+  window.open("https://wa.me/5566999999999?text=Ol%C3%A1%2C%20tenho%20d%C3%BAvidas%20sobre%20ingressos%2C%20meia-entrada%20ou%20acesso%20ao%20parque.", "_blank");
+}
 
-  resposta.classList.toggle("hidden");
+function abrirPaginaHospedagem() {
+  window.location.href = "hospedagem.html";
+}
+
+function abrirPaginaAssociados() {
+  window.location.href = "associados.html";
 }
 
 /* ============================= */
