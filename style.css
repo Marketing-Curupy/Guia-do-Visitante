@@ -114,7 +114,7 @@ button{
 
 .menu-rapido button{
   border:0;
-  background:transparent;
+  background:#ff0c58;
   color:var(--azul);
   font-weight:900;
   font-size:.92rem;
