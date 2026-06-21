@@ -249,12 +249,15 @@ button{
   min-height:520px;
 }
 
-.hero-visual img{
+.hero-visual video{
   width:100%;
   height:560px;
   object-fit:cover;
+
+  border-radius:32px;
+
   display:block;
-  border-radius:44% 56% 47% 53% / 34% 38% 62% 66%;
+
   box-shadow:var(--sombra-forte);
 }
 
