@@ -1,4 +1,3 @@
-```javascript
 function $(selector) {
   return document.querySelector(selector);
 }
@@ -811,4 +810,3 @@ document.addEventListener("click", function (e) {
     seta.innerHTML = item.classList.contains("active") ? "⌃" : "⌄";
   }
 });
-```
