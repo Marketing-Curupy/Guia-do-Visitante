@@ -3,152 +3,169 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Central do Visitante Curupy</title>
   <meta name="description" content="Central do Visitante Curupy Acqua Park: ingressos, calendário, meia-entrada, localização, hospedagem e associação." />
-
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
- <header class="hero">
-  <div class="hero-layout">
-    <div class="hero-logo">
-      <img src="logo-curupy.png" alt="Curupy Acqua Park">
-    </div>
+  <header class="hero">
+    <nav class="topbar" aria-label="Navegação principal">
+      <a class="brand" href="#topo" aria-label="Curupy Acqua Park">
+        <img src="logo-curupy.png" alt="Curupy Acqua Park" />
+      </a>
 
-    <div class="hero-content">
-      <h1>Bem-vindo</h1>
-      <h2>Como podemos ajudar com a sua visita ao Curupy?</h2>
+      <div class="menu-rapido">
+        <button onclick="openIngressosModal()">🎟️ Ingressos</button>
+        <button onclick="abrirModal('modalCalendario')">📅 Calendário</button>
+        <button onclick="abrirEmBreve('Hospedagem')">🏨 Hospedagem</button>
+        <button onclick="abrirEmBreve('Clube de Associados')">💎 Associados</button>
+        <button onclick="abrirMapa()">📍 Como chegar</button>
+      </div>
 
-      <p>
-        Encontre informações sobre ingressos, funcionamento,
-        hospedagem, associação e muito mais.
-      </p>
+      <button class="btn-topo-ajuda" onclick="abrirModal('modalAjuda')">💬 Precisa de ajuda?</button>
+    </nav>
 
-      <div class="busca-rapida">
-        <label for="campoBusca">🔍 O que você procura?</label>
+    <section id="topo" class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Guia Oficial do Visitante</p>
+        <h1>Seu dia de <span>diversão</span> começa aqui!</h1>
+        <p class="hero-texto">Encontre tudo o que você precisa saber antes de visitar o Curupy Acqua Park.</p>
 
-        <input
-          id="campoBusca"
-          type="text"
-          placeholder="Digite sua dúvida..."
-          oninput="buscarRapido()"
-        />
+        <div class="busca-rapida">
+          <label for="campoBusca">O que você procura?</label>
+          <div class="busca-box">
+            <input id="campoBusca" type="text" placeholder="Digite sua dúvida..." oninput="buscarRapido()" />
+            <button type="button" aria-label="Buscar">🔍</button>
+          </div>
+        </div>
 
-        <div class="atalhos">
-          <button onclick="openIngressosModal()">🎟 Ingressos</button>
-          <button onclick="abrirModal('modalCalendario')">📅 Calendário</button>
-          <button onclick="abrirEmBreve('Hospedagem')">🏨 Hospedagem</button>
-          <button onclick="abrirEmBreve('Clube de Associados')">💎 Associação</button>
+        <div class="selos">
+          <span>🛡️ Informações confiáveis</span>
+          <span>⏱️ Atualizações sempre</span>
+          <span>🧳 Tudo para sua visita</span>
         </div>
       </div>
-    </div>
-  </div>
-</header>
 
-  <section id="barraStatus" class="barra-fixa"></section>
-
-  <main class="container">
-    <section class="card destaque">
-      <div>
-        <h2>🎟️ Ingressos e valores</h2>
-
-        <p>
-          Garanta sua visita antecipadamente com desconto
-          e parcelamento exclusivo pelo site oficial.
-        </p>
-
-        <p class="aviso">
-          Compras online devem ser realizadas com pelo menos 1 dia de antecedência.
-        </p>
+      <div class="hero-visual">
+        <img src="assets/hero-curupy.jpg" alt="Área de piscinas e atrações do Curupy Acqua Park" />
+        <div class="splash-face" aria-hidden="true">💦</div>
       </div>
+    </section>
+  </header>
 
-      <button
-        class="btn rosa btn-ingressos"
-        onclick="openIngressosModal()">
-        Ver valores e datas disponíveis
+  <main>
+    <section class="atalhos-cards container">
+      <button class="atalho-card card-rosa" onclick="openIngressosModal()">
+        <span class="icone">🎟️</span>
+        <strong>Ingressos</strong>
+        <small>Valores, tipos e como comprar</small>
+        <em>›</em>
+      </button>
+
+      <button class="atalho-card card-azul" onclick="abrirModal('modalCalendario')">
+        <span class="icone">📅</span>
+        <strong>Calendário</strong>
+        <small>Dias e horários de funcionamento</small>
+        <em>›</em>
+      </button>
+
+      <button class="atalho-card card-turquesa" onclick="abrirEmBreve('Hospedagem')">
+        <span class="icone">🏨</span>
+        <strong>Hospedagem</strong>
+        <small>Hotéis e pousadas parceiras</small>
+        <em>›</em>
+      </button>
+
+      <button class="atalho-card card-amarelo" onclick="abrirEmBreve('Clube de Associados')">
+        <span class="icone">💎</span>
+        <strong>Associados</strong>
+        <small>Vantagens do Clube de Associados</small>
+        <em>›</em>
+      </button>
+
+      <button class="atalho-card card-pink" onclick="abrirMapa()">
+        <span class="icone">📍</span>
+        <strong>Como chegar</strong>
+        <small>Localização e acesso ao parque</small>
+        <em>›</em>
       </button>
     </section>
 
-    <section class="grid">
-      <article class="card">
-        <h2>📅 Calendário de funcionamento</h2>
+    <section id="barraStatus" class="barra-fixa"></section>
+
+    <section class="container grid-principal">
+      <article class="card card-ingressos destaque">
+        <div>
+          <span class="card-icon">🎟️</span>
+          <h2>Ingressos e valores</h2>
+          <p>Garanta sua visita antecipadamente com desconto e parcelamento exclusivo pelo site oficial.</p>
+          <p class="aviso">Compras online devem ser realizadas com pelo menos 1 dia de antecedência.</p>
+        </div>
+        <button class="btn rosa" onclick="openIngressosModal()">Ver valores e datas disponíveis →</button>
+      </article>
+
+      <article class="card card-calendario">
+        <span class="card-icon">📅</span>
+        <h2>Calendário de funcionamento</h2>
         <p>Consulte os dias e horários de funcionamento do parque.</p>
-
-        <button class="btn azul" onclick="abrirModal('modalCalendario')">
-          Ver calendário
-        </button>
+        <button class="btn azul" onclick="abrirModal('modalCalendario')">Ver calendário →</button>
       </article>
 
-      <article class="card card-em-breve">
+      <article class="card card-hospedagem card-em-breve">
         <span class="tag-em-breve">Em breve</span>
-        <h2>🏨 Hospedagem</h2>
-        <p>
-          Em breve você poderá conhecer nossas opções de hospedagem
-          para aproveitar o Curupy com ainda mais conforto.
-        </p>
-
-        <button class="btn azul" onclick="abrirEmBreve('Hospedagem')">
-          Avise-me quando lançar
-        </button>
+        <span class="card-icon">🏨</span>
+        <h2>Hospedagem</h2>
+        <p>Em breve você poderá conhecer nossas opções de hospedagem para aproveitar o Curupy com ainda mais conforto.</p>
+        <button class="btn turquesa" onclick="abrirEmBreve('Hospedagem')">Avise-me quando lançar →</button>
       </article>
 
-      <article class="card card-em-breve">
+      <article class="card card-associados card-em-breve">
         <span class="tag-em-breve">Em breve</span>
-        <h2>💎 Clube de Associados</h2>
-        <p>
-          Em breve você poderá conhecer as vantagens exclusivas
-          do Clube de Associados Curupy.
-        </p>
-
-        <button class="btn azul" onclick="abrirEmBreve('Clube de Associados')">
-          Saber mais em breve
-        </button>
-      </article>
-
-      <article class="card">
-        <h2>📍 Como chegar</h2>
-        <p>Veja a localização do Curupy no mapa.</p>
-
-        <button class="btn azul" id="btnMapa">
-          Abrir mapa
-        </button>
+        <span class="card-icon">💎</span>
+        <h2>Clube de Associados</h2>
+        <p>Em breve você poderá conhecer as vantagens exclusivas do Clube de Associados Curupy.</p>
+        <button class="btn amarelo" onclick="abrirEmBreve('Clube de Associados')">Saber mais em breve →</button>
       </article>
     </section>
 
-    <section class="info">
-      <div>
-        🚗 <strong>Estacionamento</strong>
-        <span>Gratuito</span>
-      </div>
+    <section class="info container">
+      <button onclick="abrirMapa()"><span>🚗</span><strong>Estacionamento</strong><small>Gratuito</small><em>›</em></button>
+      <button onclick="abrirModal('modalAjuda')"><span>🎒</span><strong>Guarda-volumes</strong><small>Pago à parte</small><em>›</em></button>
+      <button onclick="abrirModal('modalMeia')"><span>ℹ️</span><strong>Meia-entrada</strong><small>Ver regras</small><em>›</em></button>
+    </section>
 
-      <div>
-        🎒 <strong>Guarda-volumes</strong>
-        <span>Pago à parte</span>
+    <section class="galeria container">
+      <div class="section-title">
+        <h2>Conheça o Curupy</h2>
+        <p>Um pouco da experiência que espera por você.</p>
       </div>
-
-      <div>
-        ℹ️ <strong>Meia-entrada</strong>
-        <button onclick="abrirModal('modalMeia')">Ver regras</button>
+      <div class="galeria-grid">
+        <img src="assets/galeria-1.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
+        <img src="assets/galeria-2.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
+        <img src="assets/galeria-3.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
+        <img src="assets/galeria-4.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
       </div>
     </section>
   </main>
 
-  <section class="galeria container">
-    <h2>Conheça o Curupy</h2>
-
-    <div class="galeria-grid">
-      <img src="assets/galeria-1.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
-      <img src="assets/galeria-2.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
-      <img src="assets/galeria-3.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
-      <img src="assets/galeria-4.jpg" alt="Curupy" onclick="abrirFoto(this.src)">
+  <footer class="footer-curupy">
+    <div class="footer-wave" aria-hidden="true"></div>
+    <div class="footer-inner container">
+      <img src="logo-curupy.png" alt="Curupy Acqua Park" />
+      <div>
+        <strong>Dúvidas?</strong>
+        <span>Fale com a gente!</span>
+        <button onclick="abrirModal('modalAjuda')">💬 Abrir atendimento</button>
+      </div>
+      <div>
+        <strong>Siga o Curupy!</strong>
+        <span>Instagram • Facebook • TikTok • YouTube</span>
+      </div>
+      <p>Diversão que fica na memória! 💙</p>
     </div>
-  </section>
+  </footer>
 
-  <button class="ajuda" onclick="abrirModal('modalAjuda')">
-    ❓ Tire sua dúvida
-  </button>
+  <button class="ajuda" onclick="abrirModal('modalAjuda')">❓ Tire sua dúvida</button>
 
   <nav class="barra-acoes-mobile">
     <button onclick="openIngressosModal()">🎟 Comprar</button>
@@ -182,23 +199,17 @@
       <div class="accordion">
         <div class="accordion-item active">
           <button class="accordion-header">Meia-Entrada <span>⌃</span></button>
-
           <div class="accordion-content">
             <p>A meia-entrada é válida exclusivamente sobre o valor da tabela padrão da portaria.</p>
             <p>A venda de ingressos com meia-entrada é realizada somente na bilheteria, no dia da visita, mediante apresentação da documentação original e válida.</p>
-
             <h4>Têm direito à meia-entrada:</h4>
-
             <ul>
               <li>Estudantes com carteira estudantil válida.</li>
               <li>Professores da rede Estadual ou Municipal de Mato Grosso mediante identificação funcional válida.</li>
               <li>Doadores regulares de sangue e doadores de medula óssea mediante comprovação válida.</li>
               <li>Pessoas com 60 anos ou mais mediante documento oficial com foto.</li>
             </ul>
-
-            <div class="alerta-importante">
-              Importante: não serão aceitas cópias, fotografias ou documentos vencidos.
-            </div>
+            <div class="alerta-importante">Importante: não serão aceitas cópias, fotografias ou documentos vencidos.</div>
           </div>
         </div>
 
@@ -225,7 +236,6 @@
               <li>Ter idade mínima de 18 anos.</li>
               <li>Apresentar documento oficial com foto.</li>
             </ul>
-
             <p>A validação será realizada pela equipe da bilheteria.</p>
           </div>
         </div>
@@ -256,9 +266,7 @@
     <div class="modal-box">
       <button class="fechar" onclick="fecharModal('modalEmBreve')">×</button>
       <h2 id="tituloEmBreve">Em breve</h2>
-      <p id="textoEmBreve">
-        Esta área está em desenvolvimento e será disponibilizada em breve.
-      </p>
+      <p id="textoEmBreve">Esta área está em desenvolvimento e será disponibilizada em breve.</p>
       <button class="btn rosa full" onclick="fecharModal('modalEmBreve')">Entendi</button>
     </div>
   </div>
@@ -266,12 +274,7 @@
   <div id="ingressosModal" class="iframe-modal">
     <div class="iframe-box">
       <button class="iframe-close" onclick="closeIngressosModal()">×</button>
-
-      <iframe
-        src="ingressos/index.html"
-        title="Ingressos Curupy"
-        frameborder="0">
-      </iframe>
+      <iframe src="ingressos/index.html" title="Ingressos Curupy" frameborder="0"></iframe>
     </div>
   </div>
 
