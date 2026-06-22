@@ -767,6 +767,16 @@ function abrirPaginaAssociados() {
   window.location.href = "associados.html";
 }
 
+function abrirResposta(index) {
+  document.querySelectorAll(".help-answer").forEach((item, i) => {
+    if (i === index) {
+      item.classList.toggle("hidden");
+    } else {
+      item.classList.add("hidden");
+    }
+  });
+}
+
 /* ============================= */
 /* MODAL DE INGRESSOS */
 /* ============================= */
