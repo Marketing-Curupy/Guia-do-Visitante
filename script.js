@@ -633,16 +633,6 @@ function abrirFoto(src) {
 
 const AJUDA = [
   {
-    pergunta: "🏨 Hospedagem",
-    resposta:
-      "A área de hospedagem está em desenvolvimento e será disponibilizada em breve."
-  },
-  {
-    pergunta: "💎 Associação",
-    resposta:
-      "O Clube de Associados Curupy terá informações completas em breve."
-  },
-  {
     pergunta: "📍 Como chegar",
     resposta:
       "Use o botão Como chegar para abrir a localização no mapa."
@@ -733,7 +723,7 @@ function renderizarAjuda() {
 }
 
 function abrirWhatsAppPortaria() {
-  window.open("https://wa.me/5566999999999?text=Ol%C3%A1%2C%20tenho%20d%C3%BAvidas%20sobre%20ingressos%2C%20meia-entrada%20ou%20acesso%20ao%20parque.", "_blank");
+  window.open("https://wa.me/556696454707?text=Ol%C3%A1%2C%20tenho%20d%C3%BAvidas%20sobre%20ingressos%2C%20meia-entrada%20ou%20acesso%20ao%20parque.", "_blank");
 }
 
 function abrirPaginaHospedagem() {
