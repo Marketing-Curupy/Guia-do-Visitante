@@ -736,73 +736,109 @@ button{
 
 /* FOOTER */
 
+/* FOOTER NOVO */
+
 .footer-curupy{
-  margin-top:90px;
-  background:linear-gradient(180deg,#09649b 0%,#073b66 70%);
+  margin-top:70px;
+  background:linear-gradient(180deg,#006fb0 0%,#073b66 100%);
   color:#fff;
   position:relative;
   overflow:hidden;
 }
 
 .footer-wave{
-  height:90px;
+  height:74px;
+  position:relative;
   background:
-    radial-gradient(100px 60px at 6% 0,#fff 98%,transparent 100%),
-    radial-gradient(150px 80px at 24% 0,#fff 98%,transparent 100%),
-    radial-gradient(120px 70px at 42% 0,#fff 98%,transparent 100%),
-    radial-gradient(180px 90px at 66% 0,#fff 98%,transparent 100%),
-    radial-gradient(150px 75px at 88% 0,#fff 98%,transparent 100%);
+    radial-gradient(120px 54px at 8% 0,#fff 98%,transparent 100%),
+    radial-gradient(180px 74px at 25% 0,#fff 98%,transparent 100%),
+    radial-gradient(135px 60px at 44% 0,#fff 98%,transparent 100%),
+    radial-gradient(190px 82px at 68% 0,#fff 98%,transparent 100%),
+    radial-gradient(150px 66px at 92% 0,#fff 98%,transparent 100%);
+}
+
+.footer-wave::before,
+.footer-wave::after{
+  content:"";
+  position:absolute;
+  width:86px;
+  height:70px;
+  top:22px;
+  background:
+    radial-gradient(circle at 20% 72%,#ff2f78 0 8px,transparent 9px),
+    radial-gradient(circle at 45% 45%,#008ee8 0 10px,transparent 11px),
+    radial-gradient(circle at 72% 68%,#13d5d0 0 8px,transparent 9px);
+  z-index:2;
+}
+
+.footer-wave::before{
+  left:7%;
+  transform:rotate(-22deg);
+}
+
+.footer-wave::after{
+  right:7%;
+  transform:rotate(22deg);
 }
 
 .footer-inner{
-  padding:44px 0 52px;
+  min-height:128px;
+  padding:18px 0 24px;
   display:grid;
-  grid-template-columns:1fr 1fr 1fr 1.2fr;
-  gap:34px;
+  grid-template-columns:1.1fr 1fr 1fr 1.15fr;
+  gap:30px;
   align-items:center;
 }
 
 .footer-inner img{
-  width:190px;
+  width:150px;
 }
 
 .footer-inner strong{
   display:block;
-  font-size:1.05rem;
-  margin-bottom:6px;
+  font-size:.9rem;
+  font-weight:900;
+  margin-bottom:4px;
 }
 
 .footer-inner span{
   display:block;
+  font-size:.82rem;
   opacity:.95;
 }
 
 .footer-inner button{
-  margin-top:12px;
+  margin-top:8px;
   border:0;
   border-radius:999px;
   background:#fff;
   color:#0b5f91;
-  padding:12px 18px;
+  padding:8px 14px;
+  font-size:.78rem;
   font-weight:900;
+  box-shadow:0 10px 22px rgba(0,0,0,.12);
 }
 
 .footer-inner p{
-  font-size:1.7rem;
+  font-size:1.32rem;
   font-weight:900;
-  line-height:1.15;
+  line-height:1.12;
+  font-style:italic;
+}
+
+.footer-inner p::first-line{
+  color:#fff;
 }
 
 .social-icons{
   display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:10px;
+  gap:8px;
+  margin-top:8px;
 }
 
 .social-icons a{
-  width:42px;
-  height:42px;
+  width:30px;
+  height:30px;
   border-radius:999px;
   background:#fff;
   color:#073b66;
@@ -811,12 +847,75 @@ button{
   font-size:0;
   text-decoration:none;
   font-weight:900;
+  transition:.2s ease;
 }
 
-.social-icons a:nth-child(1)::before{content:"📷";font-size:20px;}
-.social-icons a:nth-child(2)::before{content:"f";font-size:22px;}
-.social-icons a:nth-child(3)::before{content:"♪";font-size:22px;}
-.social-icons a:nth-child(4)::before{content:"▶";font-size:20px;}
+.social-icons a:hover{
+  transform:translateY(-3px);
+}
+
+.social-icons a:nth-child(1)::before{content:"📷";font-size:15px;}
+.social-icons a:nth-child(2)::before{content:"f";font-size:17px;}
+.social-icons a:nth-child(3)::before{content:"♪";font-size:17px;}
+.social-icons a:nth-child(4)::before{content:"▶";font-size:15px;}
+
+@media(max-width:768px){
+  .footer-curupy{
+    margin-top:42px;
+    border-radius:34px 34px 0 0;
+  }
+
+  .footer-wave{
+    height:56px;
+    background:
+      radial-gradient(82px 38px at 10% 0,#fff 98%,transparent 100%),
+      radial-gradient(120px 50px at 40% 0,#fff 98%,transparent 100%),
+      radial-gradient(110px 46px at 78% 0,#fff 98%,transparent 100%);
+  }
+
+  .footer-wave::before,
+  .footer-wave::after{
+    width:54px;
+    height:48px;
+    top:18px;
+  }
+
+  .footer-wave::before{
+    left:5%;
+  }
+
+  .footer-wave::after{
+    right:5%;
+  }
+
+  .footer-inner{
+    grid-template-columns:1fr;
+    text-align:center;
+    gap:18px;
+    padding:20px 16px 32px;
+  }
+
+  .footer-inner > *{
+    margin:auto;
+  }
+
+  .footer-inner img{
+    width:135px;
+  }
+
+  .footer-inner p{
+    font-size:1.25rem;
+  }
+
+  .social-icons{
+    justify-content:center;
+  }
+
+  .footer-inner button{
+    width:100%;
+    max-width:230px;
+  }
+}
 
 /* AJUDA FIXA */
 
