@@ -22,13 +22,13 @@ const VALORES_BILHETERIA = {
 
   fimDeSemana: {
     visitante: 124,
-    kids: 55,
+    kids: 60,
     convidadoSocio: 78
   },
 
   feriado: {
     visitante: 124,
-    kids: 55,
+    kids: 60,
     convidadoSocio: 78
   }
 };
