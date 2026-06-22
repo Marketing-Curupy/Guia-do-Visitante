@@ -684,30 +684,7 @@ function renderizarAjuda() {
   if (!container) return;
 
   container.innerHTML = `
-    <div class="help-intro">
-      <strong>Ainda com dúvidas?</strong>
-      <p>Entre em contato conosco. Escolha o setor correto:</p>
-    </div>
-
-    <div class="chat-opcoes atendimento-opcoes">
-      <button onclick="abrirWhatsAppPortaria()">
-        🎟️ Ingressos, meia-entrada, acesso e entrada no parque
-        <small>Fale com a Portaria</small>
-      </button>
-
-      <button onclick="abrirPaginaHospedagem()">
-        🏨 Reservas e hospedagem
-        <small>Ir para página de hospedagem</small>
-      </button>
-
-      <button onclick="abrirPaginaAssociados()">
-        💎 Sou associado
-        <small>Ir para página de associados</small>
-      </button>
-    </div>
-
-    <hr class="help-separador">
-
+    
     ${AJUDA.map((item, index) => {
       return `
         <button class="help-item" onclick="abrirResposta(${index})">
@@ -719,11 +696,67 @@ function renderizarAjuda() {
         </div>
       `;
     }).join("")}
+
+    <div class="help-cta">
+      <div class="help-cta-icon">❓</div>
+
+      <div class="help-cta-texto">
+        <strong>Ainda com dúvidas?</strong>
+
+        <p>
+          Não encontrou sua resposta acima?
+          Escolha o assunto e fale conosco pelo WhatsApp.
+        </p>
+      </div>
+
+      <div class="help-cta-buttons">
+
+        <button onclick="abrirWhatsAppAjuda('ingressos')">
+          🎟️ Ingressos
+        </button>
+
+        <button onclick="abrirWhatsAppAjuda('acesso')">
+          🚪 Acesso ao parque
+        </button>
+
+        <button onclick="abrirWhatsAppAjuda('meia')">
+          🎫 Meia-entrada
+        </button>
+
+        <button onclick="abrirWhatsAppAjuda('outros')">
+          💬 Outros assuntos
+        </button>
+
+      </div>
+    </div>
   `;
 }
 
-function abrirWhatsAppPortaria() {
-  window.open("https://wa.me/556696454707?text=Ol%C3%A1%2C%20tenho%20d%C3%BAvidas%20sobre%20ingressos%2C%20meia-entrada%20ou%20acesso%20ao%20parque.", "_blank");
+function abrirWhatsAppAjuda(tipo) {
+
+  let mensagem = "";
+
+  switch (tipo) {
+    case "ingressos":
+      mensagem = "Olá! Tenho dúvidas sobre ingressos.";
+      break;
+
+    case "acesso":
+      mensagem = "Olá! Tenho dúvidas sobre acesso ao parque.";
+      break;
+
+    case "meia":
+      mensagem = "Olá! Tenho dúvidas sobre meia-entrada.";
+      break;
+
+    default:
+      mensagem = "Olá! Tenho uma dúvida e gostaria de falar com a equipe.";
+  }
+
+  window.open(
+    `https://wa.me/556696454707?text=${encodeURIComponent(mensagem)}`,
+    "_blank"
+  );
 }
 
 function abrirPaginaHospedagem() {
