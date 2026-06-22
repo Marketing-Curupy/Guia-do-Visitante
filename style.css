@@ -737,22 +737,29 @@ button{
   color:#fff;
   position:relative;
   overflow:hidden;
-
   background:
     url("assets/footer-curupy-bg.svg") center top / 100% auto no-repeat,
     linear-gradient(180deg,#006da9 0%,#004676 100%);
-
-  padding-top:130px;
+  padding-top:110px;
+  padding-bottom:24px;
 }
 
 .footer-curupy::before{
-  display:none;
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:70px;
+  background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,0));
+  pointer-events:none;
+  z-index:1;
 }
 
 .footer-inner{
   max-width:1120px;
   margin:0 auto;
-  padding:20px 24px 24px;
+  padding:20px 24px 10px;
   display:grid;
   grid-template-columns:1.2fr 1fr 1fr 1.35fr;
   gap:34px;
@@ -791,6 +798,7 @@ button{
   font-size:12px;
   font-weight:900;
   box-shadow:0 10px 22px rgba(0,0,0,.16);
+  cursor:pointer;
 }
 
 .footer-whatsapp::before{
@@ -817,10 +825,25 @@ button{
   font-weight:900;
 }
 
-.social-icons a[href*="instagram"]::before{ content:"◎"; font-size:18px; }
-.social-icons a[href*="facebook"]::before{ content:"f"; font-size:18px; }
-.social-icons a[href*="tiktok"]::before{ content:"♪"; font-size:18px; }
-.social-icons a[href*="youtube"]::before{ content:"▶"; font-size:15px; }
+.social-icons a[href*="instagram"]::before{
+  content:"◎";
+  font-size:18px;
+}
+
+.social-icons a[href*="facebook"]::before{
+  content:"f";
+  font-size:18px;
+}
+
+.social-icons a[href*="tiktok"]::before{
+  content:"♪";
+  font-size:18px;
+}
+
+.social-icons a[href*="youtube"]::before{
+  content:"▶";
+  font-size:15px;
+}
 
 .footer-slogan{
   font-size:18px;
@@ -840,6 +863,45 @@ button{
   text-align:center;
   position:relative;
   z-index:2;
+}
+
+@media (max-width:900px){
+  .footer-curupy{
+    background-size:auto 120px, auto;
+    padding-top:95px;
+  }
+
+  .footer-inner{
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    text-align:center;
+  }
+
+  .footer-logo img,
+  .footer-inner img{
+    margin:0 auto;
+  }
+
+  .social-icons{
+    justify-content:center;
+  }
+}
+
+@media (max-width:560px){
+  .footer-curupy{
+    margin-top:48px;
+    background-size:auto 100px, auto;
+    padding-top:85px;
+  }
+
+  .footer-inner{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+  .footer-slogan{
+    font-size:16px;
+  }
 }
 
 /* AJUDA FIXA */
