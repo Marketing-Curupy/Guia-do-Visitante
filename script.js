@@ -494,7 +494,7 @@ function gerarValoresBilheteria(status) {
       <div class="dia-bloco">
         <strong>🎟 Valor da bilheteria</strong>
         <p>Adulto: R$ 124,00</p>
-        <p>Kids: R$ 55,00</p>
+        <p>Kids: R$ 60,00</p>
         <p>Convidado de sócio: R$ 78,00</p>
       </div>
     `;
@@ -504,8 +504,8 @@ function gerarValoresBilheteria(status) {
     <div class="dia-bloco">
       <strong>🎟 Valor da bilheteria</strong>
       <p>Adulto: R$ 86,00</p>
-      <p>Kids: R$ 45,00</p>
-      <p>Convidado de sócio: R$ 55,00</p>
+      <p>Kids: R$ 40,00</p>
+      <p>Convidado de sócio: R$ 50,00</p>
     </div>
   `;
 }
