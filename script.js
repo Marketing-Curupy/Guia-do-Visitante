@@ -633,11 +633,6 @@ function abrirFoto(src) {
 
 const AJUDA = [
   {
-    pergunta: "📍 Como chegar",
-    resposta:
-      "Use o botão Como chegar para abrir a localização no mapa."
-  },
-  {
     pergunta: "Posso comprar ingresso para hoje pelo site?",
     resposta:
       "Não. Compras online devem ser realizadas com pelo menos 1 dia de antecedência."
