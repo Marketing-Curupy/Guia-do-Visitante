@@ -120,4 +120,4 @@ const HORARIOS_FUNCIONAMENTO = {
     horario: "Fechado",
     classe: "dia-fechado"
   }
-};
+}
