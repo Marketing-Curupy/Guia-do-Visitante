@@ -39,13 +39,6 @@
           </div>
         </div>
 
-        <div class="selos">
-          <span>🛡️ Informações confiáveis</span>
-          <span>⏱️ Atualizações sempre</span>
-          <span>🧳 Tudo para sua visita</span>
-        </div>
-      </div>
-
 <div class="hero-visual">
   <video
     autoplay
@@ -63,41 +56,38 @@
 
 <main>
     <section class="atalhos-cards container">
-      <button class="atalho-card card-rosa" onclick="openIngressosModal()">
-        <span class="icone">🎟️</span>
-        <strong>Ingressos</strong>
-        <small>Valores, tipos e como comprar</small>
-        <em>›</em>
-      </button>
 
-      <button class="atalho-card card-azul" onclick="abrirModal('modalCalendario')">
-        <span class="icone">📅</span>
-        <strong>Calendário</strong>
-        <small>Dias e horários de funcionamento</small>
-        <em>›</em>
-      </button>
+  <button class="atalho-card card-rosa" onclick="openIngressosModal()">
+    <span class="icone">🎟️</span>
+    <strong>Ingressos</strong>
+    <small>Valores, tipos e como comprar</small>
+  </button>
 
-      <button class="atalho-card card-turquesa" onclick="abrirEmBreve('Hospedagem')">
-        <span class="icone">🏨</span>
-        <strong>Hospedagem</strong>
-        <small>Hotéis e pousadas parceiras</small>
-        <em>›</em>
-      </button>
+  <button class="atalho-card card-azul" onclick="abrirModal('modalCalendario')">
+    <span class="icone">📅</span>
+    <strong>Calendário</strong>
+    <small>Dias e horários de funcionamento</small>
+  </button>
 
-      <button class="atalho-card card-amarelo" onclick="abrirEmBreve('Clube de Associados')">
-        <span class="icone">💎</span>
-        <strong>Associados</strong>
-        <small>Vantagens do Clube de Associados</small>
-        <em>›</em>
-      </button>
+  <button class="atalho-card card-turquesa" onclick="abrirEmBreve('Hospedagem')">
+    <span class="icone">🏨</span>
+    <strong>Hospedagem</strong>
+    <small>Hotéis e pousadas parceiras</small>
+  </button>
 
-      <button class="atalho-card card-pink" onclick="abrirMapa()">
-        <span class="icone">📍</span>
-        <strong>Como chegar</strong>
-        <small>Localização e acesso ao parque</small>
-        <em>›</em>
-      </button>
-    </section>
+  <button class="atalho-card card-amarelo" onclick="abrirEmBreve('Clube de Associados')">
+    <span class="icone">💎</span>
+    <strong>Associados</strong>
+    <small>Vantagens do Clube de Associados</small>
+  </button>
+
+  <button class="atalho-card card-pink" onclick="abrirMapa()">
+    <span class="icone">📍</span>
+    <strong>Como chegar</strong>
+    <small>Localização e acesso ao parque</small>
+  </button>
+
+</section>
 
     <section id="barraStatus" class="barra-fixa"></section>
 
@@ -137,10 +127,26 @@
     </section>
 
     <section class="info container">
-      <button onclick="abrirMapa()"><span>🚗</span><strong>Estacionamento</strong><small>Gratuito</small><em>›</em></button>
-      <button onclick="abrirModal('modalAjuda')"><span>🎒</span><strong>Guarda-volumes</strong><small>Pago à parte</small><em>›</em></button>
-      <button onclick="abrirModal('modalMeia')"><span>ℹ️</span><strong>Meia-entrada</strong><small>Ver regras</small><em>›</em></button>
-    </section>
+
+  <button onclick="abrirMapa()">
+    <span>🚗</span>
+    <strong>Estacionamento</strong>
+    <small>Gratuito</small>
+  </button>
+
+  <button onclick="abrirModal('modalAjuda')">
+    <span>🎒</span>
+    <strong>Guarda-volumes</strong>
+    <small>Pago à parte</small>
+  </button>
+
+  <button onclick="abrirModal('modalMeia')">
+    <span>ℹ️</span>
+    <strong>Meia-entrada</strong>
+    <small>Ver regras</small>
+  </button>
+
+</section>
 
 <section class="galeria-dinamica container">
   <div class="section-title">
@@ -152,28 +158,68 @@
 </section>
 
   <footer class="footer-curupy">
-  <div class="footer-wave" aria-hidden="true"></div>
-  <div class="footer-inner container">
-    <img src="logo-curupy.png" alt="Curupy Acqua Park" />
 
-    <div>
-      <strong>Ainda com dúvidas?</strong>
-      <span>Entre em contato conosco.</span>
-      <button onclick="abrirModal('modalAjuda')">💬 Escolher atendimento</button>
+  <div class="footer-wave"></div>
+
+  <div class="footer-inner container">
+
+    <div class="footer-logo">
+      <img src="logo-curupy.png" alt="Curupy Acqua Park">
     </div>
 
-    <div>
+    <div class="footer-contato">
+      <strong>Dúvidas?</strong>
+      <span>Fale com a gente!</span>
+
+      <button
+        class="footer-whatsapp"
+        onclick="abrirModal('modalAjuda')">
+        💬 Abrir WhatsApp
+      </button>
+    </div>
+
+    <div class="footer-social">
       <strong>Siga o Curupy!</strong>
+
       <div class="social-icons">
-        <a href="https://www.instagram.com/curupyacquapark" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://www.facebook.com/curupyacquapark" target="_blank" rel="noopener">Facebook</a>
-        <a href="https://www.tiktok.com/@curupyacquapark" target="_blank" rel="noopener">TikTok</a>
-        <a href="https://www.youtube.com/@CurupyAcquaParkHotelOficial" target="_blank" rel="noopener">YouTube</a>
+
+        <a href="https://www.instagram.com/curupyacquapark"
+           target="_blank"
+           rel="noopener">
+          Instagram
+        </a>
+
+        <a href="https://www.facebook.com/curupyacquapark"
+           target="_blank"
+           rel="noopener">
+          Facebook
+        </a>
+
+        <a href="https://www.tiktok.com/@curupyacquapark"
+           target="_blank"
+           rel="noopener">
+          TikTok
+        </a>
+
+        <a href="https://www.youtube.com/@CurupyAcquaParkHotelOficial"
+           target="_blank"
+           rel="noopener">
+          YouTube
+        </a>
+
       </div>
     </div>
 
-    <p>Viva o que importa! 💙</p>
+    <div class="footer-slogan">
+      Viva o que importa! 💙
+    </div>
+
   </div>
+
+  <div class="footer-copy">
+    © 2026 Curupy Acqua Park. Todos os direitos reservados.
+  </div>
+
 </footer>
 
   <button class="ajuda" onclick="abrirModal('modalAjuda')">❓ Tire sua dúvida</button>
