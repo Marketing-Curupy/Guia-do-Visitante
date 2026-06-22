@@ -366,51 +366,50 @@ button{
   display:none !important;
 }
 
-/* BARRA STATUS FIXA */
+/* BARRA STATUS - STICKY */
 
 .barra-fixa{
-  position:fixed;
+  position:sticky;
   top:12px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:9998;
+  z-index:999;
 
   width:min(1200px,calc(100% - 40px));
-  margin:0;
+  margin:24px auto 0;
 
   background:rgba(255,255,255,.96);
   backdrop-filter:blur(12px);
   border:1px solid rgba(255,255,255,.8);
-  border-radius:32px;
-  box-shadow:var(--sombra);
+  border-radius:28px;
+  box-shadow:0 12px 30px rgba(7,59,102,.10);
   overflow:hidden;
 }
 
 .barra-inner{
-  padding:24px 28px;
+  padding:14px 20px;
   display:grid;
-  grid-template-columns:1.05fr 1.55fr .75fr;
-  gap:24px;
+  grid-template-columns:1fr auto auto;
+  gap:18px;
   align-items:center;
 }
 
 .barra-status strong{
   display:block;
   color:var(--azul);
-  font-size:18px;
-  margin-bottom:7px;
+  font-size:15px;
+  margin-bottom:2px;
 }
 
 .barra-status span{
   display:block;
-  line-height:1.35;
+  font-size:13px;
+  line-height:1.25;
   font-weight:700;
 }
 
 .barra-precos{
   display:grid;
-  grid-template-columns:auto repeat(3,1fr);
-  gap:12px;
+  grid-template-columns:auto repeat(3,auto);
+  gap:8px;
   align-items:center;
 }
 
@@ -418,28 +417,32 @@ button{
   font-weight:900;
   color:var(--rosa);
   white-space:nowrap;
+  font-size:13px;
 }
 
 .preco-pill{
   background:#eef8ff;
-  padding:10px 12px;
-  border-radius:18px;
+  padding:7px 10px;
+  border-radius:12px;
+  font-size:12px;
   font-weight:900;
   color:var(--azul);
   text-align:center;
+  white-space:nowrap;
 }
 
 .link-meia{
   border:0;
   background:#eef8ff;
   color:var(--azul);
-  border-radius:20px;
-  padding:14px 16px;
+  border-radius:14px;
+  padding:10px 14px;
+  font-size:13px;
   font-weight:900;
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:58px;
+  min-height:42px;
 }
 
 /* CARDS PRINCIPAIS */
@@ -448,7 +451,7 @@ button{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:26px;
-  margin-top:130px;
+  margin-top:38px;
 }
 
 .card{
@@ -722,7 +725,7 @@ button{
   font-weight:700;
 }
 
-/* FOOTER */
+/* FOOTER COM SVG */
 
 .footer-curupy{
   margin-top:70px;
@@ -730,22 +733,17 @@ button{
   position:relative;
   overflow:hidden;
   background:linear-gradient(180deg,#006da9 0%,#004676 100%);
-  padding-top:95px;
+  padding-top:92px;
 }
 
 .footer-curupy::before{
   content:"";
   position:absolute;
   left:0;
-  top:-1px;
+  top:0;
   width:100%;
-  height:95px;
-  background:
-    radial-gradient(140px 70px at 10% 0,#fff 98%,transparent 100%),
-    radial-gradient(210px 95px at 30% 0,#fff 98%,transparent 100%),
-    radial-gradient(170px 80px at 50% 0,#fff 98%,transparent 100%),
-    radial-gradient(230px 100px at 72% 0,#fff 98%,transparent 100%),
-    radial-gradient(190px 85px at 92% 0,#fff 98%,transparent 100%);
+  height:110px;
+  background:url("assets/footer-curupy-bg.svg") center top / cover no-repeat;
   pointer-events:none;
   z-index:1;
 }
@@ -757,7 +755,7 @@ button{
 .footer-inner{
   max-width:1120px;
   margin:0 auto;
-  padding:20px 24px 24px;
+  padding:28px 24px 24px;
   display:grid;
   grid-template-columns:1.2fr 1fr 1fr 1.35fr;
   gap:34px;
@@ -1557,64 +1555,62 @@ button{
   }
 
   .barra-fixa{
-    position:fixed;
+    position:sticky;
     top:10px;
-    left:16px;
-    right:16px;
+    z-index:999;
+
+    width:calc(100% - 32px);
+    margin:16px auto 0;
+
+    left:auto;
+    right:auto;
     transform:none;
-    z-index:9998;
-
-    width:auto;
-    margin:0;
-    border-radius:24px;
-
-    background:rgba(255,255,255,.96);
-    backdrop-filter:blur(10px);
+    border-radius:20px;
   }
 
   .barra-inner{
     display:block;
-    padding:16px;
+    padding:14px;
   }
 
   .barra-status strong{
-    font-size:16px;
+    font-size:15px;
   }
 
   .barra-status span{
-    font-size:14px;
+    font-size:13px;
   }
 
   .barra-precos{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:8px;
-    margin-top:14px;
+    margin-top:12px;
   }
 
   .barra-precos-title{
     grid-column:1/-1;
-    font-size:14px;
+    font-size:13px;
   }
 
   .preco-pill{
-    border-radius:14px;
-    padding:9px 10px;
-    font-size:13px;
+    border-radius:12px;
+    padding:8px 9px;
+    font-size:12px;
     white-space:normal;
   }
 
   .link-meia{
     width:100%;
-    margin-top:12px;
-    min-height:42px;
+    margin-top:10px;
+    min-height:40px;
     font-size:13px;
   }
 
   .grid-principal{
     grid-template-columns:1fr;
     gap:16px;
-    margin-top:150px;
+    margin-top:24px;
   }
 
   .card{
@@ -1706,22 +1702,19 @@ button{
 
   .footer-curupy{
     margin-top:42px;
-    padding-top:75px;
+    padding-top:82px;
   }
 
   .footer-curupy::before{
-    height:75px;
-    background:
-      radial-gradient(90px 42px at 12% 0,#fff 98%,transparent 100%),
-      radial-gradient(140px 60px at 42% 0,#fff 98%,transparent 100%),
-      radial-gradient(120px 55px at 78% 0,#fff 98%,transparent 100%);
+    height:92px;
+    background:url("assets/footer-curupy-bg.svg") center top / 190% auto no-repeat;
   }
 
   .footer-inner{
     grid-template-columns:1fr;
     text-align:center;
     gap:18px;
-    padding:20px 16px 28px;
+    padding:16px 16px 28px;
   }
 
   .footer-inner > *{
