@@ -25,36 +25,55 @@
       <button class="btn-topo-ajuda" onclick="abrirModal('modalAjuda')">💬 Precisa de ajuda?</button>
     </nav>
 
-    <section id="topo" class="hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Guia Oficial do Visitante</p>
-        <h1>Seu dia de <span>diversão</span> começa aqui!</h1>
-        <p class="hero-texto">Encontre tudo o que você precisa saber antes de visitar o Curupy Acqua Park.</p>
+   <section id="topo" class="hero-grid">
 
-        <div class="busca-rapida">
-          <label for="campoBusca">O que você procura?</label>
-          <div class="busca-box">
-            <input id="campoBusca" type="text" placeholder="Digite sua dúvida..." oninput="buscarRapido()" />
-            <button type="button" aria-label="Buscar">🔍</button>
-          </div>
-        </div>
+  <div class="hero-copy">
 
-<div class="hero-visual">
-  <video
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
-  >
-    <source src="assets/hero-curupy.mp4" type="video/mp4">
-  </video>
-</div>
+    <p class="eyebrow">Guia Oficial do Visitante</p>
+
+    <h1>
+      Seu dia de
+      <span>diversão</span>
+      começa aqui!
+    </h1>
+
+    <p class="hero-texto">
+      Encontre tudo o que você precisa saber antes de visitar o Curupy Acqua Park.
+    </p>
+
+    <div class="busca-rapida">
+      <label for="campoBusca">O que você procura?</label>
+
+      <div class="busca-box">
+        <input
+          id="campoBusca"
+          type="text"
+          placeholder="Digite sua dúvida..."
+          oninput="buscarRapido()"
+        />
+
+        <button type="button" aria-label="Buscar">
+          🔍
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hero-visual">
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source src="assets/hero-curupy.mp4" type="video/mp4">
+    </video>
+  </div>
 
 </section>
-</header>
-
-<main>
+    
     <section class="atalhos-cards container">
 
   <button class="atalho-card card-rosa" onclick="openIngressosModal()">
