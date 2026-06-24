@@ -184,13 +184,19 @@ function selectToday(dateISO) {
   openContent.style.display = "none";
 
   closedMessage.innerHTML = `
-    <strong>Compra online indisponível para hoje</strong>
-    <p>Os ingressos para o dia de hoje são vendidos somente na bilheteria do parque.</p>
-    <p>Os valores da bilheteria são diferentes dos valores da compra antecipada online.</p>
-    <p>Para comprar online, é necessário adquirir o ingresso com pelo menos 1 dia de antecedência.</p>
+    <strong>Parque aberto nesta data</strong>
+
+    <p>
+      🎟 Compras para utilização no mesmo dia devem ser realizadas
+      exclusivamente na bilheteria do parque.
+    </p>
+
+    <p>
+      💻 Compras online devem ser realizadas com pelo menos
+      1 dia de antecedência.
+    </p>
   `;
 }
-
 async function selectDate(dateISO) {
   selectedDate = dateISO;
 
