@@ -749,26 +749,40 @@ button{
 /* FOOTER */
 
 .footer-curupy{
+  margin-top:42px;
   position:relative;
   overflow:hidden;
+  color:#fff;
+  background:transparent;
+  padding-top:160px;
+  padding-bottom:30px;
 }
 
 .footer-curupy::before{
   content:"";
   position:absolute;
-  inset:0;
-  background:url("assets/footer-curupy.svg") center top/100% auto no-repeat;
+  top:0;
+  left:0;
+  right:0;
+  height:170px;
+  background:url("assets/footer-curupy.svg") center top / 100% auto no-repeat;
+  z-index:1;
   pointer-events:none;
 }
 
-.footer-inner{
-  max-width:1120px;
-  margin:0 auto;
-  padding:20px 24px;
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:60px;
-  align-items:center;
+.footer-curupy::after{
+  content:"";
+  position:absolute;
+  top:95px;
+  left:0;
+  right:0;
+  bottom:0;
+  background:#00629b;
+  z-index:0;
+}
+
+.footer-inner,
+.footer-copy{
   position:relative;
   z-index:2;
 }
