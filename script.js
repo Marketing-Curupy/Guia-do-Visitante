@@ -809,11 +809,12 @@ function ativarAnimacoes() {
 /* ============================= */
 /* INICIALIZAÇÃO */
 /* ============================= */
-
 document.addEventListener("DOMContentLoaded", () => {
   renderizarBarra();
   renderizarAjuda();
   ativarAnimacoes();
+
+  ativarBarraFixaAoRolar();
 
   const btnMapa = $("#btnMapa");
 
@@ -863,19 +864,16 @@ document.addEventListener("click", function (e) {
 /* ============================= */
 
 function ativarBarraFixaAoRolar() {
-  const barra = document.querySelector("#barraStatus");
-
+  const barra = document.getElementById("barraStatus");
   if (!barra) return;
 
+  const pontoAtivacao = barra.offsetTop;
+
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 500) {
+    if (window.scrollY >= pontoAtivacao) {
       barra.classList.add("fixa");
     } else {
       barra.classList.remove("fixa");
     }
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  ativarBarraFixaAoRolar();
-});
