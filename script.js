@@ -855,3 +855,26 @@ document.addEventListener("click", function (e) {
     seta.innerHTML = item.classList.contains("active") ? "⌃" : "⌄";
   }
 });
+
+
+/* ============================= */
+/* BARRA FIXA AO ROLAR */
+/* ============================= */
+
+function ativarBarraFixaAoRolar() {
+  const barra = document.querySelector("#barraStatus");
+
+  if (!barra) return;
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 500) {
+      barra.classList.add("fixa");
+    } else {
+      barra.classList.remove("fixa");
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  ativarBarraFixaAoRolar();
+});
