@@ -748,42 +748,47 @@ button{
 
 /* FOOTER */
 
+/* FOOTER */
+
+.footer-curupy{
+  margin-top:42px;
+  position:relative;
+  overflow:hidden;
+  color:#fff;
+  background:transparent;
+  padding-top:170px;
+  padding-bottom:30px;
+}
+
 .footer-curupy::before{
   content:"";
   position:absolute;
   top:0;
   left:0;
   right:0;
-
   height:170px;
-
-  background:url("assets/footer-curupy.svg")
-             center top / 100% auto no-repeat;
-
+  background:url("assets/footer-curupy.svg") center top / 100% auto no-repeat;
   z-index:2;
+  pointer-events:none;
 }
 
 .footer-curupy::after{
   content:"";
   position:absolute;
-
-  top:165px; /* sobreposição de 5px evita linha branca */
-
+  top:165px;
   left:0;
   right:0;
   bottom:0;
-
   background:#00629b;
-
-  z-index:1;
-}}
+  z-index:0;
+  pointer-events:none;
+}
 
 .footer-inner,
 .footer-copy{
   position:relative;
-  z-index:2;
+  z-index:3;
 }
-
 .footer-logo{
   display:flex;
   justify-content:center;
