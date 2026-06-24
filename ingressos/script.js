@@ -60,71 +60,97 @@ async function renderCalendar() {
 
   for (let day = 1; day <= lastDate; day++) {
     const dateISO = toISODate(year, month, day);
-    const tickets = cacheDatas[dateISO] || [];
-    const temIngresso = tickets.length > 0;
-    const temPromocao = tickets.some(ehPromocional);
-    const classes = ["day"];
+  const info = cacheDatas[dateISO] || {};
+const tickets = info.tickets || [];
+const status = info.status;
+const temPromocao = tickets.some(ehPromocional);
 
-    if (dateISO === today) classes.push("today");
-
-    if (temIngresso && dateISO > today) {
-      classes.push("available");
-
-      html += `
-        <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
-          ${day}
-          ${temPromocao ? `<span class="promo-dot">%</span>` : ""}
-          <small>online</small>
-        </button>
-      `;
-      continue;
-    }
-
-    if (temIngresso && dateISO === today) {
-      classes.push("today-open");
-
-      html += `
-        <button class="${classes.join(" ")}" onclick="selectToday('${dateISO}')">
-          ${day}
-          ${temPromocao ? `<span class="promo-dot">%</span>` : ""}
-          <small>bilheteria</small>
-        </button>
-      `;
-      continue;
-    }
+const classes = ["day"];
     
-    classes.push("closed");
+    if (dateISO === today) classes.push("today");
+  
+if (status === "online") {
+  classes.push("available");
 
-    html += `
-      <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}')">
-        ${day}
-      </button>
-    `;
-  }
-
-  calendarGrid.innerHTML = html;
+  html += `
+    <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
+      ${day}
+      ${temPromocao ? `<span class="promo-dot">%</span>` : ""}
+      <small>online</small>
+    </button>
+  `;
+  continue;
 }
 
+if (status === "bilheteria") {
+  classes.push("today-open");
+
+  html += `
+    <button class="${classes.join(" ")}" onclick="selectToday('${dateISO}')">
+      ${day}
+      <small>bilheteria</small>
+    </button>
+  `;
+  continue;
+}
+
+classes.push("closed");
+
+html += `
+  <button class="${classes.join(" ")}" onclick="selectClosedDate('${dateISO}')">
+    ${day}
+  </button>
+`;
+} // fecha o for(day)
+
+calendarGrid.innerHTML = html;
+} // fecha renderCalendar()
+
 async function verificarIngressosDisponiveis(dateISO) {
-  if (Array.isArray(cacheDatas[dateISO])) {
-    return cacheDatas[dateISO].length > 0;
+  if (cacheDatas[dateISO]) {
+    return cacheDatas[dateISO].status;
   }
 
   try {
     const response = await fetch(API_BASE + dateISO);
 
+    if (response.status === 409) {
+      const errorData = await response.json();
+
+      cacheDatas[dateISO] = {
+        status: "bilheteria",
+        message: errorData.message || "",
+        tickets: []
+      };
+
+      return "bilheteria";
+    }
+
     if (!response.ok) {
-      cacheDatas[dateISO] = [];
-      return false;
+      cacheDatas[dateISO] = {
+        status: "fechado",
+        tickets: []
+      };
+
+      return "fechado";
     }
 
     const data = await response.json();
-    cacheDatas[dateISO] = normalizeTickets(data);
+    const tickets = normalizeTickets(data);
 
-    return cacheDatas[dateISO].length > 0;
+    cacheDatas[dateISO] = {
+      status: tickets.length > 0 ? "online" : "fechado",
+      tickets
+    };
+
+    return cacheDatas[dateISO].status;
   } catch {
-    cacheDatas[dateISO] = [];
-    return false;
+    cacheDatas[dateISO] = {
+      status: "fechado",
+      tickets: []
+    };
+
+    return "fechado";
   }
 }
 
@@ -144,35 +170,29 @@ async function selectClosedDate(dateISO) {
 
   const nextDate = await findNextOpenDate(dateISO);
 
-  closedMessage.innerHTML = `
-    <strong>Parque fechado nesta data</strong>
+closedMessage.innerHTML = `
+  <strong>Parque fechado nesta data</strong>
 
-    <p>
-      🎟 Compras para utilização no mesmo dia são realizadas
-      exclusivamente na bilheteria do parque.
-    </p>
+  <p>
+    Não há funcionamento do parque nesta data.
+  </p>
 
-    <p>
-      💻 Compras online devem ser realizadas com pelo menos
-      1 dia de antecedência.
-    </p>
-
-    ${
-      nextDate
-        ? `
-          <p>
-            <strong>Próxima data de abertura:</strong><br>
-            ${formatDateBR(nextDate)}
-          </p>
-        `
-        : `
-          <p>
-            Não encontramos uma próxima data disponível no momento.
-          </p>
-        `
-    }
-  `;
-}
+  ${
+    nextDate
+      ? `
+        <p>
+          <strong>Próxima data disponível:</strong><br>
+          ${formatDateBR(nextDate)}
+        </p>
+      `
+      : `
+        <p>
+          Não encontramos uma próxima data disponível no momento.
+        </p>
+      `
+  }
+`;
+} // FECHA selectClosedDate()
 
 function selectToday(dateISO) {
   selectedDate = null;
@@ -210,17 +230,17 @@ async function selectDate(dateISO) {
 
   ticketsList.innerHTML = `<div class="loading">Carregando ingressos disponíveis...</div>`;
 
-  let tickets = cacheDatas[dateISO];
+let tickets = cacheDatas[dateISO]?.tickets || [];
 
-  if (!tickets) {
-    await verificarIngressosDisponiveis(dateISO);
-    tickets = cacheDatas[dateISO] || [];
-  }
+if (!tickets.length) {
+  await verificarIngressosDisponiveis(dateISO);
+  tickets = cacheDatas[dateISO]?.tickets || [];
+}
 
-  if (!tickets.length) {
-    selectClosedDate(dateISO);
-    return;
-  }
+if (!tickets.length) {
+  selectClosedDate(dateISO);
+  return;
+}
 
   renderTickets(tickets);
 }
@@ -316,10 +336,17 @@ async function findNextOpenDate(fromDateISO) {
     const next = new Date(start);
     next.setDate(start.getDate() + i);
 
-    const dateISO = toISODate(next.getFullYear(), next.getMonth(), next.getDate());
-    const hasTickets = await verificarIngressosDisponiveis(dateISO);
+    const dateISO = toISODate(
+      next.getFullYear(),
+      next.getMonth(),
+      next.getDate()
+    );
 
-    if (hasTickets) return dateISO;
+    const status = await verificarIngressosDisponiveis(dateISO);
+
+    if (status === "online" || status === "bilheteria") {
+      return dateISO;
+    }
   }
 
   return null;
