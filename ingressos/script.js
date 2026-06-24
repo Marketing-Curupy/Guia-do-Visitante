@@ -67,18 +67,18 @@ async function renderCalendar() {
 
     if (dateISO === today) classes.push("today");
 
-    if (temIngresso && dateISO > today) {
-      classes.push("available");
+if (temIngresso && dateISO === today) {
+  classes.push("today-open");
 
-      html += `
-        <button class="${classes.join(" ")}" onclick="selectDate('${dateISO}')">
-          ${day}
-          ${temPromocao ? `<span class="promo-dot">%</span>` : ""}
-          <small>online</small>
-        </button>
-      `;
-      continue;
-    }
+  html += `
+    <button class="${classes.join(" ")}" onclick="selectToday('${dateISO}')">
+      ${day}
+      ${temPromocao ? `<span class="promo-dot">%</span>` : ""}
+      <small>bilheteria</small>
+    </button>
+  `;
+  continue;
+}
 
     if (temIngresso && dateISO === today) {
       classes.push("today-blocked");
