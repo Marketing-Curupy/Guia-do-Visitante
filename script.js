@@ -40,6 +40,7 @@ function formatarData(dataISO) {
   });
 }
 
+
 function formatarMoeda(valor) {
   if (valor === "" || valor === null || valor === undefined) return "";
 
