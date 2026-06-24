@@ -735,7 +735,7 @@ button{
 ======================================================= */
 
 .footer-curupy{
-  margin-top:70px;
+  margin-top:42px;
   position:relative;
   overflow:hidden;
   color:#fff;
@@ -744,13 +744,8 @@ button{
     url("assets/footer-curupy.svg") center top / 100% auto no-repeat,
     linear-gradient(180deg,#006da9 0%,#004676 100%);
 
-  padding-top:140px;
+  padding-top:240px;
   padding-bottom:30px;
-}
-
-.footer-curupy::before,
-.footer-curupy::after{
-  display:none;
 }
 
 .footer-inner{
@@ -759,7 +754,7 @@ button{
   padding:20px 24px;
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
-  gap:40px;
+  gap:80px;
   align-items:center;
   position:relative;
   z-index:2;
@@ -771,11 +766,11 @@ button{
   align-items:center;
 }
 
-.footer-logo img,
-.footer-inner img{
-  width:180px;
-  max-width:100%;
-  display:block;
+.footer-logo{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  grid-column:2;
 }
 
 .footer-contato{
@@ -818,14 +813,14 @@ button{
 
 .social-icons{
   display:flex;
-  gap:10px;
+  gap:12px;
   margin-top:12px;
   justify-content:flex-end;
 }
 
 .social-icons a{
-  width:40px;
-  height:40px;
+  width:44px;
+  height:44px;
   border-radius:50%;
   background:#fff;
   color:#004676;
@@ -833,35 +828,20 @@ button{
   align-items:center;
   justify-content:center;
   text-decoration:none;
-  font-weight:900;
   transition:.25s;
+}
+
+.social-icons a i{
+  font-size:22px;
+  line-height:1;
 }
 
 .social-icons a:hover{
   transform:translateY(-3px);
 }
 
-.social-icons a[href*="instagram"]::before{
-  content:"◎";
-  font-size:20px;
-}
-
-.social-icons a[href*="facebook"]::before{
-  content:"f";
-  font-size:20px;
-}
-
-.social-icons a[href*="tiktok"]::before{
-  content:"♪";
-  font-size:18px;
-}
-
-.social-icons a[href*="youtube"]::before{
-  content:"▶";
-  font-size:16px;
-}
-
 .footer-slogan{
+  grid-column:1 / -1;
   text-align:center;
   font-size:32px;
   font-weight:900;
@@ -885,11 +865,10 @@ button{
 /* TABLET */
 
 @media(max-width:900px){
-
   .footer-curupy{
-    padding-top:100px;
+    padding-top:150px;
     background:
-      url("assets/footer-curupy-bg.svg") center top / 140% auto no-repeat,
+      url("assets/footer-curupy.svg") center top / 100% auto no-repeat,
       linear-gradient(180deg,#006da9 0%,#004676 100%);
   }
 
@@ -908,8 +887,13 @@ button{
     justify-content:center;
   }
 
+  .footer-logo{
+    grid-column:auto;
+  }
+
   .footer-logo img,
   .footer-inner img{
+    width:150px;
     margin:0 auto;
   }
 
@@ -921,33 +905,37 @@ button{
 /* MOBILE */
 
 @media(max-width:768px){
-
   .footer-curupy{
     margin-top:50px;
-    padding-top:85px;
-
+    padding-top:120px;
     background:
-      url("assets/footer-curupy-bg.svg") center top / 190% auto no-repeat,
+      url("assets/footer-curupy.svg") center top / 100% auto no-repeat,
       linear-gradient(180deg,#006da9 0%,#004676 100%);
   }
 
   .footer-inner{
+    grid-template-columns:1fr;
     padding:16px;
     gap:18px;
+    text-align:center;
+  }
+
+  .footer-logo{
+    grid-column:auto;
   }
 
   .footer-logo img,
   .footer-inner img{
-    width:150px;
+    width:135px;
   }
 
-  .footer-contato strong,
-  .footer-social strong{
-    font-size:16px;
+  .footer-contato,
+  .footer-social{
+    text-align:center;
   }
 
-  .footer-contato span{
-    font-size:13px;
+  .social-icons{
+    justify-content:center;
   }
 
   .footer-whatsapp{
@@ -964,27 +952,6 @@ button{
     padding:10px 16px 0;
   }
 }
-
-/* AJUDA FIXA */
-
-.ajuda{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:998;
-  border:0;
-  border-radius:999px;
-  padding:15px 22px;
-  background:var(--azul);
-  color:#fff;
-  font-weight:900;
-  box-shadow:0 14px 34px rgba(0,0,0,.25);
-}
-
-.barra-acoes-mobile{
-  display:none;
-}
-
 /* MODAIS */
 
 .modal{
