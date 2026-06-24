@@ -96,9 +96,15 @@ body {
   outline: 3px solid #F3CB05;
 }
 
-.day.today-blocked {
-  background: #edf0f2;
-  color: #7d8d96;
+.day.today-open {
+  background: #fff7d6;
+  border: 3px solid #ffc400;
+  color: #0578A7;
+}
+
+.day.today-open small {
+  color: #0578A7;
+  font-weight: 900;
 }
 
 .day.closed {
