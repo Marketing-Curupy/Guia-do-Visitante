@@ -728,10 +728,12 @@ button{
   margin-top:42px;
   position:relative;
   overflow:hidden;
-  color:#fff;
+  color:#073b66;
+
   background:
     url("assets/footer-curupy.svg") center top / 100% auto no-repeat,
-    linear-gradient(180deg,#006da9 0%,#004676 100%);
+    #ffffff;
+
   padding-top:160px;
   padding-bottom:30px;
 }
