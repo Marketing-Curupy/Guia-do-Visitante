@@ -752,10 +752,11 @@ button{
   margin-top:42px;
   position:relative;
   overflow:hidden;
-  color:#073b66;
+  color:#fff;
 
   background:
     url("assets/footer-curupy.svg") center top / 100% auto no-repeat,
+    linear-gradient(180deg,#006da9 0%,#004676 100%) center 170px / 100% calc(100% - 170px) no-repeat,
     #ffffff;
 
   padding-top:160px;
