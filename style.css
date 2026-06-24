@@ -741,7 +741,7 @@ button{
   color:#fff;
 
   background:
-    url("assets/footer-curupy-bg.svg") center top / 100% auto no-repeat,
+    url("assets/footer-curupy.svg") center top / 100% auto no-repeat,
     linear-gradient(180deg,#006da9 0%,#004676 100%);
 
   padding-top:140px;
