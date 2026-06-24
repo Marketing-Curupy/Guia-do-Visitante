@@ -749,17 +749,16 @@ button{
 /* FOOTER */
 
 .footer-curupy{
-  margin-top:42px;
   position:relative;
   overflow:hidden;
-  color:#fff;
+}
 
-  background:
-    url("assets/footer-curupy.svg") center top / 100% auto no-repeat,
-    #00629b;
-
-  padding-top:240px;
-  padding-bottom:30px;
+.footer-curupy::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("assets/footer-curupy.svg") center top/100% auto no-repeat;
+  pointer-events:none;
 }
 
 .footer-inner{
