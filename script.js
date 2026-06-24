@@ -875,5 +875,4 @@ function ativarBarraFixaAoRolar() {
     } else {
       barra.classList.remove("fixa");
     }
-  });
 }
