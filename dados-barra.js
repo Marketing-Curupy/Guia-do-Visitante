@@ -3,85 +3,60 @@
 // Dados vindos da planilha
 // ========================================
 
-const URL_CALENDARIO_FUNCIONAMENTO =
-  `https://docs.google.com/spreadsheets/d/${PLANILHA_ID}/gviz/tq?tqx=out:csv&gid=1837692081`;
+const PLANILHA_ID = "1bk3bk1CcHgB1PmAMN-yZzR4ZnSaoxNLhiBfa4BcPEUI";
+
+const URL_PARAMETROS =
+  `https://docs.google.com/spreadsheets/d/${PLANILHA_ID}/gviz/tq?tqx=out:csv&gid=1869682511`;
 
 
 // ========================================
-// LEITOR CSV
+// DADOS GLOBAIS
 // ========================================
 
-async function carregarCSV(url) {
-  const response = await fetch(url);
-  const texto = await response.text();
+let CONFIG = {
+  ingressosOnline: "",
+  googleMaps: "",
+  whatsappGeral: ""
+};
 
-  return texto
-    .trim()
-    .split("\n")
-    .map(linha => {
-      return linha
-        .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
-        .map(celula =>
-          celula
-            .replace(/^"|"$/g, "")
-            .replace(/""/g, '"')
-            .trim()
-        );
-    });
-}
+let VALORES_BILHETERIA = {};
+
+let HORARIOS_FUNCIONAMENTO = {};
 
 
 // ========================================
-// CALENDÁRIO DE FUNCIONAMENTO
-// Agora vem da planilha
+// CONFIG, VALORES E HORÁRIOS
+// Agora vêm da planilha
 // ========================================
 
-let CALENDARIOS_FUNCIONAMENTO = [];
+async function carregarParametrosGerais() {
+  const linhas = await carregarCSV(URL_PARAMETROS);
 
-async function carregarCalendariosFuncionamento() {
-  const linhas = await carregarCSV(URL_CALENDARIO_FUNCIONAMENTO);
+  linhas.forEach(linha => {
+    const tipo = linha[0];
+    const coluna1 = linha[1];
+    const coluna2 = linha[2];
+    const coluna3 = linha[3];
+    const coluna4 = linha[4];
 
-  const cabecalho = linhas[0];
+    if (tipo === "config") {
+      CONFIG[coluna1] = coluna2;
+    }
 
-  const dados = linhas.slice(1).map(linha => {
-    const item = {};
-
-    cabecalho.forEach((coluna, index) => {
-      item[coluna] = linha[index] || "";
-    });
-
-    return item;
-  });
-
-  const meses = {};
-
-  dados.forEach(item => {
-    if (!item.mes || !item.ano || !item.dia || !item.status) return;
-
-    const chave = `${item.mes}-${item.ano}`;
-
-    if (!meses[chave]) {
-      meses[chave] = {
-        mes: item.mes,
-        ano: item.ano,
-        observacao: item.observacao || "",
-        dias: []
+    if (tipo === "valor") {
+      VALORES_BILHETERIA[coluna1] = {
+        visitante: Number(coluna2),
+        kids: Number(coluna3),
+        convidadoSocio: Number(coluna4)
       };
     }
 
-    const dia = {
-      dia: Number(item.dia),
-      status: item.status
-    };
-
-    if (item.nome) {
-      dia.nome = item.nome;
+    if (tipo === "horario") {
+      HORARIOS_FUNCIONAMENTO[coluna1] = {
+        label: coluna2,
+        horario: coluna3,
+        classe: coluna4
+      };
     }
-
-    meses[chave].dias.push(dia);
   });
-
-  CALENDARIOS_FUNCIONAMENTO = Object.values(meses);
-
-  return CALENDARIOS_FUNCIONAMENTO;
 }
