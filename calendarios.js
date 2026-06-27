@@ -18,16 +18,34 @@ async function carregarCSV(url) {
   return texto
     .trim()
     .split("\n")
-    .map(linha => {
+    .map((linha) => {
       return linha
         .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
-        .map(celula =>
+        .map((celula) =>
           celula
             .replace(/^"|"$/g, "")
             .replace(/""/g, '"')
             .trim()
         );
     });
+}
+
+
+// ========================================
+// CONVERTER VALORES
+// Aceita: 57 | 57.00 | 57,00 | R$ 57,00
+// ========================================
+
+function converterValor(valor) {
+  if (valor === "" || valor === null || valor === undefined) return 0;
+
+  return Number(
+    String(valor)
+      .replace("R$", "")
+      .replace(/\./g, "")
+      .replace(",", ".")
+      .trim()
+  ) || 0;
 }
 
 
@@ -41,9 +59,14 @@ let CALENDARIOS_FUNCIONAMENTO = [];
 async function carregarCalendariosFuncionamento() {
   const linhas = await carregarCSV(URL_CALENDARIO_FUNCIONAMENTO);
 
+  if (!linhas.length) {
+    CALENDARIOS_FUNCIONAMENTO = [];
+    return CALENDARIOS_FUNCIONAMENTO;
+  }
+
   const cabecalho = linhas[0];
 
-  const dados = linhas.slice(1).map(linha => {
+  const dados = linhas.slice(1).map((linha) => {
     const item = {};
 
     cabecalho.forEach((coluna, index) => {
@@ -55,7 +78,7 @@ async function carregarCalendariosFuncionamento() {
 
   const meses = {};
 
-  dados.forEach(item => {
+  dados.forEach((item) => {
     if (!item.mes || !item.ano || !item.dia || !item.status) return;
 
     const chave = `${item.mes}-${item.ano}`;
@@ -71,7 +94,11 @@ async function carregarCalendariosFuncionamento() {
 
     const dia = {
       dia: Number(item.dia),
-      status: item.status
+      status: item.status,
+
+      visitante: converterValor(item.visitante),
+      kids: converterValor(item.kids),
+      convidadoSocio: converterValor(item.convidadoSocio)
     };
 
     if (item.nome) {
@@ -81,7 +108,10 @@ async function carregarCalendariosFuncionamento() {
     meses[chave].dias.push(dia);
   });
 
-  CALENDARIOS_FUNCIONAMENTO = Object.values(meses);
+  CALENDARIOS_FUNCIONAMENTO = Object.values(meses).map((calendario) => {
+    calendario.dias.sort((a, b) => a.dia - b.dia);
+    return calendario;
+  });
 
   return CALENDARIOS_FUNCIONAMENTO;
 }
