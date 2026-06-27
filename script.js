@@ -608,14 +608,30 @@ function abrirEmBreve(titulo) {
 /* ============================= */
 
 function abrirMapa() {
-  if (typeof CONFIG !== "undefined" && CONFIG.googleMaps) {
-    window.open(CONFIG.googleMaps, "_blank");
+  const destino = "-11.8015771,-55.4722897";
+
+  if (!navigator.geolocation) {
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${destino}`, "_blank");
     return;
   }
 
-  window.open("https://www.google.com/maps/dir/?api=1&destination=-11.8015771,-55.4722897&travelmode=driving", "_blank");
-}
+  navigator.geolocation.getCurrentPosition(
+    function (pos) {
+      const origem = `${pos.coords.latitude},${pos.coords.longitude}`;
 
+      window.open(
+        `https://www.google.com/maps/dir/?api=1&origin=${origem}&destination=${destino}&travelmode=driving`,
+        "_blank"
+      );
+    },
+    function () {
+      window.open(
+        `https://www.google.com/maps/dir/?api=1&destination=${destino}&travelmode=driving`,
+        "_blank"
+      );
+    }
+  );
+}
 /* ============================= */
 /* GALERIA */
 /* ============================= */
