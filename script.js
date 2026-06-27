@@ -431,9 +431,6 @@ function obterNumeroMes(nomeMes) {
   return meses[String(nomeMes).trim().toLowerCase()];
 }
 
-  return meses[String(nomeMes).trim().toLowerCase()];
-}
-
 function mostrarCalendario(index) {
   const calendario = CALENDARIOS_FUNCIONAMENTO[index];
   const destino = $("#calendarioRenderizado");
@@ -441,7 +438,11 @@ function mostrarCalendario(index) {
   if (!calendario || !destino) return;
 
   const mesNumero = obterNumeroMes(calendario.mes);
-  if (mesNumero === undefined) return;
+
+  if (mesNumero === undefined) {
+    destino.innerHTML = "<p>Mês inválido na planilha.</p>";
+    return;
+  }
 
   const primeiroDiaSemana = new Date(
     Number(calendario.ano),
@@ -522,6 +523,7 @@ function mostrarCalendario(index) {
       </div>
     </div>
   `;
+}
 }
 
 function filtrarCalendario(classe) {
