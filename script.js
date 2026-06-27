@@ -613,7 +613,7 @@ function abrirMapa() {
     return;
   }
 
-  window.open("https://www.google.com/maps/search/?api=1&query=Curupy+Acqua+Park", "_blank");
+  window.open("google.com/maps?hl=pt-BR&gl=BR&um=1&ie=UTF-8&fb=1&sa=X&geocode=KQPiqoXSKgiTMayU4OV9gqUM&daddr=Curupy+Acqua+Park+Hotel+OFICIAL,+Comunidade+Nossa+Senhora+Aparecida+-+Estrada+Adalgisa+Chácara+181+-+Zona+Rural,+Sinop+-+MT,+78559-899", "_blank");
 }
 
 /* ============================= */
@@ -646,12 +646,12 @@ const AJUDA = [
   {
     pergunta: "Criança paga ingresso?",
     resposta:
-      "Crianças de 0 a 4 anos têm entrada gratuita mediante documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. Caso não seja apresentado o ducomento oficial da crinça comprovando a idade o valor cobrado será o valor integral conforme a tabela vigente do dia na bilheteria.A partir de 12 anos utilizam ingresso Individual."
+      "Crianças de 0 a 4 anos têm entrada gratuita mediante apresentação do documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. Caso não seja apresentado o ducomento oficial da criança comprovando a idade o valor cobrado será o valor integral conforme a tabela vigente do dia na bilheteria.A partir de 12 anos utilizam ingresso Individual."
   },
   {
     pergunta: "Posso levar alimentos e bebidas?",
     resposta:
-      "Não é permitida a entrada com alimentos e bebidas. Exceções: água para consumo pessoal, em dúvida entre em contato com a portaria do park"
+      "Não é permitida a entrada de alimentos e bebidas no parque. São permitidos apenas água, tereré e chimarrão. Em caso de dúvidas, entre em contato com nossa Central de Atendimento."
   },
   {
     pergunta: "Tem estacionamento?",
@@ -661,17 +661,19 @@ const AJUDA = [
   {
     pergunta: "Tem guarda-volumes?",
     resposta:
-      "Sim. O guarda-volumes fica no espaço da lanchonete e possui cobrança à parte."
+      "Sim. Disponibilizamos guarda-volumes no espaço da lanchonete. O serviço possui uma taxa de utilização pago à parte."
   },
   {
     pergunta: "Quais formas de pagamento são aceitas?",
     resposta:
-      "Aceitamos PIX, cartões de débito, cartões de crédito e Pulseira consumo. O dinheiro pode ser utilizado para realizar recargas da pulseira na sorveteria dentro do parque."
+      "Aceitamos PIX, cartões de débito e crédito e a Pulseira de Consumo. Se preferir pagar em dinheiro, basta recarregar sua Pulseira de Consumo em nosso ponto de recarga, em anexo a sorveteria, dentro do parque."
   },
   {
     pergunta: "Posso sair e retornar ao parque no mesmo dia?",
     resposta:
-      "Sim, desde que a pulseira de acesso do dia permaneça intacta. Caso seja retirada ou danificada, será necessário adquirir um novo Day Use."
+      "Sim! Você pode sair e retornar ao parque no mesmo dia, desde que a pulseira de acesso permaneça intacta e devidamente presa ao pulso.
+
+Caso a pulseira seja retirada, rompida ou danificada, ela perderá a validade e não poderá ser reutilizada. Nessa situação, será necessário adquirir um novo ingresso para acessar o parque."
   }
 ];
 
