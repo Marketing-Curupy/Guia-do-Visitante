@@ -684,13 +684,12 @@ const AJUDA = [
     resposta:
       "Aceitamos PIX, cartões de débito e crédito e a Pulseira de Consumo. Se preferir pagar em dinheiro, basta recarregar sua Pulseira de Consumo em nosso ponto de recarga, em anexo a sorveteria, dentro do parque."
   },
-  {
-    pergunta: "Posso sair e retornar ao parque no mesmo dia?",
-    resposta:
-      "Sim! Você pode sair e retornar ao parque no mesmo dia, desde que a pulseira de acesso permaneça intacta e devidamente presa ao pulso.
+{
+  pergunta: "Posso sair e retornar ao parque no mesmo dia?",
+  resposta: `Sim! Você pode sair e retornar ao parque no mesmo dia, desde que a pulseira de acesso permaneça intacta e devidamente presa ao pulso.
 
-Caso a pulseira seja retirada, rompida ou danificada, ela perderá a validade e não poderá ser reutilizada. Nessa situação, será necessário adquirir um novo ingresso para acessar o parque."
-  }
+Caso a pulseira seja retirada, rompida ou danificada, ela perderá a validade e não poderá ser reutilizada. Nessa situação, será necessário adquirir um novo ingresso para acessar o parque.`
+}
 ];
 
 function renderizarAjuda() {
