@@ -155,22 +155,9 @@ function buscarProximaAberturaNoCalendario() {
 }
 
 function obterValoresDoDia(dia) {
-  return {
-    visitante:
-      dia.visitante ||
-      VALORES_BILHETERIA[dia.status]?.visitante ||
-      0,
+  if (!dia || !dia.valores) return [];
 
-    kids:
-      dia.kids ||
-      VALORES_BILHETERIA[dia.status]?.kids ||
-      0,
-
-    convidadoSocio:
-      dia.convidadoSocio ||
-      VALORES_BILHETERIA[dia.status]?.convidadoSocio ||
-      0
-  };
+  return dia.valores;
 }
 
 function gerarValoresBarra(dia) {
