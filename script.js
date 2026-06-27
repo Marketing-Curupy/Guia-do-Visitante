@@ -691,6 +691,8 @@ const AJUDA = [
 Caso a pulseira seja retirada, rompida ou danificada, ela perderá a validade e não poderá ser reutilizada. Nessa situação, será necessário adquirir um novo ingresso para acessar o parque.`
 }
 
+];
+
 function renderizarAjuda() {
   const container = $("#ajudaContainer");
   if (!container) return;
