@@ -55,23 +55,50 @@ function formatarMoeda(valor) {
 /* ============================= */
 
 function parqueJaFechouHoje() {
-  const agora = new Date();
-  const hora = agora.getHours();
-  const minuto = agora.getMinutes();
+  const diaAtual = buscarDiaAtualNoCalendario();
 
-  return hora > 17 || (hora === 17 && minuto >= 30);
+  if (!diaAtual || diaAtual.status === "fechado") return false;
+
+  const info = HORARIOS_FUNCIONAMENTO[diaAtual.status];
+
+  if (!info || !info.horario || info.horario === "Fechado") return false;
+
+  const partes = info.horario.split("às");
+  if (partes.length < 2) return false;
+
+  const horarioFinal = partes[1].trim();
+  const match = horarioFinal.match(/(\d{1,2})h(?:(\d{2}))?/);
+
+  if (!match) return false;
+
+  const horaFechamento = Number(match[1]);
+  const minutoFechamento = Number(match[2] || 0);
+
+  const agora = new Date();
+  const horaAtual = agora.getHours();
+  const minutoAtual = agora.getMinutes();
+
+  return (
+    horaAtual > horaFechamento ||
+    (horaAtual === horaFechamento && minutoAtual >= minutoFechamento)
+  );
 }
 
 function montarDataISO(ano, mesNome, dia) {
-  const mesNumero = obterNumeroMes(mesNome) + 1;
+  const mesNumero = obterNumeroMes(mesNome);
 
-  return `${ano}-${String(mesNumero).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+  if (mesNumero === undefined) return "";
+
+  return `${ano}-${String(mesNumero + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
 }
 
 function buscarDiaAtualNoCalendario() {
   const hoje = hojeISO();
 
-  if (typeof CALENDARIOS_FUNCIONAMENTO === "undefined") {
+  if (
+    typeof CALENDARIOS_FUNCIONAMENTO === "undefined" ||
+    !CALENDARIOS_FUNCIONAMENTO.length
+  ) {
     return null;
   }
 
@@ -93,10 +120,11 @@ function buscarDiaAtualNoCalendario() {
   return null;
 }
 
-function buscarProximaAberturaNoCalendario() {
-  const hoje = hojeISO();
-
-  if (typeof CALENDARIOS_FUNCIONAMENTO === "undefined") {
+function buscarProximaAberturaDepoisDe(dataBaseISO) {
+  if (
+    typeof CALENDARIOS_FUNCIONAMENTO === "undefined" ||
+    !CALENDARIOS_FUNCIONAMENTO.length
+  ) {
     return null;
   }
 
@@ -106,7 +134,7 @@ function buscarProximaAberturaNoCalendario() {
     calendario.dias.forEach((dia) => {
       const dataISO = montarDataISO(calendario.ano, calendario.mes, dia.dia);
 
-      if (dataISO > hoje && dia.status !== "fechado") {
+      if (dataISO > dataBaseISO && dia.status !== "fechado") {
         const info = HORARIOS_FUNCIONAMENTO[dia.status];
 
         aberturas.push({
@@ -123,19 +151,31 @@ function buscarProximaAberturaNoCalendario() {
   return aberturas.sort((a, b) => a.data.localeCompare(b.data))[0] || null;
 }
 
-function gerarValoresBarra(status) {
-  if (
-    typeof VALORES_BILHETERIA !== "undefined" &&
-    VALORES_BILHETERIA[status]
-  ) {
-    return VALORES_BILHETERIA[status];
-  }
+function buscarProximaAberturaNoCalendario() {
+  return buscarProximaAberturaDepoisDe(hojeISO());
+}
 
+function obterValoresDoDia(dia) {
   return {
-    visitante: 0,
-    kids: 0,
-    convidadoSocio: 0
+    visitante:
+      dia.visitante ||
+      VALORES_BILHETERIA[dia.status]?.visitante ||
+      0,
+
+    kids:
+      dia.kids ||
+      VALORES_BILHETERIA[dia.status]?.kids ||
+      0,
+
+    convidadoSocio:
+      dia.convidadoSocio ||
+      VALORES_BILHETERIA[dia.status]?.convidadoSocio ||
+      0
   };
+}
+
+function gerarValoresBarra(dia) {
+  return obterValoresDoDia(dia);
 }
 
 function renderizarBarra() {
@@ -151,7 +191,7 @@ function renderizarBarra() {
 
   if (hojeAberto) {
     const info = HORARIOS_FUNCIONAMENTO[diaAtual.status];
-    const valores = gerarValoresBarra(diaAtual.status);
+    const valores = gerarValoresBarra(diaAtual);
 
     barra.innerHTML = `
       <div class="barra-inner">
@@ -339,8 +379,12 @@ function renderizarCalendarios() {
   const container = $("#calendariosContainer");
   if (!container) return;
 
-  if (typeof CALENDARIOS_FUNCIONAMENTO === "undefined") {
-    container.innerHTML = "<p>Calendário indisponível no momento.</p>";
+  if (
+    typeof CALENDARIOS_FUNCIONAMENTO === "undefined" ||
+    !CALENDARIOS_FUNCIONAMENTO.length
+  ) {
+    container.innerHTML =
+      "<p>Calendário indisponível no momento. Tente recarregar a página.</p>";
     return;
   }
 
@@ -369,21 +413,22 @@ function renderizarCalendarios() {
 
 function obterNumeroMes(nomeMes) {
   const meses = {
-    Janeiro: 0,
-    Fevereiro: 1,
-    Março: 2,
-    Abril: 3,
-    Maio: 4,
-    Junho: 5,
-    Julho: 6,
-    Agosto: 7,
-    Setembro: 8,
-    Outubro: 9,
-    Novembro: 10,
-    Dezembro: 11
+    janeiro: 0,
+    fevereiro: 1,
+    março: 2,
+    marco: 2,
+    abril: 3,
+    maio: 4,
+    junho: 5,
+    julho: 6,
+    agosto: 7,
+    setembro: 8,
+    outubro: 9,
+    novembro: 10,
+    dezembro: 11
   };
 
-  return meses[nomeMes];
+  return meses[String(nomeMes).trim().toLowerCase()];
 }
 
 function mostrarCalendario(index) {
@@ -393,6 +438,7 @@ function mostrarCalendario(index) {
   if (!calendario || !destino) return;
 
   const mesNumero = obterNumeroMes(calendario.mes);
+  if (mesNumero === undefined) return;
 
   const primeiroDiaSemana = new Date(
     Number(calendario.ano),
@@ -485,10 +531,10 @@ function filtrarCalendario(classe) {
   });
 }
 
-function gerarValoresBilheteria(status) {
-  const valores = VALORES_BILHETERIA[status];
+function gerarValoresBilheteria(dia) {
+  const valores = obterValoresDoDia(dia);
 
-  if (!valores) return "";
+  if (!valores.visitante) return "";
 
   return `
     <div class="dia-bloco">
@@ -512,9 +558,12 @@ function abrirInfoDia(indexCalendario, numeroDia) {
 
   if (!info || !conteudo) return;
 
+  const dataISO = montarDataISO(calendario.ano, calendario.mes, numeroDia);
   const dataTexto = `${String(numeroDia).padStart(2, "0")} de ${calendario.mes} de ${calendario.ano}`;
 
   if (dia.status === "fechado") {
+    const proxima = buscarProximaAberturaDepoisDe(dataISO);
+
     conteudo.innerHTML = `
       <div class="dia-info fechado">
         <h2>📅 ${dataTexto}</h2>
@@ -524,7 +573,12 @@ function abrirInfoDia(indexCalendario, numeroDia) {
         </div>
 
         <p>O parque não estará em funcionamento nesta data.</p>
-        <p>Consulte outra data disponível no calendário para planejar sua visita.</p>
+
+        ${
+          proxima
+            ? `<p><strong>Próxima abertura:</strong> ${formatarData(proxima.data)} • ${proxima.horario}</p>`
+            : `<p>Consulte outra data disponível no calendário para planejar sua visita.</p>`
+        }
       </div>
     `;
 
@@ -545,7 +599,7 @@ function abrirInfoDia(indexCalendario, numeroDia) {
         <p>${info.horario}</p>
       </div>
 
-      ${gerarValoresBilheteria(dia.status)}
+      ${gerarValoresBilheteria(dia)}
 
       <div class="dia-bloco">
         <strong>📍 Como chegar</strong>
@@ -571,7 +625,6 @@ function abrirInfoDia(indexCalendario, numeroDia) {
 
   abrirModal("modalDiaCalendario");
 }
-
 /* ============================= */
 /* EM BREVE */
 /* ============================= */
