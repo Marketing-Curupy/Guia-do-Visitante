@@ -431,6 +431,9 @@ function obterNumeroMes(nomeMes) {
   return meses[String(nomeMes).trim().toLowerCase()];
 }
 
+  return meses[String(nomeMes).trim().toLowerCase()];
+}
+
 function mostrarCalendario(index) {
   const calendario = CALENDARIOS_FUNCIONAMENTO[index];
   const destino = $("#calendarioRenderizado");
