@@ -613,7 +613,7 @@ function abrirMapa() {
     return;
   }
 
-  window.open("google.com/maps?hl=pt-BR&gl=BR&um=1&ie=UTF-8&fb=1&sa=X&geocode=KQPiqoXSKgiTMayU4OV9gqUM&daddr=Curupy+Acqua+Park+Hotel+OFICIAL,+Comunidade+Nossa+Senhora+Aparecida+-+Estrada+Adalgisa+Chácara+181+-+Zona+Rural,+Sinop+-+MT,+78559-899", "_blank");
+  window.open("https://www.google.com/maps/dir/?api=1&destination=-11.8015771,-55.4722897&travelmode=driving", "_blank");
 }
 
 /* ============================= */
