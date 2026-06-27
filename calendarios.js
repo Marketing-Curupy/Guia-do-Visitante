@@ -1,99 +1,97 @@
 // ========================================
-// CALENDÁRIO DE FUNCIONAMENTO
-// Atualizar a cada mês ou a cada dois meses
+// GOOGLE SHEETS
+// Dados vindos da planilha
 // ========================================
 
-const CALENDARIOS_FUNCIONAMENTO = [
-  {
-    mes: "Junho",
-    ano: "2026",
-    observacao:
-      "Consulte abaixo os dias de funcionamento do parque em junho.",
-    dias: [
-      { dia: 1, status: "fechado" },
-      { dia: 2, status: "fechado" },
-      { dia: 3, status: "semana" },
-      { dia: 4, status: "feriado", nome: "Corpus Christi" },
-      { dia: 5, status: "semana" },
-      { dia: 6, status: "fimDeSemana" },
-      { dia: 7, status: "fimDeSemana" },
+const PLANILHA_ID = "1bk3bk1CcHgB1PmAMN-yZzR4ZnSaoxNLhiBfa4BcPEUI";
 
-      { dia: 8, status: "fechado" },
-      { dia: 9, status: "fechado" },
-      { dia: 10, status: "semana" },
-      { dia: 11, status: "semana" },
-      { dia: 12, status: "semana" },
-      { dia: 13, status: "feriado", nome: "Padroeiro de Sinop" },
-      { dia: 14, status: "fimDeSemana" },
+const URL_CALENDARIO_FUNCIONAMENTO =
+  `https://docs.google.com/spreadsheets/d/${PLANILHA_ID}/gviz/tq?tqx=out:csv&gid=1837692081`;
 
-      { dia: 15, status: "fechado" },
-      { dia: 16, status: "fechado" },
-      { dia: 17, status: "semana" },
-      { dia: 18, status: "semana" },
-      { dia: 19, status: "semana" },
-      { dia: 20, status: "fimDeSemana" },
-      { dia: 21, status: "fimDeSemana" },
 
-      { dia: 22, status: "fechado" },
-      { dia: 23, status: "fechado" },
-      { dia: 24, status: "semana" },
-      { dia: 25, status: "semana" },
-      { dia: 26, status: "semana" },
-      { dia: 27, status: "fimDeSemana" },
-      { dia: 28, status: "fimDeSemana" },
+// ========================================
+// LEITOR CSV
+// ========================================
 
-      { dia: 29, status: "fechado" },
-      { dia: 30, status: "fechado" }
-    ]
-  },
+async function carregarCSV(url) {
+  const response = await fetch(url);
+  const texto = await response.text();
 
-  {
-    mes: "Julho",
-    ano: "2026",
-    observacao:
-      "Mês de férias: parque aberto todos os dias em julho.",
-    dias: [
-      { dia: 1, status: "semana" },
-      { dia: 2, status: "semana" },
-      { dia: 3, status: "semana" },
-      { dia: 4, status: "fimDeSemana" },
-      { dia: 5, status: "fimDeSemana" },
+  return texto
+    .trim()
+    .split("\n")
+    .map(linha => {
+      return linha
+        .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+        .map(celula =>
+          celula
+            .replace(/^"|"$/g, "")
+            .replace(/""/g, '"')
+            .trim()
+        );
+    });
+}
 
-      { dia: 6, status: "semana" },
-      { dia: 7, status: "semana" },
-      { dia: 8, status: "semana" },
-      { dia: 9, status: "semana" },
-      { dia: 10, status: "semana" },
-      { dia: 11, status: "fimDeSemana" },
-      { dia: 12, status: "fimDeSemana" },
 
-      { dia: 13, status: "semana" },
-      { dia: 14, status: "semana" },
-      { dia: 15, status: "semana" },
-      { dia: 16, status: "semana" },
-      { dia: 17, status: "semana" },
-      { dia: 18, status: "fimDeSemana" },
-      { dia: 19, status: "fimDeSemana" },
+// ========================================
+// CALENDÁRIO DE FUNCIONAMENTO
+// Agora vem da planilha
+// ========================================
 
-      { dia: 20, status: "semana" },
-      { dia: 21, status: "semana" },
-      { dia: 22, status: "semana" },
-      { dia: 23, status: "semana" },
-      { dia: 24, status: "semana" },
-      { dia: 25, status: "fimDeSemana" },
-      { dia: 26, status: "fimDeSemana" },
+let CALENDARIOS_FUNCIONAMENTO = [];
 
-      { dia: 27, status: "semana" },
-      { dia: 28, status: "semana" },
-      { dia: 29, status: "semana" },
-      { dia: 30, status: "semana" },
-      { dia: 31, status: "semana" }
-    ]
-  }
-];
+async function carregarCalendariosFuncionamento() {
+  const linhas = await carregarCSV(URL_CALENDARIO_FUNCIONAMENTO);
+
+  const cabecalho = linhas[0];
+
+  const dados = linhas.slice(1).map(linha => {
+    const item = {};
+
+    cabecalho.forEach((coluna, index) => {
+      item[coluna] = linha[index] || "";
+    });
+
+    return item;
+  });
+
+  const meses = {};
+
+  dados.forEach(item => {
+    if (!item.mes || !item.ano || !item.dia || !item.status) return;
+
+    const chave = `${item.mes}-${item.ano}`;
+
+    if (!meses[chave]) {
+      meses[chave] = {
+        mes: item.mes,
+        ano: item.ano,
+        observacao: item.observacao || "",
+        dias: []
+      };
+    }
+
+    const dia = {
+      dia: Number(item.dia),
+      status: item.status
+    };
+
+    if (item.nome) {
+      dia.nome = item.nome;
+    }
+
+    meses[chave].dias.push(dia);
+  });
+
+  CALENDARIOS_FUNCIONAMENTO = Object.values(meses);
+
+  return CALENDARIOS_FUNCIONAMENTO;
+}
+
 
 // ========================================
 // TIPOS DE FUNCIONAMENTO
+// Mantém igual para preservar o layout
 // ========================================
 
 const HORARIOS_FUNCIONAMENTO = {
@@ -120,4 +118,4 @@ const HORARIOS_FUNCIONAMENTO = {
     horario: "Fechado",
     classe: "dia-fechado"
   }
-}
+};
