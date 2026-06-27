@@ -3,8 +3,6 @@
 // Dados vindos da planilha
 // ========================================
 
-const PLANILHA_ID = "1bk3bk1CcHgB1PmAMN-yZzR4ZnSaoxNLhiBfa4BcPEUI";
-
 const URL_CALENDARIO_FUNCIONAMENTO =
   `https://docs.google.com/spreadsheets/d/${PLANILHA_ID}/gviz/tq?tqx=out:csv&gid=1837692081`;
 
@@ -87,35 +85,3 @@ async function carregarCalendariosFuncionamento() {
 
   return CALENDARIOS_FUNCIONAMENTO;
 }
-
-
-// ========================================
-// TIPOS DE FUNCIONAMENTO
-// Mantém igual para preservar o layout
-// ========================================
-
-const HORARIOS_FUNCIONAMENTO = {
-  semana: {
-    label: "Parque aberto",
-    horario: "09h às 17h30",
-    classe: "dia-semana"
-  },
-
-  fimDeSemana: {
-    label: "Parque aberto",
-    horario: "08h30 às 17h30",
-    classe: "dia-fim-semana"
-  },
-
-  feriado: {
-    label: "Parque aberto",
-    horario: "08h30 às 17h30",
-    classe: "dia-feriado"
-  },
-
-  fechado: {
-    label: "Parque fechado",
-    horario: "Fechado",
-    classe: "dia-fechado"
-  }
-};
