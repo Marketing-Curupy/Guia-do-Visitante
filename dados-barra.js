@@ -19,20 +19,17 @@ let CONFIG = {
   whatsappGeral: ""
 };
 
-let VALORES_BILHETERIA = {};
-
 let HORARIOS_FUNCIONAMENTO = {};
 
 
 // ========================================
-// CONFIG, VALORES E HORÁRIOS
-// Agora vêm da planilha
+// CONFIG E HORÁRIOS
 // ========================================
 
 async function carregarParametrosGerais() {
   const linhas = await carregarCSV(URL_PARAMETROS);
 
-  linhas.forEach(linha => {
+  linhas.forEach((linha) => {
     const tipo = linha[0];
     const coluna1 = linha[1];
     const coluna2 = linha[2];
@@ -41,14 +38,6 @@ async function carregarParametrosGerais() {
 
     if (tipo === "config") {
       CONFIG[coluna1] = coluna2;
-    }
-
-    if (tipo === "valor") {
-      VALORES_BILHETERIA[coluna1] = {
-        visitante: Number(coluna2),
-        kids: Number(coluna3),
-        convidadoSocio: Number(coluna4)
-      };
     }
 
     if (tipo === "horario") {
