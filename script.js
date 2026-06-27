@@ -823,16 +823,33 @@ function ativarAnimacoes() {
 /* INICIALIZAÇÃO */
 /* ============================= */
 document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    await carregarParametrosGerais();
+    await carregarCalendariosFuncionamento();
 
-  // Carrega os dados da planilha
-  await carregarParametrosGerais();
-  await carregarCalendariosFuncionamento();
+    console.log("CONFIG", CONFIG);
+    console.log("VALORES_BILHETERIA", VALORES_BILHETERIA);
+    console.log("HORARIOS_FUNCIONAMENTO", HORARIOS_FUNCIONAMENTO);
+    console.log("CALENDARIOS_FUNCIONAMENTO", CALENDARIOS_FUNCIONAMENTO);
+  } catch (erro) {
+    console.error("Erro ao carregar dados da planilha:", erro);
 
-  // Agora renderiza a interface
+    const barra = document.getElementById("barraStatus");
+    if (barra) {
+      barra.innerHTML = `
+        <div class="barra-inner barra-fechado">
+          <div class="barra-status">
+            <strong style="color:#e03131;">⚠️ Dados indisponíveis</strong>
+            <span>Não foi possível carregar a planilha.</span>
+          </div>
+        </div>
+      `;
+    }
+  }
+
   renderizarBarra();
   renderizarAjuda();
   ativarAnimacoes();
-
   ativarBarraFixaAoRolar();
 
   const btnMapa = $("#btnMapa");
@@ -848,7 +865,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   });
-
 });
 
 /* ============================= */
