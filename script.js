@@ -40,7 +40,6 @@ function formatarData(dataISO) {
   });
 }
 
-
 function formatarMoeda(valor) {
   if (valor === "" || valor === null || valor === undefined) return "";
 
@@ -260,10 +259,15 @@ function buscarRapido() {
       "valores",
       "preço",
       "preco",
+      "quanto custa",
+      "quanto é",
+      "entrada",
       "comprar",
       "compra",
       "ticket",
-      "bilheteria"
+      "bilheteria",
+      "promoção",
+      "promocao"
     ])
   ) {
     openIngressosModal();
@@ -282,7 +286,11 @@ function buscarRapido() {
       "aberto",
       "fechado",
       "dia",
-      "data"
+      "data",
+      "domingo",
+      "sábado",
+      "sabado",
+      "feriado"
     ])
   ) {
     abrirModal("modalCalendario");
@@ -315,10 +323,17 @@ function buscarRapido() {
       "hotel",
       "pousada",
       "dormir",
-      "hospedar"
+      "hospedar",
+      "chalé",
+      "chale",
+      "quiosque",
+      "bangalô",
+      "bangalo",
+      "reserva",
+      "reservas"
     ])
   ) {
-    abrirEmBreve("Hospedagem");
+    abrirEmBreve("Hospedagem e Reservas");
     campo.value = "";
     return;
   }
@@ -363,7 +378,8 @@ function buscarRapido() {
       "duvida",
       "atendimento",
       "whatsapp",
-      "falar"
+      "falar",
+      "contato"
     ])
   ) {
     abrirModal("modalAjuda");
@@ -524,7 +540,6 @@ function mostrarCalendario(index) {
     </div>
   `;
 }
-}
 
 function filtrarCalendario(classe) {
   document.querySelectorAll(".cal-dia").forEach((dia) => {
@@ -616,7 +631,7 @@ function abrirInfoDia(indexCalendario, numeroDia) {
 
         <p>
           Comprando pelo site oficial, você garante desconto exclusivo online,
-          parcelamento e mais praticidade na entrada.
+          parcelamento em até 3x sem juros e mais praticidade na entrada.
         </p>
 
         <ul>
@@ -630,6 +645,7 @@ function abrirInfoDia(indexCalendario, numeroDia) {
 
   abrirModal("modalDiaCalendario");
 }
+
 /* ============================= */
 /* EM BREVE */
 /* ============================= */
@@ -658,7 +674,7 @@ function abrirMapa() {
   const destino = "-11.8015771,-55.4722897";
 
   if (!navigator.geolocation) {
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${destino}`, "_blank");
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${destino}&travelmode=driving`, "_blank");
     return;
   }
 
@@ -679,6 +695,7 @@ function abrirMapa() {
     }
   );
 }
+
 /* ============================= */
 /* GALERIA */
 /* ============================= */
@@ -699,7 +716,7 @@ const AJUDA = [
   {
     pergunta: "Posso comprar ingresso para hoje pelo site?",
     resposta:
-      "Não. Compras online devem ser realizadas com pelo menos 1 dia de antecedência."
+      "Não. Compras online devem ser realizadas com pelo menos 1 dia de antecedência. Para uso no mesmo dia, a compra é feita exclusivamente na bilheteria do parque."
   },
   {
     pergunta: "Posso comprar ingresso na bilheteria?",
@@ -709,7 +726,7 @@ const AJUDA = [
   {
     pergunta: "Criança paga ingresso?",
     resposta:
-      "Crianças de 0 a 4 anos têm entrada gratuita mediante apresentação do documento oficial com foto. De 5 a 11 anos utilizam ingresso Kids. Caso não seja apresentado o ducomento oficial da criança comprovando a idade o valor cobrado será o valor integral conforme a tabela vigente do dia na bilheteria.A partir de 12 anos utilizam ingresso Individual."
+      "Crianças de 0 a 4 anos têm entrada gratuita mediante apresentação de documento oficial. De 5 a 11 anos utilizam ingresso Kids. Caso não seja apresentado documento que comprove a idade da criança, será cobrado o valor integral conforme a tabela vigente do dia na bilheteria. A partir de 12 anos, utiliza ingresso Individual."
   },
   {
     pergunta: "Posso levar alimentos e bebidas?",
@@ -724,20 +741,19 @@ const AJUDA = [
   {
     pergunta: "Tem guarda-volumes?",
     resposta:
-      "Sim. Disponibilizamos guarda-volumes no espaço da lanchonete. O serviço possui uma taxa de utilização pago à parte."
+      "Sim. Disponibilizamos guarda-volumes no espaço da lanchonete. O serviço possui uma taxa de utilização paga à parte."
   },
   {
     pergunta: "Quais formas de pagamento são aceitas?",
     resposta:
-      "Aceitamos PIX, cartões de débito e crédito e a Pulseira de Consumo. Se preferir pagar em dinheiro, basta recarregar sua Pulseira de Consumo em nosso ponto de recarga, em anexo a sorveteria, dentro do parque."
+      "Aceitamos PIX, cartões de débito e crédito e a Pulseira de Consumo. Se preferir pagar em dinheiro, basta recarregar sua Pulseira de Consumo no ponto de recarga, anexo à sorveteria, dentro do parque."
   },
-{
-  pergunta: "Posso sair e retornar ao parque no mesmo dia?",
-  resposta: `Sim! Você pode sair e retornar ao parque no mesmo dia, desde que a pulseira de acesso permaneça intacta e devidamente presa ao pulso.
+  {
+    pergunta: "Posso sair e retornar ao parque no mesmo dia?",
+    resposta: `Sim. Você pode sair e retornar ao parque no mesmo dia, desde que a pulseira de acesso permaneça intacta e devidamente presa ao pulso.
 
 Caso a pulseira seja retirada, rompida ou danificada, ela perderá a validade e não poderá ser reutilizada. Nessa situação, será necessário adquirir um novo ingresso para acessar o parque.`
-}
-
+  }
 ];
 
 function renderizarAjuda() {
@@ -745,7 +761,6 @@ function renderizarAjuda() {
   if (!container) return;
 
   container.innerHTML = `
-    
     ${AJUDA.map((item, index) => {
       return `
         <button class="help-item" onclick="abrirResposta(${index})">
@@ -794,7 +809,6 @@ function renderizarAjuda() {
 }
 
 function abrirWhatsAppAjuda(tipo) {
-
   let mensagem = "";
 
   switch (tipo) {
@@ -843,13 +857,12 @@ function abrirResposta(index) {
 /* ============================= */
 
 function openIngressosModal() {
-
   const modal = document.getElementById("ingressosModal");
   const iframe = document.getElementById("iframeIngressos");
 
   if (!modal) return;
 
-  if (iframe && CONFIG.ingressosOnline) {
+  if (iframe && typeof CONFIG !== "undefined" && CONFIG.ingressosOnline) {
     iframe.src = CONFIG.ingressosOnline;
   }
 
@@ -880,6 +893,7 @@ function ativarAnimacoes() {
 /* ============================= */
 /* INICIALIZAÇÃO */
 /* ============================= */
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     await carregarParametrosGerais();
@@ -933,6 +947,7 @@ document.addEventListener("click", function (e) {
   if (!e.target.closest(".accordion-header")) return;
 
   const item = e.target.closest(".accordion-item");
+  if (!item) return;
 
   document.querySelectorAll(".accordion-item").forEach((accordion) => {
     if (accordion !== item) {
@@ -951,7 +966,6 @@ document.addEventListener("click", function (e) {
     seta.innerHTML = item.classList.contains("active") ? "⌃" : "⌄";
   }
 });
-
 
 /* ============================= */
 /* BARRA FIXA AO ROLAR */
