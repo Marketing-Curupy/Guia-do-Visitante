@@ -486,27 +486,16 @@ function filtrarCalendario(classe) {
 }
 
 function gerarValoresBilheteria(status) {
-  const fimOuFeriado =
-    status === "fimDeSemana" ||
-    status === "feriado";
+  const valores = VALORES_BILHETERIA[status];
 
-  if (fimOuFeriado) {
-    return `
-      <div class="dia-bloco">
-        <strong>🎟 Valor da bilheteria</strong>
-        <p>Adulto: R$ 124,00</p>
-        <p>Kids: R$ 60,00</p>
-        <p>Convidado de sócio: R$ 78,00</p>
-      </div>
-    `;
-  }
+  if (!valores) return "";
 
   return `
     <div class="dia-bloco">
       <strong>🎟 Valor da bilheteria</strong>
-      <p>Adulto: R$ 86,00</p>
-      <p>Kids: R$ 40,00</p>
-      <p>Convidado de sócio: R$ 50,00</p>
+      <p>Adulto: ${formatarMoeda(valores.visitante)}</p>
+      <p>Kids: ${formatarMoeda(valores.kids)}</p>
+      <p>Convidado de sócio: ${formatarMoeda(valores.convidadoSocio)}</p>
     </div>
   `;
 }
@@ -796,12 +785,18 @@ function abrirResposta(index) {
 /* ============================= */
 
 function openIngressosModal() {
-  const modal = document.getElementById("ingressosModal");
 
-  if (modal) {
-    modal.classList.add("active");
-    document.body.style.overflow = "hidden";
+  const modal = document.getElementById("ingressosModal");
+  const iframe = document.getElementById("iframeIngressos");
+
+  if (!modal) return;
+
+  if (iframe && CONFIG.ingressosOnline) {
+    iframe.src = CONFIG.ingressosOnline;
   }
+
+  modal.classList.add("active");
+  document.body.style.overflow = "hidden";
 }
 
 function closeIngressosModal() {
@@ -827,7 +822,13 @@ function ativarAnimacoes() {
 /* ============================= */
 /* INICIALIZAÇÃO */
 /* ============================= */
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+
+  // Carrega os dados da planilha
+  await carregarParametrosGerais();
+  await carregarCalendariosFuncionamento();
+
+  // Agora renderiza a interface
   renderizarBarra();
   renderizarAjuda();
   ativarAnimacoes();
@@ -847,6 +848,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
 });
 
 /* ============================= */
