@@ -1,25 +1,70 @@
-const CONFIG = {
-  ingressosOnline: "ingressos/index.html",
-  googleMaps: "https://www.google.com/maps/dir/?api=1&destination=-11.8015771,-55.4722897&travelmode=driving",
-  whatsappGeral: "https://wa.me/556630153214"
+// ========================================
+// GOOGLE SHEETS
+// Dados vindos da planilha
+// ========================================
+
+const PLANILHA_ID = "1bk3bk1CcHgB1PmAMN-yZzR4ZnSaoxNLhiBfa4BcPEUI";
+
+const URL_PARAMETROS =
+  `https://docs.google.com/spreadsheets/d/${PLANILHA_ID}/gviz/tq?tqx=out:csv&gid=1869682511`;
+
+const URL_CALENDARIO_FUNCIONAMENTO =
+  `https://docs.google.com/spreadsheets/d/${PLANILHA_ID}/gviz/tq?tqx=out:csv&gid=1837692081`;
+
+
+// ========================================
+// DADOS GLOBAIS
+// Mantém o padrão do código
+// ========================================
+
+let CONFIG = {
+  ingressosOnline: "",
+  googleMaps: "",
+  whatsappGeral: ""
 };
 
-const VALORES_BILHETERIA = {
+let VALORES_BILHETERIA = {
   semana: {
-    visitante: 86,
-    kids: 40,
-    convidadoSocio: 50
+    visitante: 0,
+    kids: 0,
+    convidadoSocio: 0
   },
 
   fimDeSemana: {
-    visitante: 124,
-    kids: 60,
-    convidadoSocio: 78
+    visitante: 0,
+    kids: 0,
+    convidadoSocio: 0
   },
 
   feriado: {
-    visitante: 124,
-    kids: 60,
-    convidadoSocio: 78
+    visitante: 0,
+    kids: 0,
+    convidadoSocio: 0
+  }
+};
+
+let HORARIOS_FUNCIONAMENTO = {
+  semana: {
+    label: "",
+    horario: "",
+    classe: ""
+  },
+
+  fimDeSemana: {
+    label: "",
+    horario: "",
+    classe: ""
+  },
+
+  feriado: {
+    label: "",
+    horario: "",
+    classe: ""
+  },
+
+  fechado: {
+    label: "",
+    horario: "",
+    classe: ""
   }
 };
