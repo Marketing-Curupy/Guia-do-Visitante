@@ -1708,59 +1708,6 @@ button{
     line-height:1.15;
 }
 
-/* BOTÃO */
-
-.link-meia{
-    grid-column:1/-1;
-    min-height:34px;
-    padding:7px 10px;
-    border-radius:10px;
-    font-size:11px;
-    font-weight:700;
-}
-  .grid-principal{
-    grid-template-columns:1fr;
-    gap:16px;
-    margin-top:24px;
-  }
-
-  .card{
-    min-height:auto;
-    padding:22px;
-    border-radius:28px;
-  }
-
-  .card-icon{
-    font-size:2.4rem;
-    margin-bottom:12px;
-  }
-
-  .card h2{
-    font-size:1.4rem;
-  }
-
-  .card p{
-    font-size:15px;
-  }
-
-  .btn{
-    width:100%;
-    min-height:50px;
-    font-size:14px;
-  }
-
-  .info{
-    grid-template-columns:1fr;
-    gap:12px;
-    margin-top:22px;
-  }
-
-  .info button{
-    padding:16px 18px;
-    border-radius:20px;
-    min-height:78px;
-  }
-
   .galeria-dinamica{
     margin-top:34px;
     margin-bottom:18px;
