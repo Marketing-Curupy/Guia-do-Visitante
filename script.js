@@ -155,9 +155,19 @@ function buscarProximaAberturaNoCalendario() {
 }
 
 function obterValoresDoDia(dia) {
-  if (!dia || !dia.valores) return [];
+  if (!dia) {
+    return {
+      visitante: 0,
+      kids: 0,
+      convidadoSocio: 0
+    };
+  }
 
-  return dia.valores;
+  return {
+    visitante: dia.visitante || 0,
+    kids: dia.kids || 0,
+    convidadoSocio: dia.convidadoSocio || 0
+  };
 }
 
 function gerarValoresBarra(dia) {
