@@ -548,19 +548,20 @@ function filtrarCalendario(classe) {
   });
 }
 
-function gerarValoresBilheteria(dia) {
-  const valores = obterValoresDoDia(dia);
+function obterValoresDoDia(dia) {
+  if (!dia) {
+    return {
+      visitante: 0,
+      kids: 0,
+      convidadoSocio: 0
+    };
+  }
 
-  if (!valores.visitante) return "";
-
-  return `
-    <div class="dia-bloco">
-      <strong>🎟 Valor da bilheteria</strong>
-      <p>Adulto: ${formatarMoeda(valores.visitante)}</p>
-      <p>Kids: ${formatarMoeda(valores.kids)}</p>
-      <p>Convidado de sócio: ${formatarMoeda(valores.convidadoSocio)}</p>
-    </div>
-  `;
+  return {
+    visitante: dia.visitante || 0,
+    kids: dia.kids || 0,
+    convidadoSocio: dia.convidadoSocio || 0
+  };
 }
 
 function abrirInfoDia(indexCalendario, numeroDia) {
