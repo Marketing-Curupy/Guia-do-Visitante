@@ -1637,20 +1637,17 @@ button{
     font-size:13px;
   }
 
-/* =======================================================
-   BARRA FIXA - MOBILE (COMPACTA)
-======================================================= */
-
-.barra-fixa{
+  /* BARRA FIXA - MOBILE COMPACTA */
+  .barra-fixa{
     position:relative;
     display:block;
     width:calc(100% - 20px);
     margin:10px auto 0;
     border-radius:16px;
     z-index:20;
-}
+  }
 
-.barra-fixa.fixa{
+  .barra-fixa.fixa{
     position:fixed;
     top:6px;
     left:50%;
@@ -1658,55 +1655,100 @@ button{
     width:calc(100% - 20px);
     margin:0;
     z-index:9999;
-}
+  }
 
-.barra-inner{
+  .barra-inner{
+    display:block;
     padding:10px 12px;
-}
+  }
 
-/* STATUS */
-
-.barra-status{
+  .barra-status{
     display:flex;
     flex-direction:column;
     gap:2px;
-}
+  }
 
-.barra-status strong{
+  .barra-status strong{
     font-size:14px;
     line-height:1;
     font-weight:800;
-}
+  }
 
-.barra-status span{
+  .barra-status span{
     font-size:11px;
     line-height:1.2;
     color:#5d6f82;
-}
+  }
 
-/* PREÇOS */
-
-.barra-precos{
+  .barra-precos{
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:6px;
     margin-top:8px;
-}
+  }
 
-.barra-precos-title{
+  .barra-precos-title{
     grid-column:1/-1;
     font-size:12px;
     font-weight:700;
     margin-bottom:2px;
-}
+  }
 
-.preco-pill{
+  .preco-pill{
     padding:7px 6px;
     border-radius:10px;
     font-size:11px;
     font-weight:700;
     line-height:1.15;
-}
+    white-space:normal;
+  }
+
+  .link-meia{
+    display:none;
+  }
+
+  .grid-principal{
+    grid-template-columns:1fr;
+    gap:16px;
+    margin-top:24px;
+  }
+
+  .card{
+    min-height:auto;
+    padding:22px;
+    border-radius:28px;
+  }
+
+  .card-icon{
+    font-size:2.4rem;
+    margin-bottom:12px;
+  }
+
+  .card h2{
+    font-size:1.4rem;
+  }
+
+  .card p{
+    font-size:15px;
+  }
+
+  .btn{
+    width:100%;
+    min-height:50px;
+    font-size:14px;
+  }
+
+  .info{
+    grid-template-columns:1fr;
+    gap:12px;
+    margin-top:22px;
+  }
+
+  .info button{
+    padding:16px 18px;
+    border-radius:20px;
+    min-height:78px;
+  }
 
   .galeria-dinamica{
     margin-top:34px;
@@ -1721,10 +1763,6 @@ button{
   .section-title p{
     font-size:15px;
   }
-  /* Esconde o botão "Ver regras de meia-entrada" no mobile */
-.link-meia{
-    display:none;
-}
 
   .galeria-masonry{
     display:flex;
@@ -1750,69 +1788,134 @@ button{
     min-height:230px;
   }
 
-/* RODAPÉ MOBILE CLEAN */
-.footer-curupy{
+  /* RODAPÉ MOBILE CLEAN */
+  .footer-curupy{
     background:#fff;
-    padding:28px 20px 80px;
-}
+    margin-top:34px;
+    padding:28px 20px 90px;
+    color:var(--azul);
+  }
 
-.footer-top{
+  .footer-curupy::before,
+  .footer-curupy::after{
+    display:none;
+  }
+
+  .footer-inner{
+    display:block;
+    padding:0;
+  }
+
+  .footer-top{
     display:grid;
     grid-template-columns:90px 1fr;
     gap:18px;
     align-items:center;
     padding-bottom:20px;
     border-bottom:1px solid #e8eef5;
-}
+  }
 
-.footer-logo img{
-    width:90px;
-}
-
-.footer-social{
-    text-align:left;
-}
-
-.footer-social h3{
-    font-size:26px;
-    margin-bottom:12px;
-    color:#123;
-}
-
-.social-icons{
+  .footer-logo{
     display:flex;
-    gap:10px;
-    margin-bottom:12px;
-}
+    justify-content:center;
+    align-items:center;
+  }
 
-.social-icons a{
-    width:42px;
-    height:42px;
-    border:1px solid #b9dff0;
-    border-radius:50%;
-}
-
-.footer-slogan{
-    font-size:24px;
-    font-weight:800;
-    color:#0b4f7b;
+  .footer-logo img{
+    width:90px;
     margin:0;
-}
+  }
+
+  .footer-social{
+    text-align:left;
+  }
+
+  .footer-social strong,
+  .footer-social h3{
+    display:block;
+    font-size:22px;
+    line-height:1.1;
+    margin:0 0 10px;
+    color:#061a33;
+    font-weight:900;
+  }
+
+  .social-icons{
+    display:flex;
+    justify-content:flex-start;
+    gap:9px;
+    margin:0 0 10px;
+  }
+
+  .social-icons a{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#fff;
+    border:1px solid #b9dff0;
+    color:#08699b;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .social-icons a i{
+    font-size:18px;
+  }
+
+  .footer-slogan{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:21px;
+    line-height:1.05;
+    font-weight:900;
+    color:#0b4f7b;
+    text-align:left;
+    margin:0;
+    text-shadow:none;
+  }
+
   .footer-contato{
-    margin-top:24px;
+    margin-top:20px;
     background:#f4fbff;
     border:1px solid #d7eef8;
     border-radius:22px;
-    padding:22px;
+    padding:20px;
     text-align:center;
-}
+  }
 
-.footer-whatsapp{
-    margin-top:14px;
+  .footer-contato strong,
+  .footer-contato h3{
+    display:block;
+    font-size:20px;
+    margin:0 0 4px;
+    color:#073b66;
+    font-weight:900;
+  }
+
+  .footer-contato span,
+  .footer-contato p{
+    display:block;
+    font-size:14px;
+    margin:0 0 14px;
+    color:#17324d;
+  }
+
+  .footer-whatsapp{
     width:100%;
     max-width:250px;
-}
-}
+    min-height:42px;
+    margin:0 auto;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:900;
+  }
+
+  .footer-copy{
+    font-size:9px;
+    padding:14px 0 0;
+    color:#6b7280;
+    text-align:center;
+  }
 
   .ajuda{
     display:none;
@@ -1822,24 +1925,24 @@ button{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     position:fixed;
-    left:14px;
-    right:14px;
-    bottom:12px;
+    left:10px;
+    right:10px;
+    bottom:10px;
     z-index:999;
     background:#fff;
-    border-radius:24px;
-    padding:8px;
-    gap:8px;
+    border-radius:18px;
+    padding:6px;
+    gap:6px;
     box-shadow:0 16px 38px rgba(0,0,0,.22);
   }
 
   .barra-acoes-mobile button{
     border:0;
-    min-height:56px;
-    border-radius:17px;
+    min-height:44px;
+    border-radius:14px;
     font-weight:900;
     color:#fff;
-    font-size:13px;
+    font-size:12px;
   }
 
   .barra-acoes-mobile button:nth-child(1){
@@ -1897,4 +2000,5 @@ button{
   .iframe-box{
     height:88vh;
   }
+
 }
