@@ -1637,69 +1637,87 @@ button{
     font-size:13px;
   }
 
-  /* BARRA FIXA DE PREÇOS */
-  .barra-fixa{
+/* =======================================================
+   BARRA FIXA - MOBILE (COMPACTA)
+======================================================= */
+
+.barra-fixa{
     position:relative;
     display:block;
-    width:calc(100% - 28px);
-    margin:16px auto 0;
-    border-radius:22px;
+    width:calc(100% - 20px);
+    margin:10px auto 0;
+    border-radius:16px;
     z-index:20;
-  }
+}
 
-  .barra-fixa.fixa{
+.barra-fixa.fixa{
     position:fixed;
-    top:10px;
+    top:6px;
     left:50%;
     transform:translateX(-50%);
-    width:calc(100% - 28px);
+    width:calc(100% - 20px);
     margin:0;
     z-index:9999;
-  }
+}
 
-  .barra-inner{
-    display:block;
-    padding:16px;
-  }
-
-  .barra-status strong{
-    font-size:14px;
-    line-height:1.15;
-  }
-
-  .barra-status span{
-    font-size:12px;
-    line-height:1.25;
-  }
-
-  .barra-precos{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-    margin-top:14px;
-  }
-
-  .barra-precos-title{
-    grid-column:1/-1;
-    font-size:13px;
-  }
-
-  .preco-pill{
-    padding:9px 8px;
-    border-radius:13px;
-    font-size:12px;
-    line-height:1.2;
-    white-space:normal;
-  }
-
-  .link-meia{
-    grid-column:1/-1;
-    min-height:40px;
+.barra-inner{
     padding:10px 12px;
-    font-size:12px;
-    border-radius:14px;
-  }
+}
 
+/* STATUS */
+
+.barra-status{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.barra-status strong{
+    font-size:14px;
+    line-height:1;
+    font-weight:800;
+}
+
+.barra-status span{
+    font-size:11px;
+    line-height:1.2;
+    color:#5d6f82;
+}
+
+/* PREÇOS */
+
+.barra-precos{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:6px;
+    margin-top:8px;
+}
+
+.barra-precos-title{
+    grid-column:1/-1;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:2px;
+}
+
+.preco-pill{
+    padding:7px 6px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:700;
+    line-height:1.15;
+}
+
+/* BOTÃO */
+
+.link-meia{
+    grid-column:1/-1;
+    min-height:34px;
+    padding:7px 10px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:700;
+}
   .grid-principal{
     grid-template-columns:1fr;
     gap:16px;
