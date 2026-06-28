@@ -1799,55 +1799,58 @@ button{
     min-height:230px;
   }
 
-  /* RODAPÉ MOBILE MELHORADO */
+/* RODAPÉ MOBILE CLEAN */
 .footer-curupy{
   margin-top:34px;
-  padding-top:30px;
-  padding-bottom:10px;
-  background:#08699b;
+  padding:26px 18px 80px;
+  background:#fff;
   position:relative;
-  overflow:hidden;
 }
+
 .footer-inner{
-  position:relative;
-  z-index:2;
+  display:grid;
   grid-template-columns:1fr;
-  padding:18px 22px 10px;
-  gap:10px;
   text-align:center;
+  gap:14px;
+  padding:0;
 }
 
 .footer-logo img{
-  width:112px;
-  margin-bottom:4px;
+  width:96px;
+  margin:0 auto 8px;
+}
+
+.footer-contato{
+  background:#08699b;
+  border-radius:24px;
+  padding:22px 18px;
 }
 
 .footer-contato h3{
   font-size:20px;
-  margin:4px 0 4px;
+  margin:8px 0 4px;
   color:#fff;
 }
 
 .footer-contato p{
-  font-size:15px;
+  font-size:14px;
   margin:0 0 14px;
   color:#fff;
 }
 
 .footer-whatsapp{
   width:100%;
-  max-width:88px;
-  min-height:88px;
+  max-width:240px;
+  min-height:42px;
   margin:0 auto;
-  border-radius:10px;
-  font-size:11px;
-  font-weight:900;
+  border-radius:999px;
+  font-size:13px;
 }
 
 .footer-social h3{
-  font-size:11px;
-  margin:14px 0 8px;
-  color:#fff;
+  font-size:22px;
+  margin:8px 0 12px;
+  color:#061a33;
 }
 
 .social-icons{
@@ -1855,16 +1858,24 @@ button{
   gap:10px;
 }
 
+.social-icons a{
+  width:42px;
+  height:42px;
+  font-size:18px;
+}
+
 .footer-slogan{
-  font-size:42px;
-  line-height:.85;
+  font-size:26px;
+  line-height:1;
   max-width:260px;
-  margin:12px auto 6px;
+  margin:8px auto 4px;
+  color:#061a33;
 }
 
 .footer-copy{
   font-size:9px;
-  padding:6px 16px 0;
+  padding-top:8px;
+  color:#6b7280;
 }
 
   .ajuda{
