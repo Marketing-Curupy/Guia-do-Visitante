@@ -564,6 +564,37 @@ function obterValoresDoDia(dia) {
   };
 }
 
+function gerarValoresBilheteria(dia) {
+  const valores = obterValoresDoDia(dia);
+
+  return `
+    <div class="dia-bloco">
+      <strong>🎟️ Valores na bilheteria</strong>
+
+      <div class="valores-bilheteria">
+        <div class="valor-item">
+          <span>Ingresso individual</span>
+          <strong>${formatarMoeda(valores.visitante)}</strong>
+        </div>
+
+        <div class="valor-item">
+          <span>Kids — 5 a 11 anos</span>
+          <strong>${formatarMoeda(valores.kids)}</strong>
+        </div>
+
+        <div class="valor-item">
+          <span>Convidado de sócio</span>
+          <strong>${formatarMoeda(valores.convidadoSocio)}</strong>
+        </div>
+      </div>
+
+      <p class="observacao-valor">
+        Valores para compra presencial na bilheteria.
+      </p>
+    </div>
+  `;
+}
+
 function abrirInfoDia(indexCalendario, numeroDia) {
   const calendario = CALENDARIOS_FUNCIONAMENTO[indexCalendario];
   if (!calendario) return;
@@ -897,12 +928,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     await carregarParametrosGerais();
     await carregarCalendariosFuncionamento();
 
-    console.log("CONFIG", CONFIG);
-    console.log("VALORES_BILHETERIA", VALORES_BILHETERIA);
-    console.log("HORARIOS_FUNCIONAMENTO", HORARIOS_FUNCIONAMENTO);
-    console.log("CALENDARIOS_FUNCIONAMENTO", CALENDARIOS_FUNCIONAMENTO);
-  } catch (erro) {
-    console.error("Erro ao carregar dados da planilha:", erro);
+  console.log("CONFIG", CONFIG);
+console.log("HORARIOS_FUNCIONAMENTO", HORARIOS_FUNCIONAMENTO);
+console.log("CALENDARIOS_FUNCIONAMENTO", CALENDARIOS_FUNCIONAMENTO);
 
     const barra = document.getElementById("barraStatus");
     if (barra) {
