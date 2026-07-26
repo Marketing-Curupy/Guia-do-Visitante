@@ -548,22 +548,6 @@ function filtrarCalendario(classe) {
   });
 }
 
-function obterValoresDoDia(dia) {
-  if (!dia) {
-    return {
-      visitante: 0,
-      kids: 0,
-      convidadoSocio: 0
-    };
-  }
-
-  return {
-    visitante: dia.visitante || 0,
-    kids: dia.kids || 0,
-    convidadoSocio: dia.convidadoSocio || 0
-  };
-}
-
 function gerarValoresBilheteria(dia) {
   const valores = obterValoresDoDia(dia);
 
@@ -928,9 +912,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     await carregarParametrosGerais();
     await carregarCalendariosFuncionamento();
 
-  console.log("CONFIG", CONFIG);
-console.log("HORARIOS_FUNCIONAMENTO", HORARIOS_FUNCIONAMENTO);
-console.log("CALENDARIOS_FUNCIONAMENTO", CALENDARIOS_FUNCIONAMENTO);
+    console.log("CONFIG", CONFIG);
+    console.log("HORARIOS_FUNCIONAMENTO", HORARIOS_FUNCIONAMENTO);
+    console.log("CALENDARIOS_FUNCIONAMENTO", CALENDARIOS_FUNCIONAMENTO);
+  } catch (erro) {
+    console.error("Erro ao carregar dados da planilha:", erro);
 
     const barra = document.getElementById("barraStatus");
     if (barra) {
